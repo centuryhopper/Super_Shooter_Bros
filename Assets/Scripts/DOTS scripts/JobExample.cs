@@ -5,6 +5,12 @@ using System.Threading;
 using System;
 using Unity.Collections;
 
+/*
+Entities => things
+Components => data
+Systems => logic
+*/
+
 public class JobExample
 {
     static void p(object m) => UnityEngine.Debug.Log(m);
@@ -14,11 +20,10 @@ public class JobExample
     static void MainMethod()
     {
         Stopwatch s = new Stopwatch();
-        NativeArray<double> result = new NativeArray<double>(1, Allocator.TempJob);
+        NativeArray<double> result = new NativeArray<double>(1, Allocator.Persistent);
 
         const int NUM_JOBS = 4;
         const int MAX_BOUND = 10000000;
-
         int upperBound = MAX_BOUND / NUM_JOBS;
 
         // initialize 4 jobs, each at different locations between 0 and 10^7
@@ -89,9 +94,6 @@ public class JobExample
         }
     }
 
-
-
-    // [RuntimeInitializeOnLoadMethod]
     static void MainMethod2()
     {
         Thread[] threads = new Thread[4];
