@@ -10,7 +10,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (instance == null)
             {
-                // create a new game object
+                // create a new game object during runtime
                 GameObject g = new GameObject();
 
                 // add component to it

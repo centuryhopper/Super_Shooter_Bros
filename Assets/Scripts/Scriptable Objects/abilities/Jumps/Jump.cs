@@ -9,8 +9,9 @@ namespace Game.PlayerCharacter
         [Range(1, 10)]
         public float jumpForce;
 
-        override public void OnEnter(CharacterStateBase character, Animator a, AnimatorStateInfo asi)
+        override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
+            // ensure we don't play the landing animation too early
             a.SetBool(AnimationParameters.isGrounded.ToString(), false);
 
             // get player rigidbody and apply force to the jump
@@ -18,14 +19,14 @@ namespace Game.PlayerCharacter
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
-        override public void UpdateAbility(CharacterStateBase c, Animator a, AnimatorStateInfo asi)
+        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
 
         }
 
-        override public void OnExit(CharacterStateBase c, Animator a, AnimatorStateInfo asi)
+        override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-
+            a.SetBool(AnimationParameters.jump.ToString(), false);
         }
 
     }

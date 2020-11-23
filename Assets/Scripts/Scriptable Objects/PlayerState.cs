@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
-    public class CharacterStateBase : StateMachineBehaviour
+    public class PlayerState : StateMachineBehaviour
     {
         private PlayerMovement playerMovement;
 
@@ -20,7 +20,7 @@ namespace Game.PlayerCharacter
         // list of scriptable objects
         public List<StateData> abilityDataLst = new List<StateData>();
 
-        public void UpdateAll(CharacterStateBase c, Animator a, AnimatorStateInfo asi)
+        public void UpdateAll(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             foreach (StateData d in abilityDataLst)
             {

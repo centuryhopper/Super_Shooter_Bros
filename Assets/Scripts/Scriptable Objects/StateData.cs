@@ -9,8 +9,8 @@ namespace Game.PlayerCharacter
     /// </summary>
     public abstract class StateData : ScriptableObject
     {
-        public abstract void OnEnter(CharacterStateBase character, Animator a, AnimatorStateInfo asi);
-        public abstract void UpdateAbility(CharacterStateBase c, Animator a, AnimatorStateInfo asi);
-        public abstract void OnExit(CharacterStateBase c, Animator a, AnimatorStateInfo asi);
+        public abstract void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi);
+        public abstract void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi);
+        public abstract void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi);
     }
 }

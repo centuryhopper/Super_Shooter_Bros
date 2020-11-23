@@ -18,9 +18,6 @@ namespace Game.PlayerCharacter
     public class PlayerMovement : MonoBehaviour
     {
         public float speed = 10f;
-        public bool jump;
-        public bool moveLeft, moveRight;
-        // Animator anim = null;
         BoxCollider box = null;
         Rigidbody rb;
         public Rigidbody RB

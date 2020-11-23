@@ -10,12 +10,12 @@ namespace Game.PlayerCharacter
         [Range(.01f, 5)]
         public float distanceOfDetection;
 
-        override public void OnEnter(CharacterStateBase character, Animator a, AnimatorStateInfo asi)
+        override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
             // throw new System.NotImplementedException();
         }
 
-        override public void UpdateAbility(CharacterStateBase c, Animator a, AnimatorStateInfo asi)
+        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             PlayerMovement p = c.GetPlayerMoveMent(a);
 
@@ -30,9 +30,9 @@ namespace Game.PlayerCharacter
             }
         }
 
-        override public void OnExit(CharacterStateBase c, Animator a, AnimatorStateInfo asi)
+        override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-
+            a.SetBool(AnimationParameters.isGrounded.ToString(), false);
         }
 
         private bool IsGrounded(PlayerMovement p)

@@ -10,12 +10,12 @@ namespace Game.PlayerCharacter
         [Range(0.01f, 1f)]
         public float transitionTime;
 
-        override public void OnEnter(CharacterStateBase character, Animator a, AnimatorStateInfo asi)
+        override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
             // throw new System.NotImplementedException();
         }
 
-        override public void UpdateAbility(CharacterStateBase c, Animator a, AnimatorStateInfo asi)
+        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             // timer
             if (asi.normalizedTime >= transitionTime)
@@ -24,7 +24,7 @@ namespace Game.PlayerCharacter
             }
         }
 
-        override public void OnExit(CharacterStateBase c, Animator a, AnimatorStateInfo asi)
+        override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             a.SetBool(AnimationParameters.force_transition.ToString(), false);
         }

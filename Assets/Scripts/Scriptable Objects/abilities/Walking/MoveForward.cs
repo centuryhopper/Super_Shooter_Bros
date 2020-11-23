@@ -10,19 +10,19 @@ namespace Game.PlayerCharacter
         public AnimationCurve speedGraph;
         public float speed;
 
-        override public void OnEnter(CharacterStateBase character, Animator a, AnimatorStateInfo asi)
+        override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            throw new System.NotImplementedException();
+            ;
         }
 
-        override public void UpdateAbility(CharacterStateBase c, Animator a, AnimatorStateInfo asi)
+        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             MovePlayer(c.GetPlayerMoveMent(a), a, asi);
         }
 
-        override public void OnExit(CharacterStateBase c, Animator a, AnimatorStateInfo asi)
+        override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            throw new System.NotImplementedException();
+            a.SetBool(AnimationParameters.move.ToString(), false);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Game.PlayerCharacter
         void MovePlayer(PlayerMovement p, Animator animator, AnimatorStateInfo asi)
         {
             // side scroller
-            if (Input.GetKey(KeyCode.D))
+            if (VirtualInputManager.Instance.moveRight)
             {
                 // multiple by the speed graph value so that we can still move while we jump
                 p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
@@ -39,7 +39,7 @@ namespace Game.PlayerCharacter
                 // transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 p.transform.rotation = Quaternion.LookRotation(Vector3.forward, p.transform.up);
             }
-            else if (Input.GetKey(KeyCode.A))
+            else if (VirtualInputManager.Instance.moveLeft)
             {
                 // multiple by the speed graph value so that we can still move while we jump
                 p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
