@@ -16,7 +16,7 @@ public class JobExample
     static void p(object m) => UnityEngine.Debug.Log(m);
     static double[] data = new double[10000000];
 
-    [RuntimeInitializeOnLoadMethod]
+    // [RuntimeInitializeOnLoadMethod]
     static void MainMethod()
     {
         Stopwatch s = new Stopwatch();

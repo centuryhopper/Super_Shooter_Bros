@@ -38,6 +38,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1327293210905888338}
     m_Modifications:
+    - target: {fileID: -8297081774286939441, guid: bd6ee82c5e06b3f4f86113cbf8261ae1, type: 3}
+      propertyPath: m_Center.x
+      value: -0.016667604
+      objectReference: {fileID: 0}
+    - target: {fileID: -8297081774286939441, guid: bd6ee82c5e06b3f4f86113cbf8261ae1, type: 3}
+      propertyPath: m_Center.y
+      value: 0.78164804
+      objectReference: {fileID: 0}
+    - target: {fileID: -8297081774286939441, guid: bd6ee82c5e06b3f4f86113cbf8261ae1, type: 3}
+      propertyPath: m_Center.z
+      value: 0.021218315
+      objectReference: {fileID: 0}
+    - target: {fileID: -8297081774286939441, guid: bd6ee82c5e06b3f4f86113cbf8261ae1, type: 3}
+      propertyPath: m_Size.x
+      value: 0.8004029
+      objectReference: {fileID: 0}
+    - target: {fileID: -8297081774286939441, guid: bd6ee82c5e06b3f4f86113cbf8261ae1, type: 3}
+      propertyPath: m_Size.y
+      value: 1.6337059
+      objectReference: {fileID: 0}
+    - target: {fileID: -8297081774286939441, guid: bd6ee82c5e06b3f4f86113cbf8261ae1, type: 3}
+      propertyPath: m_Size.z
+      value: 0.48338613
+      objectReference: {fileID: 0}
     - target: {fileID: 539745478100655087, guid: bd6ee82c5e06b3f4f86113cbf8261ae1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -100,6 +124,10 @@ PrefabInstance:
         clip 'a_Idle_Battle'\n\tFrom animation clip 'a_Walking'\n\tFrom animation
         clip 'a_Running'\n\tFrom animation clip 'a_Idle_Scared'\n\tand more ..."
       objectReference: {fileID: 0}
+    - target: {fileID: 7635726066119915157, guid: bd6ee82c5e06b3f4f86113cbf8261ae1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 2f743c8632c3e4b53922f5f3a59225d4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd6ee82c5e06b3f4f86113cbf8261ae1, type: 3}
 --- !u!4 &570557712148411058 stripped
