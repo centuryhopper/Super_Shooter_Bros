@@ -4,9 +4,11 @@ using UnityEngine;
 using Unity.Mathematics;
 using Unity.Jobs;
 using Unity.Collections;
+using Unity.Burst;
 
 public class CubeManeuvers : MonoBehaviour
 {
+    [BurstCompile]
     struct OscillatorThread : IJobParallelFor
     {
         // native arrays to hold the positions of the cubes
@@ -28,8 +30,6 @@ public class CubeManeuvers : MonoBehaviour
 
         // calculate the trig result, store in result array,
         // and then assign the cube's transform position to it
-
-
     }
 
     [Range(1,100)]
@@ -104,6 +104,19 @@ public class CubeManeuvers : MonoBehaviour
 
             cubePositions.Dispose();
             results.Dispose();
+        }
+        else
+        {
+            print("single threaded");
+            // loop thru all the cubes and set cosine its x value
+            for (var i = 0; i < cubes.Count; ++i)
+            {
+                float x = cubes[i].transform.position.x;
+                float y = cubes[i].transform.position.y;
+                float z = cubes[i].transform.position.z;
+                Vector3 res = new Vector3(x + (amplitude * math.cos(time * frequency)), y, z);
+                cubes[i].transform.position = res;
+            }
         }
     }
 

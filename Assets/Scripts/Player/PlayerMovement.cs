@@ -1,8 +1,7 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Extensions;
 
 namespace Game.PlayerCharacter
 {
@@ -14,10 +13,9 @@ namespace Game.PlayerCharacter
         isGrounded
     }
 
-    [RequireComponent(typeof(Rigidbody))]
+
     public class PlayerMovement : MonoBehaviour
     {
-        public float speed = 10f;
         BoxCollider box = null;
         Rigidbody rb;
         public Rigidbody RB
@@ -41,7 +39,7 @@ namespace Game.PlayerCharacter
         void Awake()
         {
             box = GetComponent<BoxCollider>();
-            groundCheckers = new List<GameObject>();
+            groundCheckers = new List<GameObject>(sections + 2);
 
             // y-z plane in this case
             float top = box.bounds.center.y + box.bounds.extents.y;
@@ -85,10 +83,11 @@ namespace Game.PlayerCharacter
 
         public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate(groundCheckingSphere, position, Quaternion.identity);
 
-
-
-
-
+        // // debug code
+        // void OnCollisionEnter(Collision collisionInfo)
+        // {
+        //     print(collisionInfo.gameObject.name);
+        // }
 
         // /// <summary>
         // /// moves the player left and right
@@ -129,5 +128,5 @@ namespace Game.PlayerCharacter
         //     }
         // }
     }
-
 }
+

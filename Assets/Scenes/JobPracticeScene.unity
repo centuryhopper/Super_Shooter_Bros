@@ -1072,93 +1072,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5597073657975896161, guid: 4bb5521850c084bd2b76f5b7dd2f7e74, type: 3}
   m_PrefabInstance: {fileID: 603849542}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &623137071
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 623137072}
-  - component: {fileID: 623137073}
-  m_Layer: 0
-  m_Name: CubeManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &623137072
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 623137071}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &623137073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 623137071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e31a9059b1b64ad0863079e48779f0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amplitude: 1
-  frequency: 2.9
-  cubes:
-  - {fileID: 293276725}
-  - {fileID: 2131101248}
-  - {fileID: 1048243680}
-  - {fileID: 1769815552}
-  - {fileID: 1914209255}
-  - {fileID: 1025922051}
-  - {fileID: 758090184}
-  - {fileID: 1998938681}
-  - {fileID: 407061271}
-  - {fileID: 1335500436}
-  - {fileID: 1309961726}
-  - {fileID: 525540665}
-  - {fileID: 1758297243}
-  - {fileID: 2095250585}
-  - {fileID: 1261597568}
-  - {fileID: 18519920}
-  - {fileID: 1136949599}
-  - {fileID: 1302230064}
-  - {fileID: 327639672}
-  - {fileID: 1489342690}
-  - {fileID: 123397677}
-  - {fileID: 2067903057}
-  - {fileID: 54853048}
-  - {fileID: 109146824}
-  - {fileID: 465152325}
-  - {fileID: 1517181856}
-  - {fileID: 1468059510}
-  - {fileID: 979851402}
-  - {fileID: 1430602685}
-  - {fileID: 127107930}
-  - {fileID: 603849544}
-  - {fileID: 1361674147}
-  - {fileID: 1217876010}
-  - {fileID: 21840895}
-  - {fileID: 1801167025}
-  - {fileID: 1266366229}
-  - {fileID: 1494810017}
-  - {fileID: 679877640}
-  - {fileID: 1125080754}
-  - {fileID: 2138810368}
-  isMultiThreading: 1
 --- !u!1001 &679877638
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1638,8 +1551,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1147552320}
   - component: {fileID: 1147552321}
+  - component: {fileID: 1147552322}
   m_Layer: 0
-  m_Name: CubeParent
+  m_Name: CubeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1697,7 +1611,7 @@ Transform:
   - {fileID: 1125080753}
   - {fileID: 2138810367}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1147552321
 MonoBehaviour:
@@ -1714,6 +1628,62 @@ MonoBehaviour:
   x: 40
   y: 25
   z: 0
+--- !u!114 &1147552322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147552319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e31a9059b1b64ad0863079e48779f0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amplitude: 1
+  frequency: 2.9
+  cubes:
+  - {fileID: 293276725}
+  - {fileID: 2131101248}
+  - {fileID: 1048243680}
+  - {fileID: 1769815552}
+  - {fileID: 1914209255}
+  - {fileID: 1025922051}
+  - {fileID: 758090184}
+  - {fileID: 1998938681}
+  - {fileID: 407061271}
+  - {fileID: 1335500436}
+  - {fileID: 1309961726}
+  - {fileID: 525540665}
+  - {fileID: 1758297243}
+  - {fileID: 2095250585}
+  - {fileID: 1261597568}
+  - {fileID: 18519920}
+  - {fileID: 1136949599}
+  - {fileID: 1302230064}
+  - {fileID: 327639672}
+  - {fileID: 1489342690}
+  - {fileID: 123397677}
+  - {fileID: 2067903057}
+  - {fileID: 54853048}
+  - {fileID: 109146824}
+  - {fileID: 465152325}
+  - {fileID: 1517181856}
+  - {fileID: 1468059510}
+  - {fileID: 979851402}
+  - {fileID: 1430602685}
+  - {fileID: 127107930}
+  - {fileID: 603849544}
+  - {fileID: 1361674147}
+  - {fileID: 1217876010}
+  - {fileID: 21840895}
+  - {fileID: 1801167025}
+  - {fileID: 1266366229}
+  - {fileID: 1494810017}
+  - {fileID: 679877640}
+  - {fileID: 1125080754}
+  - {fileID: 2138810368}
+  isMultiThreading: 0
 --- !u!1001 &1217876008
 PrefabInstance:
   m_ObjectHideFlags: 0

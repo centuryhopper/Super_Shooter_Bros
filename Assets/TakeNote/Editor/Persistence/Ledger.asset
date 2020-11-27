@@ -57,8 +57,11 @@ MonoBehaviour:
     CreationDate: 11/24/2020 | 12:53 AM
     CompletionDate: 
     HasDetails: 1
-    Details: -Make hybrid ECS friendly player so that it can interact with entities
-      (try to. Not a big deal if cant)
+    Details: '-Fix player animations
+
+      -Create a character control script to
+      control player movement instead of using the virtual input manager (the virtual
+      input manager will be used as a universal input manager)'
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1

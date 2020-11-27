@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 746893973499253636}
   - component: {fileID: 746893973499253639}
   - component: {fileID: 746893973499253638}
-  - component: {fileID: 746893973499253643}
-  - component: {fileID: 746893973499253642}
+  - component: {fileID: 2208336715916534253}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: CubeObstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,7 +96,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &746893973499253643
+--- !u!114 &2208336715916534253
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,20 +105,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 746893973499253633}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4e676d6cacd648858017f9bd3f9c548, type: 3}
+  m_Script: {fileID: 11500000, guid: 7436d1f8803344904a2d66eef39ba605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateSpeed: 10
---- !u!114 &746893973499253642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 746893973499253633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ConversionMode: 0

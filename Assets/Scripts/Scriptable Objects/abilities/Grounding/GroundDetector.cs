@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Game.PlayerCharacter
@@ -25,7 +26,7 @@ namespace Game.PlayerCharacter
             }
             else
             {
-                // Debug.LogWarning("not grounded");
+                Debug.Log("falling");
                 a.SetBool(AnimationParameters.isGrounded.ToString(), false);
             }
         }
@@ -37,28 +38,37 @@ namespace Game.PlayerCharacter
 
         private bool IsGrounded(PlayerMovement p)
         {
-            if (Mathf.Approximately(p.RB.velocity.y, 0))
+            if (p.RB.velocity.y > -0.01f && p.RB.velocity.y <= 0)
             {
                 return true;
             }
 
-            foreach (GameObject obj in p.groundCheckers)
-            {
+            #region old code (replaced by the linq statement below)
+            // foreach (GameObject obj in p.groundCheckers)
+            // {
+            //     // show the rays
+            //     Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
+
+            //     RaycastHit hit;
+
+            //     // project a ray downwards
+            //     if (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection))
+            //     {
+            //         return true;
+            //     }
+            // }
+            #endregion
+
+           return p.groundCheckers.Any((GameObject obj) =>
+           {
                 // show the rays
                 Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
 
                 RaycastHit hit;
 
                 // project a ray downwards
-                if (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection))
-                {
-                    return true;
-                }
-            }
-
-
-            // here the player is still airborne
-            return false;
+                return (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection));
+           });
         }
     }
 }

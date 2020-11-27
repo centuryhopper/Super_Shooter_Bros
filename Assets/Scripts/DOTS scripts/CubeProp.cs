@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Utils;
+using Extensions;
 
 public class CubeProp : MonoBehaviour
 {
-
-
     void Start()
     {
         // set random position
