@@ -19,7 +19,7 @@ namespace Game.PlayerCharacter
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
-        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
+        override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
 
         }

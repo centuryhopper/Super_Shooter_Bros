@@ -15,7 +15,7 @@ namespace Game.PlayerCharacter
             a.SetBool(AnimationParameters.jump.ToString(), false);
         }
 
-        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
+        override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
 
         }

@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.PlayerCharacter;
 
-public class KeyboardInputs : MonoBehaviour
+namespace Game.Inputs
 {
-    void Update()
+    public class KeyboardInputs : MonoBehaviour
     {
-        VirtualInputManager.Instance.moveRight = Input.GetKey(KeyCode.D);
-        VirtualInputManager.Instance.moveLeft = Input.GetKey(KeyCode.A);
-        VirtualInputManager.Instance.jump = Input.GetKeyDown(KeyCode.Space);
-
+        void Update()
+        {
+            VirtualInputManager.Instance.moveRight = Input.GetKey(KeyCode.D);
+            VirtualInputManager.Instance.moveLeft = Input.GetKey(KeyCode.A);
+            VirtualInputManager.Instance.jump = Input.GetKeyDown(KeyCode.Space);
+            VirtualInputManager.Instance.turbo = Input.GetKey(KeyCode.LeftShift);
+        }
     }
 }

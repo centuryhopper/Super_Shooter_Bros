@@ -1,8 +1,10 @@
 ﻿// using System.Collections;
 // using System.Collections.Generic;
 // using UnityEngine;
+using Game.singleton;
 
-namespace Game.PlayerCharacter
+
+namespace Game.Inputs
 {
     /// <summary>
     /// This script will be used to control the player and
@@ -16,5 +18,12 @@ namespace Game.PlayerCharacter
         public bool jump { get; set; }
         public bool moveLeft { get; set; }
         public bool moveRight { get; set; }
+
+        /// <summary>
+        /// Is true when player holds down
+        /// shift or when player is "run" mode
+        /// </summary>
+        /// <value></value>
+        public bool turbo { get; set; }
     }
 }

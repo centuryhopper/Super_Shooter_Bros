@@ -57,15 +57,21 @@ MonoBehaviour:
     CreationDate: 11/24/2020 | 12:53 AM
     CompletionDate: 
     HasDetails: 1
-    Details: '-Fix player animations
+    Details: '-Fix player jump animations CHECK
 
-      -Create a character control script to
-      control player movement instead of using the virtual input manager (the virtual
-      input manager will be used as a universal input manager)'
+      -Create a character control
+      script to control player movement instead of using the virtual input manager
+      (the virtual input manager will be used as a universal input manager) CHECK
+
+      -Add
+      a run/walk mode for the player to determine walk or run animation (use enums)
+
+      -Toggle
+      between walk and run speed'
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1
-    DrawColor: {r: 0, g: 0.9811321, b: 0.21396954, a: 1}
+    DrawColor: {r: 0, g: 0.46226418, b: 0.10169813, a: 1}
   CompletedTasks:
   - Title: TODOs
     CreationDate: 11/7/2020 | 5:44 PM

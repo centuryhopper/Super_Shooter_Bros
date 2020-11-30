@@ -16,7 +16,7 @@ namespace Game.PlayerCharacter
             // throw new System.NotImplementedException();
         }
 
-        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
+        override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             PlayerMovement p = c.GetPlayerMoveMent(a);
 

@@ -6,16 +6,30 @@ namespace Game.PlayerCharacter
     public class PlayerState : StateMachineBehaviour
     {
         private PlayerMovement playerMovement;
-
         public PlayerMovement GetPlayerMoveMent(Animator animator)
         {
             if (playerMovement == null)
             {
+                // was getcomponentinparent
                 playerMovement = animator.GetComponentInParent<PlayerMovement>();
             }
 
             return playerMovement;
         }
+
+        private PlayerController playerController;
+        public PlayerController GetPlayerController(Animator animator)
+        {
+            if (playerController == null)
+            {
+                // was getcomponentinparent
+                playerController = animator.GetComponentInParent<PlayerController>();
+            }
+
+            return playerController;
+        }
+
+
 
         // list of scriptable objects
         public List<StateData> abilityDataLst = new List<StateData>();
@@ -24,7 +38,7 @@ namespace Game.PlayerCharacter
         {
             foreach (StateData d in abilityDataLst)
             {
-                d.UpdateAbility(c, a, asi);
+                d.OnAbilityUpdate(c, a, asi);
             }
         }
 
