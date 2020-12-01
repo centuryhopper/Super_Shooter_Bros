@@ -81,10 +81,12 @@ namespace Game.PlayerCharacter
             }
         }
 
-        private void OnCollisionEnter(BoxCollider collectible)
+        private void OnCollisionEnter(Collision collectible)
         {
+            Debug.Log("Collision Detected");
             if(collectible.gameObject.CompareTag("Collectible"))
             {
+                Debug.Log("triggered collectible");
                 Destroy(collectible.gameObject);
             }
         
