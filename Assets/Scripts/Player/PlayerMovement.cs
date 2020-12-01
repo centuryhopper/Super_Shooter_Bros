@@ -81,6 +81,15 @@ namespace Game.PlayerCharacter
             }
         }
 
+        private void OnCollisionEnter(BoxCollider collectible)
+        {
+            if(collectible.gameObject.CompareTag("Collectible"))
+            {
+                Destroy(collectible.gameObject);
+            }
+        
+        }
+
         public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate(groundCheckingSphere, position, Quaternion.identity);
 
         // // debug code
@@ -128,5 +137,7 @@ namespace Game.PlayerCharacter
         //     }
         // }
     }
+
+    
 }
 
