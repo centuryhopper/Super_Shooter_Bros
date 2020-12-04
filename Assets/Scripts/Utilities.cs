@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 // source: https://www.bitshiftprogrammer.com/2018/05/unity-c-extension-methods.html
@@ -19,7 +20,6 @@ namespace Extensions
         {
             return component.GetComponent<T>() != null;
         }
-
 
         /// <summary>
         /// Resets the Transform
@@ -75,7 +75,27 @@ namespace Extensions
             return Vector3.Normalize(destination - source);
         }
 
+        /// <summary>
+        /// given an int array, return a subarray of values
+        /// starting from the given array's "startingIndex" to,
+        /// but not including, the "endingIndex"
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endingIndex"></param>
+        /// <returns></returns>
+        public static T[] SubArray<T>(this T[] data, int startingIndex, int? endingIndex = null)
+        {
+            if (endingIndex == null) { endingIndex = data.Length; }
+            if (startingIndex < 0 || endingIndex <= 0) { return Array.Empty<T>(); }
+            if (startingIndex >= endingIndex) { return Array.Empty<T>(); }
 
+            // length of new array
+            int length = endingIndex.GetValueOrDefault() - startingIndex;
+            T[] result = new T[length];
+            Array.Copy(data, startingIndex, result, 0, length);
+            return result;
+        }
 
     }
 }
