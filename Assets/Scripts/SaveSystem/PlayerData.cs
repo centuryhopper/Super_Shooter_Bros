@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Game.Core
+﻿namespace Game.Core
 {
     /// <summary>
     /// all data you want to save

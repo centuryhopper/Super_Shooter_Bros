@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.PlayerCharacter
@@ -9,7 +8,8 @@ namespace Game.PlayerCharacter
         move,
         jump,
         force_transition,
-        isGrounded
+        isGrounded,
+        turbo,
     }
 
 

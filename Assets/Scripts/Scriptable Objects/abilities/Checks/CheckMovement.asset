@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f5764d297343475f83d003756eded45, type: 3}
-  m_Name: ForceTransition_Landing
+  m_Script: {fileID: 11500000, guid: 6cf01f33e0d6143e5bda64e5bc5e587d, type: 3}
+  m_Name: CheckMovement
   m_EditorClassIdentifier: 
-  transitionTime: 0.01

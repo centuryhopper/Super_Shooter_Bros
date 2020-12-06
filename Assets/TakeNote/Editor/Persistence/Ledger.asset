@@ -64,14 +64,30 @@ MonoBehaviour:
       (the virtual input manager will be used as a universal input manager) CHECK
 
       -Add
-      a run/walk mode for the player to determine walk or run animation (use enums)
+      a run/walk mode for the player to determine walk or run animation (no longer
+      needed)
 
-      -Toggle
-      between walk and run speed'
+      -Toggle between walk and run speed and animations (CHECK)
+
+      -Add
+      ground detector for idle state (CHECK)
+
+      -Perfect running state (CHECKED
+      for now but will need feedback from teammates and playtesters well in the future)
+
+      -Be
+      able to jump while moving
+
+      -Double jump ability
+
+      -Add ledge grab
+
+      -Add
+      player weapon (gun that shoots ice beam?)'
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1
-    DrawColor: {r: 0, g: 0.46226418, b: 0.10169813, a: 1}
+    DrawColor: {r: 0.36320752, g: 1, b: 0.43243113, a: 1}
   CompletedTasks:
   - Title: TODOs
     CreationDate: 11/7/2020 | 5:44 PM

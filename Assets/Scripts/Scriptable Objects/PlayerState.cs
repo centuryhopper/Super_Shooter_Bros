@@ -38,6 +38,7 @@ namespace Game.PlayerCharacter
         {
             foreach (StateData d in abilityDataLst)
             {
+                if (d == null) Debug.Log("d is null");
                 d.OnAbilityUpdate(c, a, asi);
             }
         }
