@@ -25,5 +25,10 @@ namespace Game.Inputs
         /// </summary>
         /// <value></value>
         public bool turbo { get; set; }
+        public bool secondJump { get; set; }
+
+
+
+
     }
 }

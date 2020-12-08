@@ -14,6 +14,9 @@ namespace Game.PlayerCharacter
 
             // prevents the bug: player jumping while airborne
             a.SetBool(AnimationParameters.jump.ToString(), false);
+
+            // player can double jump again
+            PlayerMovement.numJumps = 2;
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)

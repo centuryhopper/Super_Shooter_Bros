@@ -1,43 +1,31 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
-    [CreateAssetMenu(fileName = "New State", menuName = "ability/jump", order = 0)]
-    public class Jump : StateData
+
+    [CreateAssetMenu(fileName = "SecondJump", menuName = "ability/SecondJump", order = 0)]
+    public class SecondJump : StateData
     {
         [Range(1, 10)]
-        public float jumpForce;
-        private PlayerController playerController;
+        public float secondJumpForce = 5.14f;
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            // ensure we don't play the landing animation too early
-            a.SetBool(AnimationParameters.isGrounded.ToString(), false);
-
-            playerController = character.GetPlayerController(a);
+            PlayerMovement.numJumps -= 1;
 
             // get player rigidbody and apply force to the jump
             Rigidbody rb = character.GetPlayerMoveMent(a).RB;
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            PlayerMovement.numJumps -= 1;
+            rb.AddForce(Vector3.up * secondJumpForce, ForceMode.Impulse);
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            Debug.Log("second Jump: " + playerController.jump + "and num jumps: " + PlayerMovement.numJumps);
 
-            // listen for another jump
-            if (playerController.jump && PlayerMovement.numJumps == 1)
-            {
-                Debug.Log("second jump triggered");
-
-                a.SetBool(AnimationParameters.secondJump.ToString(), true);
-            }
         }
 
         override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            a.SetBool(AnimationParameters.jump.ToString(), false);
+            a.SetBool(AnimationParameters.secondJump.ToString(), false);
         }
 
     }

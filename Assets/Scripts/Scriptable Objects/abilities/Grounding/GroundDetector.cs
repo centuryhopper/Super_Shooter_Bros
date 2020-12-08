@@ -20,6 +20,7 @@ namespace Game.PlayerCharacter
 
             if (IsGrounded(p))
             {
+                Debug.Log("on ground");
                 a.SetBool(AnimationParameters.isGrounded.ToString(), true);
             }
             else
@@ -57,16 +58,16 @@ namespace Game.PlayerCharacter
             // }
             #endregion
 
-           return p.groundCheckers.Any((GameObject obj) =>
-           {
-                // show the rays
-                Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
+            return p.groundCheckers.Any((GameObject obj) =>
+            {
+               // show the rays
+               Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
 
                 RaycastHit hit;
 
-                // project a ray downwards
-                return (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection));
-           });
+               // project a ray downwards
+               return (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection));
+            });
         }
     }
 }

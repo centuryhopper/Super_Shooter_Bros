@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fad3767963e9448f887b2ede282e9a1, type: 3}
-  m_Name: ground_detector
+  m_Script: {fileID: 11500000, guid: 26b2c97b57c684060bd08a1f17d20ace, type: 3}
+  m_Name: SecondJump
   m_EditorClassIdentifier: 
-  distanceOfDetection: 0.35
+  secondJumpForce: 5.14

@@ -10,6 +10,7 @@ namespace Game.PlayerCharacter
         force_transition,
         isGrounded,
         turbo,
+        secondJump,
     }
 
 
@@ -34,6 +35,12 @@ namespace Game.PlayerCharacter
         [SerializeField] GameObject groundCheckingSphere = null;
 
         [SerializeField] int sections = 5;
+
+        /// <summary>
+        /// player has double jump ability
+        /// </summary>
+        [HideInInspector]
+        public static int numJumps = 2;
 
         void Awake()
         {

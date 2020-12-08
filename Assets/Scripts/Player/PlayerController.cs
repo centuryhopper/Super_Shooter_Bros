@@ -15,6 +15,7 @@ namespace Game.PlayerCharacter
         /// </summary>
         /// <value></value>
         public bool turbo;
+        public bool secondJump;
 
         void Update()
         {
@@ -22,7 +23,9 @@ namespace Game.PlayerCharacter
             moveLeft = VirtualInputManager.Instance.moveLeft;
             moveRight = VirtualInputManager.Instance.moveRight;
             turbo = VirtualInputManager.Instance.turbo;
-            print(turbo);
+            secondJump = VirtualInputManager.Instance.secondJump;
+
+            // print(turbo);
         }
     }
 }

@@ -76,14 +76,17 @@ MonoBehaviour:
       for now but will need feedback from teammates and playtesters well in the future)
 
       -Be
-      able to jump while moving
+      able to jump while moving (CHECK)
+
+      -Make sure player can move while falling
+      (CHECK)
 
       -Double jump ability
 
       -Add ledge grab
 
-      -Add
-      player weapon (gun that shoots ice beam?)'
+      -Add player
+      weapon (gun that shoots ice beam?)'
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1
