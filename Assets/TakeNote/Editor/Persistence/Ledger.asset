@@ -81,12 +81,13 @@ MonoBehaviour:
       -Make sure player can move while falling
       (CHECK)
 
-      -Double jump ability
+      -Double jump ability (CHECK but try using a blend tree to smoothen
+      the ending animation)
 
       -Add ledge grab
 
-      -Add player
-      weapon (gun that shoots ice beam?)'
+      -Add player weapon (gun
+      that shoots ice beam?)'
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1

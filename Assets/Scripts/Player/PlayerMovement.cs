@@ -11,6 +11,7 @@ namespace Game.PlayerCharacter
         isGrounded,
         turbo,
         secondJump,
+        transitionIndex,
     }
 
 
