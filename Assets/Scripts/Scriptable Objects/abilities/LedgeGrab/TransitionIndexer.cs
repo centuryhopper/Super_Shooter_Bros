@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Unity.Mathematics;
-using Unity.Jobs;
-using Unity.Collections;
 
 namespace Game.PlayerCharacter
 {
@@ -18,6 +14,7 @@ namespace Game.PlayerCharacter
         GRABBING_LEDGE,
     }
 
+    [CreateAssetMenu(fileName = "New State", menuName = "ability/Transition Indexer", order = 0)]
     public class TransitionIndexer : StateData
     {
         public int Index;
@@ -42,9 +39,7 @@ namespace Game.PlayerCharacter
         }
 
         public override void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
-        {
-            throw new System.NotImplementedException();
-        }
+        {}
 
         private bool ShouldMakeTransition(PlayerController playerController)
         {
@@ -54,18 +49,19 @@ namespace Game.PlayerCharacter
                 {
                     case AirBorneTransitions.UP:
                     {
-                        // if (!playerController.moveUp)
-                        // {
-
-                        // }
+                        if (!playerController.moveUp)
+                        {
+                            // Debug.Log("player isn't moving up");
+                            return false;
+                        }
                     }
                     break;
                     case AirBorneTransitions.DOWN:
                     {
-                        // if (!playerController.moveDown)
-                        // {
-
-                        // }
+                        if (!playerController.moveDown)
+                        {
+                            return false;
+                        }
                     }
                     break;
                     case AirBorneTransitions.LEFT:
@@ -99,12 +95,16 @@ namespace Game.PlayerCharacter
                     break;
                     case AirBorneTransitions.GRABBING_LEDGE:
                     {
-
+                        if (!playerController.ledgeChecker.isGrabbingLedge)
+                        {
+                            return false;
+                        }
                     }
                     break;
                 }
             }
 
+            Debug.Log("here");
             return true;
         }
     }

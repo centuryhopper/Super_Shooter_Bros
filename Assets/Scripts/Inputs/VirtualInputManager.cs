@@ -18,6 +18,8 @@ namespace Game.Inputs
         public bool jump { get; set; }
         public bool moveLeft { get; set; }
         public bool moveRight { get; set; }
+        public bool moveUp { get; set; }
+        public bool moveDown { get; set; }
 
         /// <summary>
         /// Is true when player holds down

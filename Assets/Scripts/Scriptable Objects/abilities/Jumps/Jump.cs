@@ -24,12 +24,12 @@ namespace Game.PlayerCharacter
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            Debug.Log("second Jump: " + playerController.jump + "and num jumps: " + PlayerMovement.numJumps);
+            // Debug.Log("second Jump: " + playerController.jump + "and num jumps: " + PlayerMovement.numJumps);
 
             // listen for another jump
             if (playerController.jump && PlayerMovement.numJumps == 1)
             {
-                Debug.Log("second jump triggered");
+                // Debug.Log("second jump triggered");
 
                 a.SetBool(AnimationParameters.secondJump.ToString(), true);
             }

@@ -20,12 +20,12 @@ namespace Game.PlayerCharacter
 
             if (IsGrounded(p))
             {
-                Debug.Log("on ground");
+                // Debug.Log("on ground");
                 a.SetBool(AnimationParameters.isGrounded.ToString(), true);
             }
             else
             {
-                Debug.Log("falling");
+                // Debug.Log("falling");
                 a.SetBool(AnimationParameters.isGrounded.ToString(), false);
             }
         }

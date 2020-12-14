@@ -29,8 +29,6 @@ namespace Game.PlayerCharacter
             return playerController;
         }
 
-
-
         // list of scriptable objects
         public List<StateData> abilityDataLst = new List<StateData>();
 

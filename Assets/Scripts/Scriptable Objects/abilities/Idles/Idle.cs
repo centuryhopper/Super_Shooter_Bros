@@ -10,7 +10,7 @@ namespace Game.PlayerCharacter
         override public void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             playerController = c.GetPlayerController(a);
-            Debug.Log(playerController);
+            // Debug.Log(playerController);
 
             // prevents the bug: player jumping while airborne
             a.SetBool(AnimationParameters.jump.ToString(), false);

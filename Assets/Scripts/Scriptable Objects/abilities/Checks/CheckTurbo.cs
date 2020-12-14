@@ -17,7 +17,7 @@ namespace Game.PlayerCharacter
             // check whether the player should sprint
             if (playerController.turbo)
             {
-                Debug.Log("turbo is true");
+                // Debug.Log("turbo is true");
                 a.SetBool(AnimationParameters.turbo.ToString(), true);
             }
             else
