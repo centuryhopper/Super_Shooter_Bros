@@ -5,6 +5,7 @@ namespace Game.PlayerCharacter
 {
     public class PlayerState : StateMachineBehaviour
     {
+        #region player components
         private PlayerMovement playerMovement;
         public PlayerMovement GetPlayerMoveMent(Animator animator)
         {
@@ -28,6 +29,9 @@ namespace Game.PlayerCharacter
 
             return playerController;
         }
+
+        
+        #endregion
 
         // list of scriptable objects
         public List<StateData> abilityDataLst = new List<StateData>();

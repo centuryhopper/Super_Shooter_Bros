@@ -78,6 +78,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9354ea10283ab4af1a2b2bed083a3640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ledgeChecker: {fileID: 7096382803104766911}
+  playerSkin: {fileID: 570557712148411058}
   groundCheckingSphere: {fileID: 4664209058132775207, guid: c6e13f6502013421d8df4174707638a6, type: 3}
   sections: 5
 --- !u!95 &2845221631649874173
@@ -226,6 +228,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5537c011c1d4c4f0da5c2bb0b583f5d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkLedge: {fileID: 0}
+  getLedge: {fileID: 0}
   isGrabbingLedge: 0
 --- !u!1001 &42371399891233117
 PrefabInstance:

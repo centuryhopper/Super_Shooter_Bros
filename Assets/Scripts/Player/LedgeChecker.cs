@@ -12,20 +12,22 @@ namespace Game.PlayerCharacter
     /// </summary>
     public class LedgeChecker : MonoBehaviour
     {
-        Ledge anyLedge = null;
-        public bool isGrabbingLedge;
+        [HideInInspector]
+        public Ledge checkLedge = null, getLedge = null;
+        public bool isGrabbingLedge = false;
 
         void OnTriggerEnter(Collider other)
         {
-            anyLedge = other.GetComponent<Ledge>();
-            isGrabbingLedge = anyLedge != null;
+            checkLedge = other.GetComponent<Ledge>();
+            isGrabbingLedge = checkLedge != null;
+            getLedge = isGrabbingLedge ? checkLedge : null;
             Debug.Log($"is grabbing ledge: {isGrabbingLedge}");
         }
 
         void OnTriggerExit(Collider other)
         {
-            anyLedge = other.GetComponent<Ledge>();
-            if (anyLedge != null)
+            checkLedge = other.GetComponent<Ledge>();
+            if (checkLedge != null)
             {
                 isGrabbingLedge = false;
             }

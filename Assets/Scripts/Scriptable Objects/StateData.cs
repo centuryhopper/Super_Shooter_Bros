@@ -3,7 +3,7 @@
 namespace Game.PlayerCharacter
 {
     /// <summary>
-    /// the base model for every player action/ability that has
+    /// The base model for every player action/ability that has
     /// and will be created.
     /// Always get the player movement script from the CharacterStateBase class
     /// </summary>
