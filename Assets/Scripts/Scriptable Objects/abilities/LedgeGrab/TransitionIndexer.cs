@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
+    // potential moves performed by the player when airborne
     public enum AirBorneTransitions
     {
         UP,
@@ -36,10 +37,20 @@ namespace Game.PlayerCharacter
             {
                 a.SetInteger(AnimationParameters.transitionIndex.ToString(), Index);
             }
+
+            // listens for a down-key press
+            else
+            {
+                // transition the animation back to idle
+                a.SetInteger(AnimationParameters.transitionIndex.ToString(), 0);
+            }
+
         }
 
         public override void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
-        {}
+        {
+            a.SetInteger(AnimationParameters.transitionIndex.ToString(), 0);
+        }
 
         private bool ShouldMakeTransition(PlayerController playerController)
         {
@@ -104,7 +115,7 @@ namespace Game.PlayerCharacter
                 }
             }
 
-            Debug.Log("here");
+            // Debug.Log("here");
             return true;
         }
     }

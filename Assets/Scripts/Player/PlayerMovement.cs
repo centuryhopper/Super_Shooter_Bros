@@ -41,7 +41,7 @@ namespace Game.PlayerCharacter
         [SerializeField] LedgeChecker ledgeChecker = null;
         public LedgeChecker GetLedgeChecker { get {return ledgeChecker;}  }
         [SerializeField] Transform playerSkin = null;
-        public Transform PlayerSkin { get {return playerSkin;}  }
+        public Transform PlayerSkin { get {return playerSkin;} set { playerSkin = value; } }
 
         public List<GameObject> groundCheckers { get; private set; }
 

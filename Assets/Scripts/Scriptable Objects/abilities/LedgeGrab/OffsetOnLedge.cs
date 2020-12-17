@@ -16,8 +16,8 @@ namespace Game.PlayerCharacter
             // then set the jammo player's local position to the specified ledge offset
             PlayerMovement p = c.GetPlayerMoveMent(a);
             Transform playerSkin = p.PlayerSkin;
-            playerSkin.parent = p.GetLedgeChecker.getLedge.transform;
-            playerSkin.localPosition = p.GetLedgeChecker.getLedge.Offset;
+            playerSkin.parent = p.GetLedgeChecker.getGrabbedLedge.transform;
+            playerSkin.localPosition = p.GetLedgeChecker.getGrabbedLedge.Offset;
 
             // zero out velocity to avoid bugs
             p.RB.velocity = new Vector3(0,0,0);

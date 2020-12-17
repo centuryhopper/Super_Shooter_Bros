@@ -11,7 +11,7 @@ namespace Game.PlayerCharacter
     [CreateAssetMenu(fileName = "New State", menuName = "ability/Toggle Collider", order = 0)]
     public class ToggleCollider : StateData
     {
-        public bool gravitySwitch;
+        public bool colliderSwitch;
         public bool onStart, onEnd;
 
         public override void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
@@ -38,7 +38,8 @@ namespace Game.PlayerCharacter
 
         private void toggleCollider(PlayerMovement p)
         {
-            p.BoxCollider.enabled = false;
+            p.RB.velocity = new Vector3(0,0,0);
+            p.BoxCollider.enabled = colliderSwitch;
         }
     }
 }
