@@ -1,27 +1,31 @@
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+
+namespace Game.singleton
 {
-    private static T instance;
-
-    public static T Instance
+    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        get
+        private static T instance;
+
+        public static T Instance
         {
-            if (instance == null)
+            get
             {
-                // create a new game object during runtime
-                GameObject g = new GameObject();
+                if (instance == null)
+                {
+                    // create a new game object during runtime
+                    GameObject g = new GameObject();
 
-                // add component to it
-                instance = g.AddComponent<T>();
+                    // add component to it
+                    instance = g.AddComponent<T>();
 
-                // give it a name
-                g.name = typeof(T).ToString();
+                    // give it a name
+                    g.name = typeof(T).ToString();
+                }
+
+                return instance;
             }
-
-            return instance;
         }
-    }
 
+    }
 }

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f5764d297343475f83d003756eded45, type: 3}
   m_Name: ForceTransition_Landing
   m_EditorClassIdentifier: 
-  transitionTime: 0.446
+  transitionTime: 0.01

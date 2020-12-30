@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 namespace Game.PlayerCharacter
@@ -6,24 +5,32 @@ namespace Game.PlayerCharacter
     [CreateAssetMenu(fileName = "idle", menuName = "idle")]
     public class Idle : StateData
     {
-        override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
+        PlayerController playerController = null;
+
+        override public void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
+            playerController = c.GetPlayerController(a);
+            // Debug.Log(playerController);
+
             // prevents the bug: player jumping while airborne
             a.SetBool(AnimationParameters.jump.ToString(), false);
+
+            // player can double jump again
+            PlayerMovement.numJumps = 2;
         }
 
-        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
+        override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             // only determine when to switch to the walk animation
-            if (VirtualInputManager.Instance.moveRight)
+            if (playerController.moveRight)
             {
                 a.SetBool(AnimationParameters.move.ToString(), true);
             }
-            else if (VirtualInputManager.Instance.moveLeft)
+            else if (playerController.moveLeft)
             {
                 a.SetBool(AnimationParameters.move.ToString(), true);
             }
-            else if (VirtualInputManager.Instance.jump)
+            else if (playerController.jump)
             {
                 a.SetBool(AnimationParameters.jump.ToString(), true);
             }

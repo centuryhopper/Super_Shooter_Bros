@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CharacterSkinController : MonoBehaviour
 {
@@ -18,7 +16,7 @@ public class CharacterSkinController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         characterMaterials = GetComponentsInChildren<Renderer>();
-        
+
     }
 
     // Update is called once per frame

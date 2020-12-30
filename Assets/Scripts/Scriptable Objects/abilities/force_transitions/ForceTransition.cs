@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
@@ -15,7 +13,7 @@ namespace Game.PlayerCharacter
             // throw new System.NotImplementedException();
         }
 
-        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
+        override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             // timer
             if (asi.normalizedTime >= transitionTime)

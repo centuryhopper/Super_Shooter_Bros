@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace Game.PlayerCharacter
@@ -16,17 +14,18 @@ namespace Game.PlayerCharacter
             // throw new System.NotImplementedException();
         }
 
-        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
+        override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             PlayerMovement p = c.GetPlayerMoveMent(a);
 
             if (IsGrounded(p))
             {
+                // Debug.Log("on ground");
                 a.SetBool(AnimationParameters.isGrounded.ToString(), true);
             }
             else
             {
-                Debug.Log("falling");
+                // Debug.Log("falling");
                 a.SetBool(AnimationParameters.isGrounded.ToString(), false);
             }
         }
@@ -59,16 +58,16 @@ namespace Game.PlayerCharacter
             // }
             #endregion
 
-           return p.groundCheckers.Any((GameObject obj) =>
-           {
-                // show the rays
-                Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
+            return p.groundCheckers.Any((GameObject obj) =>
+            {
+               // show the rays
+               Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
 
                 RaycastHit hit;
 
-                // project a ray downwards
-                return (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection));
-           });
+               // project a ray downwards
+               return (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection));
+            });
         }
     }
 }

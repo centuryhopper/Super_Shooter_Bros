@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
@@ -15,7 +13,7 @@ namespace Game.PlayerCharacter
             a.SetBool(AnimationParameters.jump.ToString(), false);
         }
 
-        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
+        override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
 
         }

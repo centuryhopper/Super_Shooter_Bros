@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Extensions;
 
 namespace Game.PlayerCharacter
 {
@@ -10,13 +8,23 @@ namespace Game.PlayerCharacter
         move,
         jump,
         force_transition,
-        isGrounded
+        isGrounded,
+        turbo,
+        secondJump,
+        transitionIndex,
     }
-
 
     public class PlayerMovement : MonoBehaviour
     {
-        BoxCollider box = null;
+        BoxCollider boxCollider = null;
+        public BoxCollider BoxCollider
+        {
+            get
+            {
+                return boxCollider;
+            }
+        }
+
         Rigidbody rb;
         public Rigidbody RB
         {
@@ -30,23 +38,34 @@ namespace Game.PlayerCharacter
             }
         }
 
+        [SerializeField] LedgeChecker ledgeChecker = null;
+        public LedgeChecker GetLedgeChecker { get {return ledgeChecker;}  }
+        [SerializeField] Transform playerSkin = null;
+        public Transform PlayerSkin { get {return playerSkin;} set { playerSkin = value; } }
+
         public List<GameObject> groundCheckers { get; private set; }
 
         [SerializeField] GameObject groundCheckingSphere = null;
 
         [SerializeField] int sections = 5;
 
+        /// <summary>
+        /// player has double jump ability
+        /// </summary>
+        [HideInInspector]
+        public static int numJumps = 2;
+
         void Awake()
         {
-            box = GetComponent<BoxCollider>();
             groundCheckers = new List<GameObject>(sections + 2);
+            boxCollider = GetComponent<BoxCollider>();
 
             // y-z plane in this case
-            float top = box.bounds.center.y + box.bounds.extents.y;
-            float bottom = box.bounds.center.y - box.bounds.extents.y;
+            float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
+            float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
 
-            float front = box.bounds.center.z + box.bounds.extents.z;
-            float back = box.bounds.center.z - box.bounds.extents.z;
+            float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
+            float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
 
             // create the spheres and add them to the list
             GameObject bottomFrontSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, front));

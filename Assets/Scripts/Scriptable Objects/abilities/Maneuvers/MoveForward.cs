@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
@@ -9,15 +7,18 @@ namespace Game.PlayerCharacter
     {
         public AnimationCurve speedGraph;
         public float speed;
+        private PlayerController playerController;
+        private PlayerMovement playerMovement;
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            ;
+            playerController = character.GetPlayerController(a);
+            playerMovement = character.GetPlayerMoveMent(a);
         }
 
-        override public void UpdateAbility(PlayerState c, Animator a, AnimatorStateInfo asi)
+        override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            MovePlayer(c.GetPlayerMoveMent(a), a, asi);
+            MovePlayer(playerMovement, a, asi);
         }
 
         override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
@@ -31,7 +32,7 @@ namespace Game.PlayerCharacter
         void MovePlayer(PlayerMovement p, Animator animator, AnimatorStateInfo asi)
         {
             // side scroller
-            if (VirtualInputManager.Instance.moveRight)
+            if (playerController.moveRight)
             {
                 // multiple by the speed graph value so that we can still move while we jump
                 p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
@@ -39,7 +40,7 @@ namespace Game.PlayerCharacter
                 // transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 p.transform.rotation = Quaternion.LookRotation(Vector3.forward, p.transform.up);
             }
-            else if (VirtualInputManager.Instance.moveLeft)
+            else if (playerController.moveLeft)
             {
                 // multiple by the speed graph value so that we can still move while we jump
                 p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);

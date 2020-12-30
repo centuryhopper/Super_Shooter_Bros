@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Mathematics;
-using Unity.Jobs;
-using Unity.Collections;
+﻿using UnityEngine;
 
 public class SnowFlakeCubeBehavior : MonoBehaviour
 {
