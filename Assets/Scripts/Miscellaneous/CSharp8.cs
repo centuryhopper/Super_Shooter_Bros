@@ -46,9 +46,9 @@ public class CSharp8
             "dog"       // 8                   ^1
         };              // 9 (or words.Length) ^0
 
-        var allWords = words[..]; // contains "The" through "dog".
-        var firstPhrase = words[..4]; // contains "The" through "fox"
-        var lastPhrase = words[6..]; // contains "the", "lazy" and "dog"
+        // var allWords = words[..]; // contains "The" through "dog".
+        // var firstPhrase = words[..4]; // contains "The" through "fox"
+        // var lastPhrase = words[6..]; // contains "the", "lazy" and "dog"
     }
 
     int M()

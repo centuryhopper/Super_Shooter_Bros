@@ -25,6 +25,7 @@ namespace Game.PlayerCharacter
 
         public override void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
+            
         }
 
         public override void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
