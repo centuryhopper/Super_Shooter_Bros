@@ -57,37 +57,20 @@ MonoBehaviour:
     CreationDate: 11/24/2020 | 12:53 AM
     CompletionDate: 
     HasDetails: 1
-    Details: '-Fix player jump animations CHECK
-
-      -Create a character control
-      script to control player movement instead of using the virtual input manager
-      (the virtual input manager will be used as a universal input manager) CHECK
-
-      -Add
+    Details: "-Fix player jump animations CHECK\n-Create a character control script
+      to control player movement instead of using the virtual input manager (the
+      virtual input manager will be used as a universal input manager) CHECK\n-Add
       a run/walk mode for the player to determine walk or run animation (no longer
-      needed)
-
-      -Toggle between walk and run speed and animations (CHECK)
-
-      -Add
-      ground detector for idle state (CHECK)
-
-      -Perfect running state (CHECKED
-      for now but will need feedback from teammates and playtesters well in the future)
-
-      -Be
-      able to jump while moving (CHECK)
-
-      -Make sure player can move while falling
-      (CHECK)
-
-      -Double jump ability (CHECK but try using a blend tree to smoothen
-      the ending animation)
-
-      -Add ledge grab
-
-      -Add player weapon (gun
-      that shoots ice beam?)'
+      needed)\n-Toggle between walk and run speed and animations (CHECK)\n-Add ground
+      detector for idle state (CHECK)\n-Perfect running state (CHECKED for now but
+      will need feedback from teammates and playtesters well in the future)\n-Be
+      able to jump while moving (CHECK)\n-Make sure player can move while falling
+      (CHECK)\n-Double jump ability (CHECK but try using a blend tree to smoothen
+      the ending animation)\n-Add ledge grab (CHECK but review for bugs)\n-Add player
+      weapon (gun that shoots things depending on the environments you've been in)\n\t-for
+      example, you will have the power to shoot ice beams if you've been in snowy
+      environments, high-pressured water if you've been in lakes, flames if you've
+      been around hot flamy volcanic regions, lightning bolts if you've been in deserts."
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1

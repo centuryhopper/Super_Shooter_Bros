@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf36fcb2f5c34de59ee20d1e61e40a1, type: 3}
   m_Name: Player_Crouch_Idle_Indexer
   m_EditorClassIdentifier: 
-  Index: 0
-  transitionConditions: 
+  Index: 1
+  transitionConditions: 01000000

@@ -21,7 +21,7 @@ namespace Game.PlayerCharacter
             checkLedge = other.GetComponent<Ledge>();
             isGrabbingLedge = checkLedge != null;
             getGrabbedLedge = isGrabbingLedge ? checkLedge : null;
-            Debug.Log($"is grabbing ledge: {isGrabbingLedge}");
+            // Debug.Log($"is grabbing ledge: {isGrabbingLedge}");
         }
 
         void OnTriggerExit(Collider other)
@@ -31,7 +31,7 @@ namespace Game.PlayerCharacter
             {
                 isGrabbingLedge = false;
             }
-            Debug.Log($"is grabbing ledge now is: {isGrabbingLedge}");
+            // Debug.Log($"is grabbing ledge now is: {isGrabbingLedge}");
         }
     }
 }
