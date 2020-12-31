@@ -6,11 +6,12 @@ namespace Game.PlayerCharacter
     public class Idle : StateData
     {
         PlayerController playerController = null;
+        PlayerMovement playerMovement = null;
 
         override public void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             playerController = c.GetPlayerController(a);
-            // Debug.Log(playerController);
+            playerMovement = c.GetPlayerMoveMent(a);
 
             // prevents the bug: player jumping while airborne
             a.SetBool(AnimationParameters.jump.ToString(), false);
@@ -21,6 +22,9 @@ namespace Game.PlayerCharacter
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
+            float playerSkinFaceDirection = playerMovement.PlayerSkin.eulerAngles.y;
+            // Debug.Log(playerSkinFaceDirection);
+
             // only determine when to switch to the walk animation
             if (playerController.moveRight)
             {

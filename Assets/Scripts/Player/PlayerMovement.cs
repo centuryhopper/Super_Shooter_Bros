@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace Game.PlayerCharacter
 {
@@ -12,6 +13,8 @@ namespace Game.PlayerCharacter
         turbo,
         secondJump,
         transitionIndex,
+        walkDirection,
+
     }
 
     public class PlayerMovement : MonoBehaviour
@@ -38,69 +41,99 @@ namespace Game.PlayerCharacter
             }
         }
 
+        public Transform targetTransform = null;
+        private Camera mainCam;
+
+
         [SerializeField] LedgeChecker ledgeChecker = null;
         public LedgeChecker GetLedgeChecker { get {return ledgeChecker;}  }
         [SerializeField] Transform playerSkin = null;
         public Transform PlayerSkin { get {return playerSkin;} set { playerSkin = value; } }
-
         public List<GameObject> groundCheckers { get; private set; }
-
         [SerializeField] GameObject groundCheckingSphere = null;
-
         [SerializeField] int sections = 5;
 
         /// <summary>
-        /// player has double jump ability
+        /// With this, player now has double jump ability
         /// </summary>
         [HideInInspector]
         public static int numJumps = 2;
+        public LayerMask mouseAimMask;
 
         void Awake()
         {
+            // Debug.Log(Input.mousePresent ? "mouse detected" : "mouse not detected");
             groundCheckers = new List<GameObject>(sections + 2);
             boxCollider = GetComponent<BoxCollider>();
+            rb = GetComponent<Rigidbody>();
+            mainCam = Camera.main;
 
-            // y-z plane in this case
-            float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
-            float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
+            #region groundchecking spheres
+                // y-z plane in this case
+                float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
+                float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
 
-            float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
-            float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
+                float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
+                float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
 
-            // create the spheres and add them to the list
-            GameObject bottomFrontSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, front));
-            GameObject bottomBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
+                // create the spheres and add them to the list
+                GameObject bottomFrontSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, front));
+                GameObject bottomBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
 
-            groundCheckers.Add(bottomFrontSphere);
-            groundCheckers.Add(bottomBackSphere);
+                groundCheckers.Add(bottomFrontSphere);
+                groundCheckers.Add(bottomBackSphere);
 
-            // parent the player to the spheres so the positions of the ground checkers are accurate
-            bottomFrontSphere.transform.parent = this.transform;
-            bottomBackSphere.transform.parent = this.transform;
+                // parent the player to the spheres so the positions of the ground checkers are accurate
+                bottomFrontSphere.transform.parent = this.transform;
+                bottomBackSphere.transform.parent = this.transform;
 
-            // divide into 5 sections and add a sphere for each section
-            float section = (bottomFrontSphere.transform.position
-            - bottomBackSphere.transform.position).magnitude / sections;
+                // divide into 5 sections and add a sphere for each section
+                float section = (bottomFrontSphere.transform.position
+                - bottomBackSphere.transform.position).magnitude / sections;
 
-            for (int i = 0; i < sections; ++i)
-            {
-                // find position for each section
-                //         X       X       X       X       X
-                // | ..... | ..... | ..... | ..... | ..... | ..... |
-                Vector3 position = bottomBackSphere.transform.position + (Vector3.forward * section * (i + 1));
+                for (int i = 0; i < sections; ++i)
+                {
+                    // find position for each section
+                    //         X       X       X       X       X
+                    // | ..... | ..... | ..... | ..... | ..... | ..... |
+                    Vector3 position = bottomBackSphere.transform.position + (Vector3.forward * section * (i + 1));
 
-                // instantiate sphere
-                GameObject sphere = CreateGroundCheckingSphere(position);
+                    // instantiate sphere
+                    GameObject sphere = CreateGroundCheckingSphere(position);
 
-                // parent it to the player
-                sphere.transform.parent = this.transform;
+                    // parent it to the player
+                    sphere.transform.parent = this.transform;
 
-                // add it to the list
-                groundCheckers.Add(sphere);
-            }
+                    // add it to the list
+                    groundCheckers.Add(sphere);
+                }
+
+            #endregion
+
         }
 
         public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate(groundCheckingSphere, position, Quaternion.identity);
+
+
+        // todo maybe migrate the code below over to a state machine script
+        void Update()
+        {
+            // Debug.Log($"y rotation of playerskin: {playerSkin.eulerAngles.y}");
+
+            Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mouseAimMask))
+            {
+                // move the target transform to where the mouse cursor is
+                targetTransform.position = hit.point;
+            }
+
+            // changing the this transform's rotation had some weird inversions, so player skin turned
+            // out to be the better alternative
+            playerSkin.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(targetTransform.position.z - this.transform.position.z), transform.up);
+        }
+
+
 
         // // debug code
         // void OnCollisionEnter(Collision collisionInfo)
