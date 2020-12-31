@@ -11,8 +11,7 @@ namespace Game.Inputs
             VirtualInputManager.Instance.moveUp = Input.GetKey(KeyCode.W);
             VirtualInputManager.Instance.moveDown = Input.GetKey(KeyCode.S);
             VirtualInputManager.Instance.jump = Input.GetKeyDown(KeyCode.Space);
-            VirtualInputManager.Instance.turbo = Input.GetKey(KeyCode.RightShift);
-
+            VirtualInputManager.Instance.turbo = Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift);
         }
     }
 }
