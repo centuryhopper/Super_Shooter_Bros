@@ -36,16 +36,31 @@ namespace Game.PlayerCharacter
         /// </summary>
         void MovePlayer(PlayerMovement p, Animator a, AnimatorStateInfo asi)
         {
-            float playerSkinFaceDirection = p.PlayerSkin.eulerAngles.y;
+            // help decide whether to walk forward and backwards based on player's
+            // facing direction
+            float faceDirection = p.faceDirection;
+            Debug.Log($"face dir: {faceDirection}");
+
+            facingSign = faceDirection == 0 ? 1 : faceDirection == 180 ? -1 : 0;
 
             // side scroller
             if (playerController.moveRight)
             {
-                facingSign = playerSkinFaceDirection == 0 ? 1 : playerSkinFaceDirection == 180 ? -1 : 0;
                 a.SetFloat(AnimationParameters.walkDirection.ToString(), facingSign);
 
-                // multiple by the speed graph value so that we can still move while we jump
-                p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                // facing right
+                if (facingSign == 1)
+                {
+                    // multiple by the speed graph value so that we can still move while we jump
+                    p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                }
+                // facing left
+                else if (facingSign == -1)
+                {
+                    // multiple by the speed graph value so that we can still move while we jump
+                    p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                }
+
                 // p.transform.Translate(Vector3.forward * speed * Time.deltaTime);
                 // transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                 // p.transform.rotation = Quaternion.LookRotation(Vector3.forward, p.transform.up);
@@ -55,11 +70,22 @@ namespace Game.PlayerCharacter
             }
             else if (playerController.moveLeft)
             {
-                facingSign = playerSkinFaceDirection == 0 ? -1 : playerSkinFaceDirection == 180 ? 1 : 0;
-                a.SetFloat(AnimationParameters.walkDirection.ToString(), facingSign);
+                a.SetFloat(AnimationParameters.walkDirection.ToString(), -facingSign);
 
-                // multiple by the speed graph value so that we can still move while we jump
-                p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                // facing right
+                if (facingSign == 1)
+                {
+                    // multiple by the speed graph value so that we can still move while we jump
+                    p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                }
+                // facing left
+                else if (facingSign == -1)
+                {
+                    // multiple by the speed graph value so that we can still move while we jump
+                    p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                }
+
+
                 // p.transform.Translate(Vector3.forward * speed * Time.deltaTime);
                 // transform.rotation = Quaternion.Euler(0f, 180f, 0f);
                 // p.transform.rotation = Quaternion.LookRotation(-Vector3.forward, p.transform.up);

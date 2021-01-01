@@ -186,18 +186,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2845221631649874173, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2845221631649874173, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 77540f2ed51fec940898a965a0acaa68, type: 2}
-    - target: {fileID: 3403268544669607040, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
-      propertyPath: playerSkin
-      value: 
-      objectReference: {fileID: 1952727356}
     - target: {fileID: 3403268544669607040, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
       propertyPath: targetTransform
       value: 
@@ -222,6 +210,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3531496426724657342, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 77540f2ed51fec940898a965a0acaa68, type: 2}
     - target: {fileID: 3580466087367655585, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -326,8 +318,7 @@ PrefabInstance:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 13400000, guid: ffbcdd6018f2b4e568b798d9ec672c30, type: 2}
-    m_RemovedComponents:
-    - {fileID: 6623849027428815205, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
 --- !u!1 &87597032
 GameObject:
@@ -5765,7 +5756,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1021579463}
   m_Layer: 0
-  m_Name: TargetTransform
+  m_Name: PlayerCrossHair
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -5779,7 +5770,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1021579462}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 18.1627, z: 3.1490755}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6312,11 +6303,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 746893973499253637, guid: 77527dd9086ca42ecaeb9ee43a547043, type: 3}
   m_PrefabInstance: {fileID: 1420979361}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1952727356 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3484063990644978126, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
-  m_PrefabInstance: {fileID: 5540213}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2073689389
 GameObject:

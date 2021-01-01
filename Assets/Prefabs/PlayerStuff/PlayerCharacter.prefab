@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7918680335284003833}
   - component: {fileID: 8296462606703166333}
   - component: {fileID: 3403268544669607040}
-  - component: {fileID: 2845221631649874173}
   - component: {fileID: 4203551154815645255}
+  - component: {fileID: 4608712103709223717}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -80,31 +80,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 0}
   ledgeChecker: {fileID: 7096382803104766911}
-  playerSkin: {fileID: 0}
+  playerSkin: {fileID: 3484063990644978126}
   groundCheckingSphere: {fileID: 4664209058132775207, guid: c6e13f6502013421d8df4174707638a6, type: 3}
   sections: 5
   mouseAimMask:
     serializedVersion: 2
     m_Bits: 8
---- !u!95 &2845221631649874173
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327293210905888339}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 535511bb156e7f54f83f305d96a1c4ce, type: 3}
-  m_Controller: {fileID: 9100000, guid: 2f743c8632c3e4b53922f5f3a59225d4, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &4203551154815645255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +105,25 @@ MonoBehaviour:
   moveDown: 0
   turbo: 0
   secondJump: 0
+--- !u!95 &4608712103709223717
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327293210905888339}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 535511bb156e7f54f83f305d96a1c4ce, type: 3}
+  m_Controller: {fileID: 9100000, guid: 77540f2ed51fec940898a965a0acaa68, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8495748693219008967
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,6 +292,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4468519549282688, guid: 3fc233a9407d11f46a1983e4692babf9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 95812470430208240, guid: 3fc233a9407d11f46a1983e4692babf9, type: 3}
+      propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
