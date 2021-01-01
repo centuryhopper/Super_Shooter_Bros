@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00eefcba85a0a4104ac409619ef89ced, type: 3}
   m_Name: Player_LedgeGrab_ToggleCollider
   m_EditorClassIdentifier: 
-  gravitySwitch: 0
+  colliderSwitch: 0
   onStart: 1
   onEnd: 0
