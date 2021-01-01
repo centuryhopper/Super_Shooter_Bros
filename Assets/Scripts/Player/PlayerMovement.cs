@@ -43,6 +43,7 @@ namespace Game.PlayerCharacter
 
         public Transform targetTransform = null;
         private Camera mainCam;
+        private Animator animator;
 
 
         [SerializeField] LedgeChecker ledgeChecker = null;
@@ -67,6 +68,7 @@ namespace Game.PlayerCharacter
             boxCollider = GetComponent<BoxCollider>();
             rb = GetComponent<Rigidbody>();
             mainCam = Camera.main;
+            animator = GetComponent<Animator>();
 
             #region groundchecking spheres
                 // y-z plane in this case
@@ -130,7 +132,19 @@ namespace Game.PlayerCharacter
 
             // changing the this transform's rotation had some weird inversions, so player skin turned
             // out to be the better alternative
-            playerSkin.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(targetTransform.position.z - this.transform.position.z), transform.up);
+            // playerSkin.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(targetTransform.position.z - this.transform.position.z), transform.up);
+        }
+
+        void OnAnimatorIK()
+        {
+            // Weapon aim at target ik
+            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+            animator.SetIKPosition(AvatarIKGoal.RightHand, targetTransform.position);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, targetTransform.position);
+
+
+
         }
 
 
