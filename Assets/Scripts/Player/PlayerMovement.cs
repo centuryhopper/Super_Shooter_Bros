@@ -135,15 +135,17 @@ namespace Game.PlayerCharacter
                 targetTransform.position = hit.point;
             }
 
-            // changing the this transform's rotation had some weird inversions, so player skin turned
-            // out to be the better alternative
-            // playerSkin.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(targetTransform.position.z - this.transform.position.z), transform.up);
-            // transform.forward = playerSkin.forward;
-            faceDirection = transform.eulerAngles.y;
+            // faceDirection = transform.eulerAngles.y;
 
             transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(targetTransform.position.z - this.transform.position.z), transform.up);
+
+            // hover your mouse cursor over this function call for comment details
+            faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
+            Debug.Log($"facing: {faceDirection}");
         }
 
+        // This method can't be called if this script and the animator component aren't
+        // attached to the same game object
         void OnAnimatorIK()
         {
             // Weapon aim at target ik
@@ -151,6 +153,17 @@ namespace Game.PlayerCharacter
             animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
             animator.SetIKPosition(AvatarIKGoal.RightHand, targetTransform.position);
             animator.SetIKPosition(AvatarIKGoal.LeftHand, targetTransform.position);
+        }
+
+        /// <summary>
+        /// Returns...<br/>
+        /// 1 if both vectors are facing the same direction with each other.<br/>
+        /// -1 if both vectors are facing the opposite direction.<br/>
+        /// 0 if both vectors are perpendicular with each other.
+        /// </summary>
+        private float DotProductWithComments(Vector3 l, Vector3 r)
+        {
+            return Vector3.Dot(l, r);
         }
 
 
