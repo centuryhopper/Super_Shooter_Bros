@@ -9,7 +9,7 @@ namespace Game.PlayerCharacter
         public float speed;
         private PlayerController playerController;
         private PlayerMovement playerMovement;
-        public int facingSign;
+        public float faceDirection;
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
@@ -38,24 +38,21 @@ namespace Game.PlayerCharacter
         {
             // help decide whether to walk forward and backwards based on player's
             // facing direction
-            float faceDirection = p.faceDirection;
-            Debug.Log($"face dir: {faceDirection}");
-
-            facingSign = faceDirection == 0 ? 1 : faceDirection == 180 ? -1 : 0;
+            faceDirection = p.faceDirection;
 
             // side scroller
             if (playerController.moveRight)
             {
-                a.SetFloat(AnimationParameters.walkDirection.ToString(), facingSign);
+                a.SetFloat(AnimationParameters.walkDirection.ToString(), faceDirection);
 
                 // facing right
-                if (facingSign == 1)
+                if (faceDirection == 1)
                 {
                     // multiple by the speed graph value so that we can still move while we jump
                     p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                 }
                 // facing left
-                else if (facingSign == -1)
+                else if (faceDirection == -1)
                 {
                     // multiple by the speed graph value so that we can still move while we jump
                     p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
@@ -70,16 +67,16 @@ namespace Game.PlayerCharacter
             }
             else if (playerController.moveLeft)
             {
-                a.SetFloat(AnimationParameters.walkDirection.ToString(), -facingSign);
+                a.SetFloat(AnimationParameters.walkDirection.ToString(), -faceDirection);
 
                 // facing right
-                if (facingSign == 1)
+                if (faceDirection == 1)
                 {
                     // multiple by the speed graph value so that we can still move while we jump
                     p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                 }
                 // facing left
-                else if (facingSign == -1)
+                else if (faceDirection == -1)
                 {
                     // multiple by the speed graph value so that we can still move while we jump
                     p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
