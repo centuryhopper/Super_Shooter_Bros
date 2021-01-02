@@ -70,7 +70,8 @@ MonoBehaviour:
       weapon (gun that shoots things depending on the environments you've been in)\n\t-for
       example, you will have the power to shoot ice beams if you've been in snowy
       environments, high-pressured water if you've been in lakes, flames if you've
-      been around hot flamy volcanic regions, lightning bolts if you've been in deserts."
+      been around hot flamy volcanic regions, lightning bolts if you've been in deserts.\n-Make
+      weapon repeatedly fire (use a coroutine)"
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1

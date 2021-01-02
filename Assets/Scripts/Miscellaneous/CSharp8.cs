@@ -17,9 +17,9 @@ public class CSharp8
         // PrintState(false);
 
         // NullCoalesce();
-        var tup = (1,2);
-        Debug.Log((1,2,3));
-        Debug.Log($"{tup.Item1} and {tup.Item2}");
+        // var tup = (1,2);
+        // Debug.Log((1,2,3));
+        // Debug.Log($"{tup.Item1} and {tup.Item2}");
     }
 
     static void StackAllocNested()
