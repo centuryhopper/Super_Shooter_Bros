@@ -24,15 +24,18 @@ namespace Game.Pooling
         /// </summary>
         public Dictionary<string, Queue<GameObject>> poolDictionary;
 
+        private Vector3 zeroVector;
+
         void Awake()
         {
+            zeroVector = Vector3.zero;
             pools = new List<Pool>(3);
-            
+
             pools.Add(new Pool
             {
                 tag = "bullet",
                 prefab = Resources.Load<GameObject>("Bullet"),
-                size = 50
+                size = 5
             });
         }
 
@@ -75,6 +78,8 @@ namespace Game.Pooling
             // make it active in the game
             if (objectToSpawn != null)
             {
+                // reset bullet velocity if it has already been used before
+                objectToSpawn.GetComponent<Rigidbody>().velocity = zeroVector;
                 objectToSpawn.SetActive(true);
                 objectToSpawn.transform.position = trans.position;
                 objectToSpawn.transform.rotation = trans.rotation;
@@ -87,8 +92,6 @@ namespace Game.Pooling
             // and call its spawn method
             IPooledObject pooledObj = objectToSpawn.GetComponent<IPooledObject>();
 
-            // Cube cube = objectToSpawn.GetComponent<Cube>();
-            // if (cube != null)
             if (pooledObj != null)
             {
                 pooledObj.OnObjectSpawn();
@@ -98,6 +101,8 @@ namespace Game.Pooling
 
             // once spawned, we want to
             poolDictionary[tag].Enqueue(objectToSpawn);
+            print("recycling");
+
 
             return objectToSpawn;
         }

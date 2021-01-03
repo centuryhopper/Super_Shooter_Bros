@@ -20,8 +20,6 @@ namespace Game.Weapons
         public bool shouldCallOnObjectSpawn = false;
         public bool shouldCallOnObjectSpawnWithParam = true;
 
-
-        // fire off to a distance!
         public void OnObjectSpawn()
         {
             if (!shouldCallOnObjectSpawn) return;
@@ -35,6 +33,8 @@ namespace Game.Weapons
             GetComponent<Rigidbody>().velocity = force;
         }
 
+
+        // fire off to a distance!
         public void OnObjectSpawn(Transform spawnPointTransform)
         {
             if (!shouldCallOnObjectSpawnWithParam) return;
@@ -43,6 +43,7 @@ namespace Game.Weapons
 
             // add force in the direction of the fire point position
             rb.AddForce(bulletForce * spawnPointTransform.forward, ForceMode.Impulse);
+            print("fired off into the distance");
         }
 
         void OnCollisionEnter(Collision collisionInfo)
