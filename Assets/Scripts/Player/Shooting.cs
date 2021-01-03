@@ -10,6 +10,7 @@ namespace Game.PlayerCharacter
         public Transform firePoint;
         public string bulletTag = "bullet";
         public ParticleSystem muzzleFlash;
+        public AudioSource bulletSound;
         private ObjectPooler bulletPooler;
 
 
@@ -27,8 +28,7 @@ namespace Game.PlayerCharacter
                 // spawn from pool
                 GameObject bullet = bulletPooler.InstantiateFromPool(bulletTag, firePoint);
                 muzzleFlash.Play();
-
-
+                bulletSound.PlayOneShot(bulletSound.clip);
             }
         }
     }
