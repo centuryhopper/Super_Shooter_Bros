@@ -16,6 +16,8 @@ namespace Game.PlayerCharacter
             // then set the jammo player's local position to the specified ledge offset
             PlayerMovement p = c.GetPlayerMoveMent(a);
             Transform playerSkin = p.PlayerSkin;
+
+            // null ref exception happened here
             playerSkin.parent = p.GetLedgeChecker.getGrabbedLedge.transform;
             playerSkin.localPosition = p.GetLedgeChecker.getGrabbedLedge.Offset;
 
@@ -25,7 +27,7 @@ namespace Game.PlayerCharacter
 
         public override void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            
+
         }
 
         public override void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)

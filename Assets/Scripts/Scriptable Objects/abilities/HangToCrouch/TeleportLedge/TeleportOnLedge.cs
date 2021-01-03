@@ -21,6 +21,8 @@ namespace Game.PlayerCharacter
         public override void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             PlayerMovement p = c.GetPlayerMoveMent(a);
+
+            // rarely happens but there was a nullref exception here
             Vector3 grabbedLedgeEndPosition = p.GetLedgeChecker.getGrabbedLedge.transform.position +
                                                 p.GetLedgeChecker.getGrabbedLedge.EndPosition;
 

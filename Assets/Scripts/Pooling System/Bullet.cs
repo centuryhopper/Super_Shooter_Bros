@@ -20,8 +20,6 @@ namespace Game.Weapons
         public bool shouldCallOnObjectSpawn = false;
         public bool shouldCallOnObjectSpawnWithParam = true;
 
-
-        // fire off to a distance!
         public void OnObjectSpawn()
         {
             if (!shouldCallOnObjectSpawn) return;
@@ -35,6 +33,8 @@ namespace Game.Weapons
             GetComponent<Rigidbody>().velocity = force;
         }
 
+
+        // fire off to a distance!
         public void OnObjectSpawn(Transform spawnPointTransform)
         {
             if (!shouldCallOnObjectSpawnWithParam) return;

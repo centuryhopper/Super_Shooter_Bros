@@ -9,7 +9,10 @@ namespace Game.PlayerCharacter
     {
         public Transform firePoint;
         public string bulletTag = "bullet";
-        ObjectPooler bulletPooler;
+        public ParticleSystem muzzleFlash;
+        private ObjectPooler bulletPooler;
+
+
 
         void Start()
         {
@@ -23,6 +26,9 @@ namespace Game.PlayerCharacter
             {
                 // spawn from pool
                 GameObject bullet = bulletPooler.InstantiateFromPool(bulletTag, firePoint);
+                muzzleFlash.Play();
+
+
             }
         }
     }
