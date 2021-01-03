@@ -20,7 +20,7 @@ namespace Game.singleton
                     instance = g.AddComponent<T>();
 
                     // give it a name
-                    g.name = typeof(T).ToString();
+                    g.name = $"Runtime-Spawned: {typeof(T).ToString()}";
                 }
 
                 return instance;

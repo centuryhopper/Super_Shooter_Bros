@@ -43,6 +43,7 @@ namespace Game.Weapons
 
             // add force in the direction of the fire point position
             rb.AddForce(bulletForce * spawnPointTransform.forward, ForceMode.Impulse);
+            print("fired off into the distance");
         }
 
         void OnCollisionEnter(Collision collisionInfo)

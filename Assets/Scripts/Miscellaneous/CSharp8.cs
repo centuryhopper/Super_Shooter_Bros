@@ -13,8 +13,8 @@ public class CSharp8
     [RuntimeInitializeOnLoadMethod]
     static void MainMethod()
     {
-        Sound sound = new Sound();
-        Debug.Log($"{sound.Equals(default(Sound))}");
+        // Sound sound = new Sound();
+        // Debug.Log($"{sound.Equals(default(Sound))}");
         // PrintState(null);
         // PrintState(true);
         // PrintState(false);
@@ -24,6 +24,8 @@ public class CSharp8
         // Debug.Log((1,2,3));
         // Debug.Log($"{tup.Item1} and {tup.Item2}");
     }
+
+
 
     static void StackAllocNested()
     {
