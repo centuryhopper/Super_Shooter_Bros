@@ -16,8 +16,6 @@ namespace Game.PlayerCharacter
         private WaitForSeconds waitForSeconds;
         private Coroutine fireBulletCoro;
 
-
-
         void Awake()
         {
             // initialize bullet gameobject pooler
