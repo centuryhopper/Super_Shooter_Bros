@@ -121,10 +121,11 @@ namespace Game.PlayerCharacter
 
         private void OnCollisionEnter(Collision collectible)
         {
-            Debug.Log("Collision Detected");
+            //Debug.Log("Collision Detected");
             if(collectible.gameObject.CompareTag("Collectible"))
             {
                 Debug.Log("triggered collectible");
+                PlayerStats.Points++;
                 Destroy(collectible.gameObject);
             }
         
