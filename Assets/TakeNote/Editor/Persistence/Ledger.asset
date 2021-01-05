@@ -70,11 +70,24 @@ MonoBehaviour:
       weapon (gun that shoots things depending on the environments you've been in)\n\t-for
       example, you will have the power to shoot ice beams if you've been in snowy
       environments, high-pressured water if you've been in lakes, flames if you've
-      been around hot flamy volcanic regions, lightning bolts if you've been in deserts."
+      been around hot flamy volcanic regions, lightning bolts if you've been in deserts.\n-Make
+      weapon repeatedly fire (use a coroutine)"
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1
     DrawColor: {r: 0.36320752, g: 1, b: 0.43243113, a: 1}
+  - Title: Bugs for Leo To Go back to
+    CreationDate: 12/30/2020 | 4:18 PM
+    CompletionDate: 
+    HasDetails: 1
+    Details: '-Gun not in player hand when player grabbing ledge
+
+      -Rarely happens,
+      but player ledge climb shows player teleporting onto ledge'
+    IsCompleted: 0
+    IsDeferred: 0
+    IsColored: 1
+    DrawColor: {r: 0.9056604, g: 0.783497, b: 0.2597365, a: 1}
   CompletedTasks:
   - Title: TODOs
     CreationDate: 11/7/2020 | 5:44 PM

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace Game.PlayerCharacter
 {
@@ -12,8 +13,11 @@ namespace Game.PlayerCharacter
         turbo,
         secondJump,
         transitionIndex,
+        walkDirection,
+
     }
 
+    // [ExecuteInEditMode]
     public class PlayerMovement : MonoBehaviour
     {
         BoxCollider boxCollider = null;
@@ -38,66 +42,81 @@ namespace Game.PlayerCharacter
             }
         }
 
+        public Transform targetTransform = null;
+        private Camera mainCam;
+        private Animator animator;
+
+
         [SerializeField] LedgeChecker ledgeChecker = null;
-        public LedgeChecker GetLedgeChecker { get {return ledgeChecker;}  }
+        public LedgeChecker GetLedgeChecker { get {return ledgeChecker;} }
         [SerializeField] Transform playerSkin = null;
         public Transform PlayerSkin { get {return playerSkin;} set { playerSkin = value; } }
-
         public List<GameObject> groundCheckers { get; private set; }
-
         [SerializeField] GameObject groundCheckingSphere = null;
-
         [SerializeField] int sections = 5;
 
         /// <summary>
-        /// player has double jump ability
+        /// With this, player now has double jump ability
         /// </summary>
         [HideInInspector]
         public static int numJumps = 2;
+        public LayerMask mouseAimMask;
+
+        [ReadOnly]
+        public float faceDirection = 1;
 
         void Awake()
         {
+            // Debug.Log(Input.mousePresent ? "mouse detected" : "mouse not detected");
             groundCheckers = new List<GameObject>(sections + 2);
             boxCollider = GetComponent<BoxCollider>();
+            rb = GetComponent<Rigidbody>();
+            mainCam = Camera.main;
+            animator = GetComponent<Animator>();
 
-            // y-z plane in this case
-            float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
-            float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
 
-            float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
-            float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
+            #region groundchecking spheres
+                // y-z plane in this case
+                float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
+                float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
 
-            // create the spheres and add them to the list
-            GameObject bottomFrontSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, front));
-            GameObject bottomBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
+                float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
+                float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
 
-            groundCheckers.Add(bottomFrontSphere);
-            groundCheckers.Add(bottomBackSphere);
+                // create the spheres and add them to the list
+                GameObject bottomFrontSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, front));
+                GameObject bottomBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
 
-            // parent the player to the spheres so the positions of the ground checkers are accurate
-            bottomFrontSphere.transform.parent = this.transform;
-            bottomBackSphere.transform.parent = this.transform;
+                groundCheckers.Add(bottomFrontSphere);
+                groundCheckers.Add(bottomBackSphere);
 
-            // divide into 5 sections and add a sphere for each section
-            float section = (bottomFrontSphere.transform.position
-            - bottomBackSphere.transform.position).magnitude / sections;
+                // parent the player to the spheres so the positions of the ground checkers are accurate
+                bottomFrontSphere.transform.parent = this.transform;
+                bottomBackSphere.transform.parent = this.transform;
 
-            for (int i = 0; i < sections; ++i)
-            {
-                // find position for each section
-                //         X       X       X       X       X
-                // | ..... | ..... | ..... | ..... | ..... | ..... |
-                Vector3 position = bottomBackSphere.transform.position + (Vector3.forward * section * (i + 1));
+                // divide into 5 sections and add a sphere for each section
+                float section = (bottomFrontSphere.transform.position
+                - bottomBackSphere.transform.position).magnitude / sections;
 
-                // instantiate sphere
-                GameObject sphere = CreateGroundCheckingSphere(position);
+                for (int i = 0; i < sections; ++i)
+                {
+                    // find position for each section
+                    //         X       X       X       X       X
+                    // | ..... | ..... | ..... | ..... | ..... | ..... |
+                    Vector3 position = bottomBackSphere.transform.position + (Vector3.forward * section * (i + 1));
 
-                // parent it to the player
-                sphere.transform.parent = this.transform;
+                    // instantiate sphere
+                    GameObject sphere = CreateGroundCheckingSphere(position);
 
-                // add it to the list
-                groundCheckers.Add(sphere);
-            }
+                    // parent it to the player
+                    sphere.transform.parent = this.transform;
+
+                    // add it to the list
+                    groundCheckers.Add(sphere);
+                }
+
+            #endregion
+
         }
 
         private void OnCollisionEnter(Collision collectible)
@@ -112,6 +131,55 @@ namespace Game.PlayerCharacter
         }
 
         public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate(groundCheckingSphere, position, Quaternion.identity);
+
+
+        // todo maybe migrate the code below over to a state machine script
+        void Update()
+        {
+            // Debug.Log($"y rotation of playerskin: {playerSkin.eulerAngles.y}");
+
+            Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mouseAimMask))
+            {
+                // move the target transform to where the mouse cursor is
+                targetTransform.position = hit.point;
+            }
+
+            // faceDirection = transform.eulerAngles.y;
+
+            transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(targetTransform.position.z - this.transform.position.z), transform.up);
+
+            // hover your mouse cursor over this function call for comment details
+            faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
+            // Debug.Log($"facing: {faceDirection}");
+        }
+
+        // This method can't be called if this script and the animator component aren't
+        // attached to the same game object
+        // void OnAnimatorIK()
+        // {
+        //     // Weapon aim at target ik
+
+        //     // position sets for ik goals
+        //     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.5f);
+        //     animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0.5f);
+        //     animator.SetIKPosition(AvatarIKGoal.RightHand, targetTransform.position);
+        //     animator.SetIKPosition(AvatarIKGoal.LeftHand, targetTransform.position);
+        // }
+
+        /// <summary>
+        /// Returns...<br/>
+        /// 1 if both vectors are facing the same direction with each other.<br/>
+        /// -1 if both vectors are facing the opposite direction.<br/>
+        /// 0 if both vectors are perpendicular with each other.
+        /// </summary>
+        private float DotProductWithComments(Vector3 l, Vector3 r)
+        {
+            return Vector3.Dot(l, r);
+        }
+
+
 
         // // debug code
         // void OnCollisionEnter(Collision collisionInfo)
