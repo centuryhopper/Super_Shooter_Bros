@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.Animations.Rigging;
 
 namespace Game.PlayerCharacter
 {
@@ -42,11 +43,8 @@ namespace Game.PlayerCharacter
             }
         }
 
-        public Transform targetTransform = null;
+        public Transform crossHairTransform = null;
         private Camera mainCam;
-        // private Animator animator;
-
-
         [SerializeField] LedgeChecker ledgeChecker = null;
         public LedgeChecker GetLedgeChecker { get {return ledgeChecker;} }
         [SerializeField] Transform playerSkin = null;
@@ -65,6 +63,9 @@ namespace Game.PlayerCharacter
         [ReadOnly]
         public float faceDirection = 1;
 
+        [SerializeField] Rig weaponAimRig = null;
+        [SerializeField] float tolerableDistance = 2.5f;
+
         void Awake()
         {
             // Debug.Log(Input.mousePresent ? "mouse detected" : "mouse not detected");
@@ -72,7 +73,7 @@ namespace Game.PlayerCharacter
             boxCollider = GetComponent<BoxCollider>();
             rb = GetComponent<Rigidbody>();
             mainCam = Camera.main;
-            // animator = GetComponent<Animator>();
+
 
 
             #region groundchecking spheres
@@ -127,17 +128,50 @@ namespace Game.PlayerCharacter
         {
             // Debug.Log($"y rotation of playerskin: {playerSkin.eulerAngles.y}");
 
+            // plauyer aim will follow the crosshair transform, which follows the hit.point,
+            // if the hit.point is far enough
             Ray mouseRay = mainCam.ScreenPointToRay(Input.mousePosition);
 
+            // methods to keep in mind for rig weight control
+            // if the ray hit something and the the point was far enough from the player
+            // OR
+            // toggle animation rig weights depending on the distance of the crosshair
+            // to the player
             if (Physics.Raycast(mouseRay, out RaycastHit hit, Mathf.Infinity, mouseAimMask))
             {
-                // move the target transform to where the mouse cursor is
-                targetTransform.position = hit.point;
+                Debug.Log($"ray hit something");
+                // Vector3 fromPlayerToCrossHair = crossHairTransform.position - transform.position;
+                Vector3 fromHitPointToCrossHair = hit.point - transform.position;
+
+                // accurately compares the distance and
+                // saves a sqrt call on every frame that
+                // this code is reached
+                if (fromHitPointToCrossHair.sqrMagnitude >= tolerableDistance * tolerableDistance /*distance is far enough*/ )
+                {
+                    // Debug.Log($"far enough with a distance of {fromPlayerToCrossHair.sqrMagnitude}");
+                    Debug.Log($"far enough with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
+                    weaponAimRig.weight = 1;
+
+                    // move the target transform to where the mouse cursor is
+                    // but because we're looking at the player on a y-z plane, we should only ever
+                    // change those two coordinates
+                    float x = crossHairTransform.position.x;
+                    float y = hit.point.y;
+                    float z = hit.point.z;
+                    Vector3 newCrossHairPosition = new Vector3(x, y, z);
+                    crossHairTransform.position = newCrossHairPosition;
+                }
+                else
+                {
+                    // Debug.Log($"too close with a distance of {fromPlayerToCrossHair.sqrMagnitude}");
+                    Debug.Log($"too close with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
+                    weaponAimRig.weight = 0;
+                }
             }
 
             // faceDirection = transform.eulerAngles.y;
 
-            transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(targetTransform.position.z - this.transform.position.z), transform.up);
+            transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(crossHairTransform.position.z - this.transform.position.z), transform.up);
 
             // hover your mouse cursor over this function call for comment details
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
