@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Game.PlayerCharacter
 {
@@ -8,10 +10,21 @@ namespace Game.PlayerCharacter
         PlayerController playerController = null;
         PlayerMovement playerMovement = null;
 
+        RigBuilder rigBuilder = null;
+
         override public void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             playerController = c.GetPlayerController(a);
             playerMovement = c.GetPlayerMoveMent(a);
+            rigBuilder = a.GetComponent<RigBuilder>();
+
+
+            rigBuilder.enabled = true;
+
+            // todo set each rig layer and child values to hardcoded values
+            List<RigLayer> rigLayers = rigBuilder.layers;
+            rigLayers[0].rig.weight = 1;
+            // MultiAimConstraint m = rigLayers[0].rig.transform.GetChild(0).GetComponent<MultiAimConstraint>();
 
             // prevents the bug: player jumping while airborne
             a.SetBool(AnimationParameters.jump.ToString(), false);

@@ -15,6 +15,7 @@ namespace Game.PlayerCharacter
         private ObjectPooler bulletPooler;
         private WaitForSeconds waitForSeconds;
         private Coroutine fireBulletCoro;
+        private static readonly string Fire1 = "Fire1";
 
         void Awake()
         {
@@ -37,12 +38,12 @@ namespace Game.PlayerCharacter
 
         void Update()
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown(Fire1))
             {
                 fireBulletCoro = StartCoroutine(FireBullet());
             }
 
-            if (Input.GetButtonUp("Fire1"))
+            if (Input.GetButtonUp(Fire1))
             {
                 StopCoroutine(fireBulletCoro);
             }

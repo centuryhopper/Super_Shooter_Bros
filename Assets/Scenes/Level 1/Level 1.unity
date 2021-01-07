@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 25686217}
   m_Layer: 0
   m_Name: RigLayer_WeaponPose
-  m_TagString: Untagged
+  m_TagString: rig
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -486,7 +486,7 @@ GameObject:
   - component: {fileID: 38920138}
   m_Layer: 0
   m_Name: RigLayer_BodyAim
-  m_TagString: Untagged
+  m_TagString: rig
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6524,7 +6524,7 @@ GameObject:
   - component: {fileID: 289612871}
   m_Layer: 0
   m_Name: RigLayer_HandIK
-  m_TagString: Untagged
+  m_TagString: rig
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6846,7 +6846,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3483910856415607976, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3483940159446251824, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
       propertyPath: m_RootOrder
@@ -12296,7 +12296,7 @@ Transform:
   m_Children:
   - {fileID: 978794977}
   m_Father: {fileID: 1514164300}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &659986146
 MonoBehaviour:
@@ -19221,7 +19221,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &1967735873
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -19231,7 +19231,7 @@ SphereCollider:
   m_GameObject: {fileID: 1967735872}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}

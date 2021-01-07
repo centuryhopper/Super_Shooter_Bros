@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Game.PlayerCharacter
 {
@@ -20,11 +21,19 @@ namespace Game.PlayerCharacter
     {
         public int Index;
         public List<AirBorneTransitions> transitionConditions = new List<AirBorneTransitions>();
+        private PlayerController playerController = null;
+        private RigBuilder rigBuilder = null;
 
         public override void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            PlayerController p = character.GetPlayerController(a);
-            if (ShouldMakeTransition(p))
+            // initial cache
+            playerController = FindObjectOfType<PlayerController>();
+            rigBuilder = a.GetComponent<RigBuilder>();
+
+            // Debug.Log($"{rigBuilder is null}");
+
+
+            if (playerController != null && ShouldMakeTransition(playerController))
             {
                 a.SetInteger(AnimationParameters.transitionIndex.ToString(), Index);
             }
@@ -32,8 +41,7 @@ namespace Game.PlayerCharacter
 
         public override void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            PlayerController p = c.GetPlayerController(a);
-            if (ShouldMakeTransition(p))
+            if (playerController != null && ShouldMakeTransition(playerController))
             {
                 a.SetInteger(AnimationParameters.transitionIndex.ToString(), Index);
             }
@@ -42,6 +50,7 @@ namespace Game.PlayerCharacter
             else
             {
                 // transition the animation back to idle
+                Debug.Log($"playerController is null");
                 a.SetInteger(AnimationParameters.transitionIndex.ToString(), 0);
             }
 
@@ -50,6 +59,10 @@ namespace Game.PlayerCharacter
         public override void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             a.SetInteger(AnimationParameters.transitionIndex.ToString(), 0);
+            if (asi.IsName("CrouchIdle"))
+            {
+                Debug.Log($"leaving crouch idle");
+            }
         }
 
         private bool ShouldMakeTransition(PlayerController playerController)
@@ -115,7 +128,13 @@ namespace Game.PlayerCharacter
                 }
             }
 
-            // Debug.Log("here");
+
+            // having the rigbuilder stay on
+            // resulted in weird player mesh
+            // appearances, so turning it off helps.
+            rigBuilder.enabled = false;
+
+
             return true;
         }
     }

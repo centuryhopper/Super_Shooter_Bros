@@ -38,6 +38,7 @@ namespace Game.PlayerCharacter
 
         private void toggleCollider(PlayerMovement p)
         {
+            // rare null ref exception here
             p.RB.velocity = new Vector3(0,0,0);
             p.BoxCollider.enabled = colliderSwitch;
         }

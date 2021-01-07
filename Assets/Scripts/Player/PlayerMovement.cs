@@ -24,23 +24,13 @@ namespace Game.PlayerCharacter
         BoxCollider boxCollider = null;
         public BoxCollider BoxCollider
         {
-            get
-            {
-                return boxCollider;
-            }
+            get => boxCollider;
         }
 
         Rigidbody rb;
         public Rigidbody RB
         {
-            get
-            {
-                if (rb == null)
-                {
-                    rb = GetComponent<Rigidbody>();
-                }
-                return rb;
-            }
+            get => rb;
         }
 
         public Transform crossHairTransform = null;
@@ -66,15 +56,40 @@ namespace Game.PlayerCharacter
         [SerializeField] Rig weaponAimRig = null;
         [SerializeField] float tolerableDistance = 2.5f;
 
+        #region Messed around with animation curves
+        // [SerializeField] AnimationCurve sinPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve cosPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve tanPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve aSinPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve aCosPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve aTanPlot = new AnimationCurve();
+
+        // [SerializeField] AnimationCurve cscPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve secPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve cotPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve aCscPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve aSecPlot = new AnimationCurve();
+        // [SerializeField] AnimationCurve aCotPlot = new AnimationCurve();
+        // aSinPlot.AddKey(Time.realtimeSinceStartup, Mathf.Asin(Time.time));
+        // aCosPlot.AddKey(Time.realtimeSinceStartup, Mathf.Acos(Time.time));
+        // aTanPlot.AddKey(Time.realtimeSinceStartup, Mathf.Atan(Time.time));
+
+        // cscPlot.AddKey(Time.realtimeSinceStartup, 1 / Mathf.Sin(Time.time));
+        // secPlot.AddKey(Time.realtimeSinceStartup, 1 / Mathf.Cos(Time.time));
+        // cotPlot.AddKey(Time.realtimeSinceStartup, 1 / Mathf.Tan(Time.time));
+        #endregion
+
+
+        Transform t;
+
         void Awake()
         {
             // Debug.Log(Input.mousePresent ? "mouse detected" : "mouse not detected");
             groundCheckers = new List<GameObject>(sections + 2);
             boxCollider = GetComponent<BoxCollider>();
             rb = GetComponent<Rigidbody>();
+            t = transform;
             mainCam = Camera.main;
-
-
 
             #region groundchecking spheres
                 // y-z plane in this case
@@ -126,6 +141,7 @@ namespace Game.PlayerCharacter
         // todo maybe migrate the code below over to a state machine script
         void Update()
         {
+
             // Debug.Log($"y rotation of playerskin: {playerSkin.eulerAngles.y}");
 
             // plauyer aim will follow the crosshair transform, which follows the hit.point,
@@ -139,9 +155,10 @@ namespace Game.PlayerCharacter
             // to the player
             if (Physics.Raycast(mouseRay, out RaycastHit hit, Mathf.Infinity, mouseAimMask))
             {
-                Debug.Log($"ray hit something");
+                // Debug.Log($"ray hit something");
                 // Vector3 fromPlayerToCrossHair = crossHairTransform.position - transform.position;
-                Vector3 fromHitPointToCrossHair = hit.point - transform.position;
+                Vector3 fromHitPointToCrossHair = hit.point - t.position;
+                // plot.AddKey(Time.realtimeSinceStartup, fromHitPointToCrossHair.sqrMagnitude);
 
                 // accurately compares the distance and
                 // saves a sqrt call on every frame that
@@ -149,7 +166,7 @@ namespace Game.PlayerCharacter
                 if (fromHitPointToCrossHair.sqrMagnitude >= tolerableDistance * tolerableDistance /*distance is far enough*/ )
                 {
                     // Debug.Log($"far enough with a distance of {fromPlayerToCrossHair.sqrMagnitude}");
-                    Debug.Log($"far enough with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
+                    // Debug.Log($"far enough with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
                     weaponAimRig.weight = 1;
 
                     // move the target transform to where the mouse cursor is
@@ -164,14 +181,12 @@ namespace Game.PlayerCharacter
                 else
                 {
                     // Debug.Log($"too close with a distance of {fromPlayerToCrossHair.sqrMagnitude}");
-                    Debug.Log($"too close with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
+                    // Debug.Log($"too close with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
                     weaponAimRig.weight = 0;
                 }
             }
 
-            // faceDirection = transform.eulerAngles.y;
-
-            transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(crossHairTransform.position.z - this.transform.position.z), transform.up);
+            transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(crossHairTransform.position.z - t.position.z), transform.up);
 
             // hover your mouse cursor over this function call for comment details
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
