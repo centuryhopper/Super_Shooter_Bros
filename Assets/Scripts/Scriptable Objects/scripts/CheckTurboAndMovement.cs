@@ -31,7 +31,6 @@ namespace Game.PlayerCharacter
 
         override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            // a.SetBool(AnimationParameters.turbo.ToString(), false);
         }
     }
 }

@@ -10,6 +10,6 @@ namespace Game.Enums
         turbo,
         secondJump,
         transitionIndex,
-        walkDirection,
+        faceDirection,
     }
 }

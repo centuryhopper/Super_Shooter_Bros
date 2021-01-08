@@ -45,7 +45,7 @@ namespace Game.PlayerCharacter
             // side scroller
             if (playerController.moveRight)
             {
-                a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.walkDirection], faceDirection);
+                a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.faceDirection], faceDirection);
 
                 // facing right
                 if (faceDirection == 1)
@@ -69,7 +69,7 @@ namespace Game.PlayerCharacter
             }
             else if (playerController.moveLeft)
             {
-                a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.walkDirection], -faceDirection);
+                a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.faceDirection], -faceDirection);
 
                 // facing right
                 if (faceDirection == 1)
