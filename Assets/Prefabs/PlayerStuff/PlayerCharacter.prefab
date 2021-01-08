@@ -58,6 +58,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   faceDirection: 1
+  weaponAimRig: {fileID: 0}
+  tolerableDistance: 2.5
 --- !u!114 &2520653899853958378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,6 +236,8 @@ MonoBehaviour:
   checkLedge: {fileID: 0}
   getGrabbedLedge: {fileID: 0}
   isGrabbingLedge: 0
+  collider1: {fileID: 0}
+  collider2: {fileID: 0}
 --- !u!1001 &3482973170828810318
 PrefabInstance:
   m_ObjectHideFlags: 0

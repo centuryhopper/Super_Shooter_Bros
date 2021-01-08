@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game.Enums;
+using Game.Hash;
+using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
@@ -17,13 +19,13 @@ namespace Game.PlayerCharacter
             // check whether the player should sprint
             if ((playerController.moveLeft || playerController.moveRight) && playerController.turbo)
             {
-                a.SetBool(AnimationParameters.turbo.ToString(), true);
-                a.SetBool(AnimationParameters.move.ToString(), true);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.turbo], true);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], true);
             }
             else
             {
-                a.SetBool(AnimationParameters.turbo.ToString(), false);
-                a.SetBool(AnimationParameters.move.ToString(), false);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.turbo], false);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], false);
             }
         }
 

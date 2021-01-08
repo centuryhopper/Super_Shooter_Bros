@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game.Enums;
+using Game.Hash;
+using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
@@ -18,13 +20,13 @@ namespace Game.PlayerCharacter
             // timer
             if (asi.normalizedTime >= transitionTime)
             {
-                a.SetBool(AnimationParameters.force_transition.ToString(), true);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.force_transition], true);
             }
         }
 
         override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            a.SetBool(AnimationParameters.force_transition.ToString(), false);
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.force_transition], false);
         }
     }
 }

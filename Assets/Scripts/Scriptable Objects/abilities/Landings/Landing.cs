@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game.Enums;
+using Game.Hash;
+using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
@@ -10,7 +12,7 @@ namespace Game.PlayerCharacter
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            a.SetBool(AnimationParameters.jump.ToString(), false);
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], false);
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)

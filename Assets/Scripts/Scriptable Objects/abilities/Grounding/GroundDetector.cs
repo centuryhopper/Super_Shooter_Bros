@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Game.Enums;
+using Game.Hash;
 using UnityEngine;
 
 namespace Game.PlayerCharacter
@@ -21,18 +23,18 @@ namespace Game.PlayerCharacter
             if (IsGrounded(p))
             {
                 // Debug.Log("on ground");
-                a.SetBool(AnimationParameters.isGrounded.ToString(), true);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.isGrounded], true);
             }
             else
             {
                 // Debug.Log("falling");
-                a.SetBool(AnimationParameters.isGrounded.ToString(), false);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.isGrounded], false);
             }
         }
 
         override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            a.SetBool(AnimationParameters.isGrounded.ToString(), false);
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.isGrounded], false);
         }
 
         private bool IsGrounded(PlayerMovement p)

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game.Enums;
+using Game.Hash;
+using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
@@ -18,11 +20,11 @@ namespace Game.PlayerCharacter
             if (playerController.turbo)
             {
                 // Debug.Log("turbo is true");
-                a.SetBool(AnimationParameters.turbo.ToString(), true);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.turbo], true);
             }
             else
             {
-                a.SetBool(AnimationParameters.turbo.ToString(), false);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.turbo], false);
             }
         }
 

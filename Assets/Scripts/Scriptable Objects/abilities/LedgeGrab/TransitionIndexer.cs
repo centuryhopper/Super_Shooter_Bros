@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Game.Enums;
+using Game.Hash;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -23,19 +25,21 @@ namespace Game.PlayerCharacter
         public List<AirBorneTransitions> transitionConditions = new List<AirBorneTransitions>();
         private PlayerController playerController = null;
         private RigBuilder rigBuilder = null;
+        private List<RigLayer> rigLayers = null;
 
         public override void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
             // initial cache
             playerController = FindObjectOfType<PlayerController>();
             rigBuilder = a.GetComponent<RigBuilder>();
+            rigLayers = rigBuilder.layers;
 
             // Debug.Log($"{rigBuilder is null}");
 
 
             if (playerController != null && ShouldMakeTransition(playerController))
             {
-                a.SetInteger(AnimationParameters.transitionIndex.ToString(), Index);
+                a.SetInteger(HashManager.Instance.animationParamsDict[AnimationParameters.transitionIndex], Index);
             }
         }
 
@@ -43,26 +47,25 @@ namespace Game.PlayerCharacter
         {
             if (playerController != null && ShouldMakeTransition(playerController))
             {
-                a.SetInteger(AnimationParameters.transitionIndex.ToString(), Index);
+                a.SetInteger(HashManager.Instance.animationParamsDict[AnimationParameters.transitionIndex], Index);
             }
 
             // listens for a down-key press
             else
             {
                 // transition the animation back to idle
-                Debug.Log($"playerController is null");
-                a.SetInteger(AnimationParameters.transitionIndex.ToString(), 0);
+                // Debug.Log($"playerController is null");
+                a.SetInteger(HashManager.Instance.animationParamsDict[AnimationParameters.transitionIndex], 0);
             }
-
         }
 
         public override void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            a.SetInteger(AnimationParameters.transitionIndex.ToString(), 0);
-            if (asi.IsName("CrouchIdle"))
-            {
-                Debug.Log($"leaving crouch idle");
-            }
+            a.SetInteger(HashManager.Instance.animationParamsDict[AnimationParameters.transitionIndex], 0);
+            // if (asi.IsName("CrouchIdle"))
+            // {
+            //     Debug.Log($"leaving crouch idle");
+            // }
         }
 
         private bool ShouldMakeTransition(PlayerController playerController)
@@ -132,8 +135,8 @@ namespace Game.PlayerCharacter
             // having the rigbuilder stay on
             // resulted in weird player mesh
             // appearances, so turning it off helps.
-            rigBuilder.enabled = false;
-
+            // rigLayers.ForEach(r => r.active = false);
+            // rigBuilder.enabled = false;
 
             return true;
         }

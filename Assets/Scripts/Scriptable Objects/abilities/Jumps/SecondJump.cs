@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game.Enums;
+using Game.Hash;
+using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
@@ -25,7 +27,7 @@ namespace Game.PlayerCharacter
 
         override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            a.SetBool(AnimationParameters.secondJump.ToString(), false);
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.secondJump], false);
         }
 
     }

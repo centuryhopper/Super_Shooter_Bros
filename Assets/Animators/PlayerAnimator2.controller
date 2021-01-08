@@ -473,8 +473,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityDataLst:
   - {fileID: 11400000, guid: bbe9cedc8858142a1a8e426834ecb7a8, type: 2}
-  - {fileID: 11400000, guid: 80013c28480c440f582ace5905709782, type: 2}
-  - {fileID: 11400000, guid: b10e7cbdbf7cb4667b8c875ebf6c72db, type: 2}
   - {fileID: 11400000, guid: efa5bdcbf8a3cb1498a67fcbdc712bd5, type: 2}
 --- !u!1101 &-2713125924299183107
 AnimatorStateTransition:
@@ -1053,7 +1051,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityDataLst:
   - {fileID: 11400000, guid: 7c0e05ebc354573498463c73bec8ab1a, type: 2}
-  - {fileID: 11400000, guid: 4062ff4296d618f40925e88b88b77ce2, type: 2}
   - {fileID: 11400000, guid: 71cc2eded60f45f499bc1339934c028f, type: 2}
 --- !u!1102 &4340996750914142875
 AnimatorState:
@@ -1195,8 +1192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aee88f9fe6b3f4e24b5e20658d5c0847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityDataLst:
-  - {fileID: 11400000, guid: 763bdcf31326d474a96d17036805bbfe, type: 2}
+  abilityDataLst: []
 --- !u!1102 &6364520055137507031
 AnimatorState:
   serializedVersion: 6

@@ -72,7 +72,8 @@ MonoBehaviour:
       environments, high-pressured water if you've been in lakes, flames if you've
       been around hot flamy volcanic regions, lightning bolts if you've been in deserts.\n-Make
       weapon repeatedly fire (use a coroutine)\n-Animation rigging (aim ik)\n-limit
-      where the crosshair game object can go"
+      where the crosshair game object can go (CHECK)\n-Just toggling the rig layer
+      weights seem to work better than messing with the rig builder enabling/disabling"
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1

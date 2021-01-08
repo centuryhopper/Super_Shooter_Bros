@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.Mathematics;
 using Unity.Jobs;
 using Unity.Collections;
+using Game.Hash;
+using Game.Enums;
 
 namespace Game.PlayerCharacter
 {
@@ -21,11 +23,11 @@ namespace Game.PlayerCharacter
         {
             if (playerController.jump)
             {
-                a.SetBool(AnimationParameters.jump.ToString(), true);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], true);
             }
             else
             {
-                a.SetBool(AnimationParameters.jump.ToString(), false);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], false);
             }
         }
 

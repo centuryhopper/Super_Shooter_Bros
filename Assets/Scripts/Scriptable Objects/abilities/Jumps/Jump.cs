@@ -1,3 +1,5 @@
+using Game.Enums;
+using Game.Hash;
 using UnityEngine;
 
 namespace Game.PlayerCharacter
@@ -12,7 +14,7 @@ namespace Game.PlayerCharacter
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
             // ensure we don't play the landing animation too early
-            a.SetBool(AnimationParameters.isGrounded.ToString(), false);
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.isGrounded], false);
 
             playerController = character.GetPlayerController(a);
 
@@ -31,13 +33,13 @@ namespace Game.PlayerCharacter
             {
                 // Debug.Log("second jump triggered");
 
-                a.SetBool(AnimationParameters.secondJump.ToString(), true);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.secondJump], true);
             }
         }
 
         override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            a.SetBool(AnimationParameters.jump.ToString(), false);
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], false);
         }
 
     }

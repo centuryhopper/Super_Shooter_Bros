@@ -5,18 +5,6 @@ using UnityEngine.Animations.Rigging;
 
 namespace Game.PlayerCharacter
 {
-    public enum AnimationParameters
-    {
-        move,
-        jump,
-        force_transition,
-        isGrounded,
-        turbo,
-        secondJump,
-        transitionIndex,
-        walkDirection,
-
-    }
 
     // [ExecuteInEditMode]
     public class PlayerMovement : MonoBehaviour
@@ -37,8 +25,7 @@ namespace Game.PlayerCharacter
         private Camera mainCam;
         [SerializeField] LedgeChecker ledgeChecker = null;
         public LedgeChecker GetLedgeChecker { get {return ledgeChecker;} }
-        [SerializeField] Transform playerSkin = null;
-        public Transform PlayerSkin { get {return playerSkin;} set { playerSkin = value; } }
+        public Transform playerSkin = null;
         public List<GameObject> groundCheckers { get; private set; }
         [SerializeField] GameObject groundCheckingSphere = null;
         [SerializeField] int sections = 5;
@@ -53,6 +40,8 @@ namespace Game.PlayerCharacter
         [ReadOnly]
         public float faceDirection = 1;
 
+
+        [SerializeField] List<Rig> rigs = null;
         [SerializeField] Rig weaponAimRig = null;
         [SerializeField] float tolerableDistance = 2.5f;
 
@@ -81,6 +70,7 @@ namespace Game.PlayerCharacter
 
 
         Transform t;
+
 
         void Awake()
         {
@@ -142,6 +132,17 @@ namespace Game.PlayerCharacter
         void Update()
         {
 
+            if (ledgeChecker.isGrabbingLedge)
+            {
+                rigs.ForEach(rig => rig.weight = 0);
+                weaponAimRig.weight = 0;
+                return;
+            }
+            else
+            {
+                rigs.ForEach(rig => rig.weight = 1);
+            }
+
             // Debug.Log($"y rotation of playerskin: {playerSkin.eulerAngles.y}");
 
             // plauyer aim will follow the crosshair transform, which follows the hit.point,
@@ -186,13 +187,23 @@ namespace Game.PlayerCharacter
                 }
             }
 
-            transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(crossHairTransform.position.z - t.position.z), transform.up);
+            if (!ledgeChecker.isGrabbingLedge)
+                transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(crossHairTransform.position.z - t.position.z), transform.up);
 
             // hover your mouse cursor over this function call for comment details
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
             // Debug.Log($"facing: {faceDirection}");
         }
 
+        /// <summary>
+        /// Returns...<br/>
+        /// 1 if both vectors are facing the same direction with each other.<br/>
+        /// -1 if both vectors are facing the opposite direction.<br/>
+        /// 0 if both vectors are perpendicular with each other.
+        /// </summary>
+        private float DotProductWithComments(Vector3 l, Vector3 r) => Vector3.Dot(l, r);
+
+        #region old code
         // This method can't be called if this script and the animator component aren't
         // attached to the same game object
         // void OnAnimatorIK()
@@ -205,20 +216,10 @@ namespace Game.PlayerCharacter
         //     animator.SetIKPosition(AvatarIKGoal.RightHand, targetTransform.position);
         //     animator.SetIKPosition(AvatarIKGoal.LeftHand, targetTransform.position);
         // }
-
-        /// <summary>
-        /// Returns...<br/>
-        /// 1 if both vectors are facing the same direction with each other.<br/>
-        /// -1 if both vectors are facing the opposite direction.<br/>
-        /// 0 if both vectors are perpendicular with each other.
-        /// </summary>
-        private float DotProductWithComments(Vector3 l, Vector3 r)
-        {
-            return Vector3.Dot(l, r);
-        }
+        #endregion
 
 
-
+        #region
         // // debug code
         // void OnCollisionEnter(Collision collisionInfo)
         // {
@@ -263,6 +264,7 @@ namespace Game.PlayerCharacter
         //         new Vector3(transform.localScale.x,transform.localScale.y,-zScale);
         //     }
         // }
+    #endregion
     }
 }
 

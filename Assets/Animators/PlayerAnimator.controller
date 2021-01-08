@@ -455,7 +455,6 @@ MonoBehaviour:
   abilityDataLst:
   - {fileID: 11400000, guid: bbe9cedc8858142a1a8e426834ecb7a8, type: 2}
   - {fileID: 11400000, guid: 80013c28480c440f582ace5905709782, type: 2}
-  - {fileID: 11400000, guid: b10e7cbdbf7cb4667b8c875ebf6c72db, type: 2}
   - {fileID: 11400000, guid: efa5bdcbf8a3cb1498a67fcbdc712bd5, type: 2}
 --- !u!1101 &-2713125924299183107
 AnimatorStateTransition:

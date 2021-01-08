@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game.Enums;
+using Game.Hash;
+using UnityEngine;
 
 namespace Game.PlayerCharacter
 {
@@ -28,7 +30,7 @@ namespace Game.PlayerCharacter
 
         override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            a.SetBool(AnimationParameters.move.ToString(), false);
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], false);
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace Game.PlayerCharacter
             // side scroller
             if (playerController.moveRight)
             {
-                a.SetFloat(AnimationParameters.walkDirection.ToString(), faceDirection);
+                a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.walkDirection], faceDirection);
 
                 // facing right
                 if (faceDirection == 1)
@@ -67,7 +69,7 @@ namespace Game.PlayerCharacter
             }
             else if (playerController.moveLeft)
             {
-                a.SetFloat(AnimationParameters.walkDirection.ToString(), -faceDirection);
+                a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.walkDirection], -faceDirection);
 
                 // facing right
                 if (faceDirection == 1)
@@ -92,7 +94,7 @@ namespace Game.PlayerCharacter
             else
             {
                 // go back to idle animation
-                a.SetBool(AnimationParameters.move.ToString(), false);
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], false);
             }
         }
     }
