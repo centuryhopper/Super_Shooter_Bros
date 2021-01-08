@@ -16,7 +16,6 @@ namespace Game.Weapons
         public float bulletForce;
         public float upForce = 1f;
         public float sideForce = .1f;
-
         public bool shouldCallOnObjectSpawn = false;
         public bool shouldCallOnObjectSpawnWithParam = true;
 
@@ -43,7 +42,7 @@ namespace Game.Weapons
 
             // add force in the direction of the fire point position
             rb.AddForce(bulletForce * spawnPointTransform.forward, ForceMode.Impulse);
-            print("fired off into the distance");
+            // print("fired off into the distance");
         }
 
         void OnCollisionEnter(Collision collisionInfo)
