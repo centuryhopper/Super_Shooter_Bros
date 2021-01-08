@@ -25,7 +25,7 @@ namespace Game.Hash
 
             foreach (var e in animStateParams)
             {
-                Debug.Log($"{e.ToString()}");
+                // Debug.Log($"{e.ToString()}");
                 animationParamsDict.Add(e, Animator.StringToHash(e.ToString()));
             }
         }

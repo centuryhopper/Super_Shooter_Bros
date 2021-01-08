@@ -48,7 +48,13 @@ MonoBehaviour:
       -Change character to jammo character or a character that
       the team has come to a consensus upon
 
-      -Find Bugs'
+      -Find Bugs
+
+      -Just toggling
+      the rig layer weights seem to work better than messing with the rig builder
+      enabling/disabling
+
+'
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1
@@ -72,8 +78,7 @@ MonoBehaviour:
       environments, high-pressured water if you've been in lakes, flames if you've
       been around hot flamy volcanic regions, lightning bolts if you've been in deserts.\n-Make
       weapon repeatedly fire (use a coroutine)\n-Animation rigging (aim ik)\n-limit
-      where the crosshair game object can go (CHECK)\n-Just toggling the rig layer
-      weights seem to work better than messing with the rig builder enabling/disabling"
+      where the crosshair game object can go (CHECK)\n"
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1
@@ -82,14 +87,18 @@ MonoBehaviour:
     CreationDate: 12/30/2020 | 4:18 PM
     CompletionDate: 
     HasDetails: 1
-    Details: '-Gun not in player hand when player grabbing ledge
+    Details: '-Gun not in player hand when player grabbing ledge (Fixed by hiding
+      the gun, which is a temporary solution for now)
 
-      -Rarely happens,
-      but player ledge climb shows player teleporting onto ledge'
+      -Rarely happens, but
+      player ledge climb shows player teleporting onto ledge
+
+      -Again, the player
+      teleports onto ledge when climbing'
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1
-    DrawColor: {r: 0.9056604, g: 0.783497, b: 0.2597365, a: 1}
+    DrawColor: {r: 0.8867924, g: 0.34559003, b: 0.30452114, a: 1}
   CompletedTasks:
   - Title: TODOs
     CreationDate: 11/7/2020 | 5:44 PM

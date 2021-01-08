@@ -39,7 +39,7 @@ namespace Game.PlayerCharacter
 
         [ReadOnly]
         public float faceDirection = 1;
-
+        public bool IsFacingForward => faceDirection == 1;
 
         [SerializeField] List<Rig> rigs = null;
         [SerializeField] Rig weaponAimRig = null;
@@ -194,6 +194,10 @@ namespace Game.PlayerCharacter
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
             // Debug.Log($"facing: {faceDirection}");
         }
+
+
+
+
 
         /// <summary>
         /// Returns...<br/>

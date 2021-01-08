@@ -12,7 +12,7 @@ namespace Game.PlayerCharacter
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            // throw new System.NotImplementedException();
+            Debug.Log($"force transitioning");
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)

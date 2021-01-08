@@ -12,26 +12,33 @@ namespace Game.PlayerCharacter
     {
         public bool gravitySwitch;
         public bool onStart, onEnd;
+        public float customTiming = 0.9f;
 
         public override void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             if (onStart)
             {
-                PlayerMovement p = c.GetPlayerMoveMent(a);
-                toggleGravity(p);
+                toggleGravity(c.GetPlayerMoveMent(a));
             }
         }
         public override void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            
+            if (customTiming != 0)
+            {
+                // if we've reached more than customTiming
+                // time of the animation
+                if (customTiming <= asi.normalizedTime)
+                {
+                    toggleGravity(c.GetPlayerMoveMent(a));
+                }
+            }
         }
 
         public override void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             if (onEnd)
             {
-                PlayerMovement p = c.GetPlayerMoveMent(a);
-                toggleGravity(p);
+                toggleGravity(c.GetPlayerMoveMent(a));
             }
         }
 

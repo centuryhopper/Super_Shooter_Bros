@@ -16,11 +16,14 @@ namespace Game.PlayerCharacter
 
         public override void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
+            Debug.Log(asi.IsName("HangingIdle") ? "turning collider off" : "turning collider on");
+
             if (onStart)
             {
                 PlayerMovement p = c.GetPlayerMoveMent(a);
                 toggleCollider(p);
             }
+
         }
         public override void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {

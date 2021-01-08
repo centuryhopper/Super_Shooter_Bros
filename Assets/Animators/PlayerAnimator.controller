@@ -453,7 +453,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilityDataLst:
-  - {fileID: 11400000, guid: bbe9cedc8858142a1a8e426834ecb7a8, type: 2}
   - {fileID: 11400000, guid: 80013c28480c440f582ace5905709782, type: 2}
   - {fileID: 11400000, guid: efa5bdcbf8a3cb1498a67fcbdc712bd5, type: 2}
 --- !u!1101 &-2713125924299183107
@@ -1016,7 +1015,6 @@ MonoBehaviour:
   abilityDataLst:
   - {fileID: 11400000, guid: 7c0e05ebc354573498463c73bec8ab1a, type: 2}
   - {fileID: 11400000, guid: 4062ff4296d618f40925e88b88b77ce2, type: 2}
-  - {fileID: 11400000, guid: 71cc2eded60f45f499bc1339934c028f, type: 2}
 --- !u!1102 &4340996750914142875
 AnimatorState:
   serializedVersion: 6

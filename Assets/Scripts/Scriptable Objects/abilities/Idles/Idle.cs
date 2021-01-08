@@ -30,9 +30,6 @@ namespace Game.PlayerCharacter
 
             // todo set each rig layer and child values to hardcoded values
 
-            // rigLayers[0].rig.weight = 1;
-            // MultiAimConstraint m = rigLayers[0].rig.transform.GetChild(0).GetComponent<MultiAimConstraint>();
-
             // prevents the bug: player jumping while airborne
             a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], false);
 
@@ -42,44 +39,6 @@ namespace Game.PlayerCharacter
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            // Debug.Log($"here in idle");
-            // foreach (RigLayer rigLayer in rigLayers)
-            // {
-            //     switch (rigLayer.name)
-            //     {
-            //         case "RigLayer_BodyAim":
-
-            //             rigLayer.rig.weight = 1;
-
-            //             // headaim
-            //             MultiAimConstraint headAim = rigLayer.rig.transform.Find("HeadAim").GetComponent<MultiAimConstraint>();
-            //             Debug.Log($"head aim multi constraint weight: {headAim.weight}");
-            //             headAim.weight = 1;
-            //             Debug.Log($"head aim multi constraint weight after: {headAim.weight}");
-            //             // Debug.Log($"head weight: {headAim.data.sourceObjects[0].weight}");
-            //             headAim.data.sourceObjects.SetWeight(0, 1);
-
-
-            //             break;
-            //         case "RigLayer_WeaponPose":
-            //             rigLayer.rig.weight = 1;
-            //             break;
-            //         case "RigLayer_WeaponAim":
-            //             rigLayer.rig.weight = 1;
-            //             break;
-            //         case "RigLayer_HandIK":
-            //             rigLayer.rig.weight = 1;
-            //             break;
-            //         default:
-            //             Debug.LogWarning($"Unregistered RigLayer");
-            //             break;
-            //     }
-
-            // }
-
-
-
-
 
             // only determine when to switch to the walk animation
             if (playerController.moveRight)
@@ -92,6 +51,7 @@ namespace Game.PlayerCharacter
             }
             else if (playerController.jump)
             {
+                Debug.Log($"jump");
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], true);
             }
             else

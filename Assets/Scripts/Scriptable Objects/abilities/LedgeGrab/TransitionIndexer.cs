@@ -6,18 +6,6 @@ using UnityEngine.Animations.Rigging;
 
 namespace Game.PlayerCharacter
 {
-    // potential moves performed by the player when airborne
-    public enum AirBorneTransitions
-    {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT,
-        ATTACK,
-        JUMP,
-        GRABBING_LEDGE,
-    }
-
     [CreateAssetMenu(fileName = "New State", menuName = "ability/Transition Indexer", order = 0)]
     public class TransitionIndexer : StateData
     {
@@ -70,7 +58,7 @@ namespace Game.PlayerCharacter
 
         private bool ShouldMakeTransition(PlayerController playerController)
         {
-            foreach (var transitionCondition in transitionConditions)
+            foreach (AirBorneTransitions transitionCondition in transitionConditions)
             {
                 switch (transitionCondition)
                 {

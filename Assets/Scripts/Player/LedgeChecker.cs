@@ -13,6 +13,8 @@ namespace Game.PlayerCharacter
         [HideInInspector]
         public Ledge checkLedge = null, getGrabbedLedge = null;
 
+        public Vector3 ledgeCalibration = new Vector3();
+
         /// <summary>
         /// this is only ever true if player is airborne, and only collider1 is touching the ledge
         /// </summary>
@@ -50,6 +52,7 @@ namespace Game.PlayerCharacter
             {
                 shooting.enabled = true;
                 rifle.SetActive(true);
+                playerMovement.RB.useGravity = true;
             }
 
             // if player is in the air
@@ -59,8 +62,11 @@ namespace Game.PlayerCharacter
                 {
                     if (!collider2.CollidedObjects.Contains(o))
                     {
-                        isGrabbingLedge = true;
-                        break;
+
+                        if (OffSetPosition(o))
+                        {
+                            break;
+                        }
                     }
                     else
                     {
@@ -78,6 +84,53 @@ namespace Game.PlayerCharacter
             {
                 isGrabbingLedge = false;
             }
+        }
+
+        bool OffSetPosition(GameObject platform)
+        {
+            if (isGrabbingLedge)
+            {
+                return true;
+            }
+            isGrabbingLedge = true;
+
+            BoxCollider boxCollider = platform.GetComponent<BoxCollider>();
+
+            if (boxCollider is null)
+            {
+                Debug.LogWarning($"missing box collider component from the plaform");
+                return false;
+            }
+
+
+            playerMovement.RB.useGravity = false;
+            playerMovement.RB.velocity = new Vector3(0,0,0);
+            float y = platform.transform.position.y + (boxCollider.size.y / 2f);
+            float z;
+
+            if (playerMovement.IsFacingForward)
+            {
+                z = platform.transform.position.z - (boxCollider.size.x / 2f);
+            }
+            else
+            {
+                z = platform.transform.position.z + (boxCollider.size.x / 2f);
+            }
+
+            Vector3 platformEdge = new Vector3(0, y, z);
+
+            if (playerMovement.IsFacingForward)
+            {
+                playerMovement.RB.MovePosition(platformEdge + ledgeCalibration);
+            }
+            else
+            {
+                Vector3 newLedgeCalibration = new Vector3(0, ledgeCalibration.y, -ledgeCalibration.z);
+                playerMovement.RB.MovePosition(platformEdge + newLedgeCalibration);
+            }
+
+
+            return true;
         }
 
 
