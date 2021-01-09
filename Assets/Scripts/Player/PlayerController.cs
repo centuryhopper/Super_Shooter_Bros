@@ -3,6 +3,7 @@ using Game.Inputs;
 
 namespace Game.PlayerCharacter
 {
+    // todo merge this script into playermovement
     public class PlayerController : MonoBehaviour
     {
         public bool jump;

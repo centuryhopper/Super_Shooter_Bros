@@ -96,7 +96,7 @@ namespace Game.PlayerCharacter
 
             BoxCollider boxCollider = platform.GetComponent<BoxCollider>();
 
-            if (boxCollider is null)
+            if (boxCollider == null)
             {
                 Debug.LogWarning($"missing box collider component from the plaform");
                 return false;

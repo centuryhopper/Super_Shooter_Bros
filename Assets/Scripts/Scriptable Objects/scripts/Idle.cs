@@ -51,7 +51,7 @@ namespace Game.PlayerCharacter
             }
             else if (playerController.jump)
             {
-                Debug.Log($"jump");
+                // Debug.Log($"jump");
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], true);
             }
             else

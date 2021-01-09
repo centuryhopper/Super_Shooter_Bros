@@ -1,4 +1,3 @@
-using UnityEngine.Audio;
 using UnityEngine;
 using System;
 
@@ -19,13 +18,14 @@ namespace Game.Audio
             else
             {
                 Destroy(gameObject);
+                return;
             }
 
             // persist the audio manager between scenes
             DontDestroyOnLoad(gameObject);
 
             // add an audio source for each sound
-            for (var i = 0; i < sounds.Length; i++)
+            for (int i = 0; i < sounds.Length; i++)
             {
                 // populate audiosource
                 sounds[i].source = gameObject.AddComponent<AudioSource>();
@@ -37,7 +37,14 @@ namespace Game.Audio
             }
         }
 
-        public void Play(string name, float volume = 1f)
+        // todo add a main music theme sometime
+        // void Start()
+        // {
+        //     // Play the game theme here
+            // Play("GameTheme")
+        // }
+
+        public void Play(string name, float volume = .5f)
         {
             Sound s = Array.Find<Sound>(sounds, sound => sound.name == name);
 

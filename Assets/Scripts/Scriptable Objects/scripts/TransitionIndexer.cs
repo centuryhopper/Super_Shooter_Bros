@@ -12,19 +12,13 @@ namespace Game.PlayerCharacter
         public int Index;
         public List<AirBorneTransitions> transitionConditions = new List<AirBorneTransitions>();
         private PlayerController playerController = null;
-        private RigBuilder rigBuilder = null;
-        private List<RigLayer> rigLayers = null;
+
 
         public override void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            // initial cache
-            playerController = FindObjectOfType<PlayerController>();
-            rigBuilder = a.GetComponent<RigBuilder>();
-            rigLayers = rigBuilder.layers;
+            playerController = character.GetPlayerController(a);
 
-            // Debug.Log($"{rigBuilder is null}");
-
-
+            // Debug.Log($"here in indexer");
             if (playerController != null && ShouldMakeTransition(playerController))
             {
                 a.SetInteger(HashManager.Instance.animationParamsDict[AnimationParameters.transitionIndex], Index);
@@ -42,7 +36,10 @@ namespace Game.PlayerCharacter
             else
             {
                 // transition the animation back to idle
-                // Debug.Log($"playerController is null");
+                // if (playerController is null)
+                //     Debug.Log($"playerController is null");
+                // else
+                //     Debug.Log($"couldnt make transition");
                 a.SetInteger(HashManager.Instance.animationParamsDict[AnimationParameters.transitionIndex], 0);
             }
         }
@@ -58,9 +55,9 @@ namespace Game.PlayerCharacter
 
         private bool ShouldMakeTransition(PlayerController playerController)
         {
-            foreach (AirBorneTransitions transitionCondition in transitionConditions)
+            for (int i = 0; i < transitionConditions.Count; ++i)
             {
-                switch (transitionCondition)
+                switch (transitionConditions[i])
                 {
                     case AirBorneTransitions.UP:
                     {
@@ -69,6 +66,8 @@ namespace Game.PlayerCharacter
                             // Debug.Log("player isn't moving up");
                             return false;
                         }
+
+                        // Debug.Log($"up");
                     }
                     break;
                     case AirBorneTransitions.DOWN:
@@ -118,13 +117,6 @@ namespace Game.PlayerCharacter
                     break;
                 }
             }
-
-
-            // having the rigbuilder stay on
-            // resulted in weird player mesh
-            // appearances, so turning it off helps.
-            // rigLayers.ForEach(r => r.active = false);
-            // rigBuilder.enabled = false;
 
             return true;
         }
