@@ -1,11 +1,11 @@
 fileFormatVersion: 2
 guid: b6694a327aee44d47920286b941301e2
 ModelImporter:
-  serializedVersion: 20101
+  serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Jump_Climax
+    second: Jump_Normal
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Jump_Climax
+      name: Jump_Normal
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
@@ -893,6 +893,7 @@ ModelImporter:
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

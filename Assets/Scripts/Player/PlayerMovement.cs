@@ -9,6 +9,7 @@ namespace Game.PlayerCharacter
     // [ExecuteInEditMode]
     public class PlayerMovement : MonoBehaviour
     {
+        public AnimationProgress animationProgress;
         BoxCollider boxCollider = null;
         public BoxCollider BoxCollider
         {
@@ -68,7 +69,6 @@ namespace Game.PlayerCharacter
         // cotPlot.AddKey(Time.realtimeSinceStartup, 1 / Mathf.Tan(Time.time));
         #endregion
 
-
         Transform t;
 
 
@@ -127,6 +127,47 @@ namespace Game.PlayerCharacter
 
         public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate(groundCheckingSphere, position, Quaternion.identity);
 
+
+        public void UpdateBoxColliderSize()
+        {
+            if (!animationProgress.isUpdatingBoxCollider)
+            {
+                return;
+            }
+
+            // updating the boxcollider size only when significant difference is found
+
+            if (Vector3.SqrMagnitude(boxCollider.size - animationProgress.targetSize) > 0.01f)
+            {
+                boxCollider.size = Vector3.Lerp(boxCollider.size,
+                    animationProgress.targetSize,
+                    Time.fixedDeltaTime * animationProgress.sizeSpeed);
+            }
+
+        }
+
+        public void UpdateBoxColliderCenter()
+        {
+            if (!animationProgress.isUpdatingBoxCollider)
+            {
+                return;
+            }
+
+            if (Vector3.SqrMagnitude(boxCollider.center - animationProgress.targetCenter) > 0.01f)
+            {
+                boxCollider.center = Vector3.Lerp(boxCollider.center,
+                    animationProgress.targetCenter,
+                    Time.fixedDeltaTime * animationProgress.centerSpeed);
+            }
+        }
+
+        void FixedUpdate()
+        {
+            // todo add a gravity multiplier
+
+            UpdateBoxColliderSize();
+            UpdateBoxColliderCenter();
+        }
 
         // todo maybe migrate the code below over to a state machine script
         void Update()
@@ -192,7 +233,6 @@ namespace Game.PlayerCharacter
 
             // hover your mouse cursor over this function call for comment details
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
-            // Debug.Log($"facing: {faceDirection}");
         }
 
 

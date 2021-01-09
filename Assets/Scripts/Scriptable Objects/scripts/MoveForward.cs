@@ -17,10 +17,6 @@ namespace Game.PlayerCharacter
         {
             playerController = character.GetPlayerController(a);
             playerMovement = character.GetPlayerMoveMent(a);
-
-            // float playerSkinFaceDirection = playerMovement.PlayerSkin.eulerAngles.y;
-            // a.SetFloat(AnimationParameters.walkDirection.ToString(), 1);
-
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
@@ -41,6 +37,7 @@ namespace Game.PlayerCharacter
             // help decide whether to walk forward and backwards based on player's
             // facing direction
             faceDirection = p.faceDirection;
+            // Debug.Log($"facing: {faceDirection}");
 
             // side scroller
             if (playerController.moveRight)
@@ -59,10 +56,6 @@ namespace Game.PlayerCharacter
                     // multiple by the speed graph value so that we can still move while we jump
                     p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                 }
-
-                // p.transform.Translate(Vector3.forward * speed * Time.deltaTime);
-                // transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-                // p.transform.rotation = Quaternion.LookRotation(Vector3.forward, p.transform.up);
 
                 // todo rotation will be determined by the mouse position
                 // todo fix transform translate to work according to player aim
@@ -84,10 +77,6 @@ namespace Game.PlayerCharacter
                     p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                 }
 
-
-                // p.transform.Translate(Vector3.forward * speed * Time.deltaTime);
-                // transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-                // p.transform.rotation = Quaternion.LookRotation(-Vector3.forward, p.transform.up);
                 // todo rotation will be determined by the mouse position
                 // todo fix transform translate to work according to player aim
             }

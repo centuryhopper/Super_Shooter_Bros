@@ -227,6 +227,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9c864f162507f4fab89ae10a0601562d, type: 2}
   - {fileID: 11400000, guid: b9d203fe3653c490cbd83e039c15fbae, type: 2}
   - {fileID: 11400000, guid: 5610ab356098f4e91b5e943995023202, type: 2}
+  - {fileID: 11400000, guid: 9f8c7f1d0a5e6a64db650aedda630896, type: 2}
 --- !u!1101 &-6231750482915882716
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -277,7 +278,7 @@ AnimatorState:
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
-  m_SpeedParameterActive: 0
+  m_SpeedParameterActive: 1
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
@@ -646,10 +647,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -5376432206340398576}
-    m_Position: {x: 200, y: -100, z: 0}
+    m_Position: {x: 230, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8404490361076670832}
-    m_Position: {x: -210, y: -350, z: 0}
+    m_Position: {x: -210, y: -340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8658270416228012128}
     m_Position: {x: 270, y: -420, z: 0}
@@ -742,49 +743,49 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: jump
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: force_transition
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: isGrounded
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 1
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: turbo
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: secondJump
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: transitionIndex
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: faceDirection
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -906,7 +907,7 @@ AnimatorState:
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
-  m_SpeedParameterActive: 0
+  m_SpeedParameterActive: 1
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
@@ -956,7 +957,7 @@ AnimatorStateMachine:
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: -284394854215771435}
-    m_Position: {x: -140, y: -440, z: 0}
+    m_Position: {x: -140, y: -430, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: -1660662210639373764}
     m_Position: {x: 280, y: -20, z: 0}
@@ -1250,7 +1251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aee88f9fe6b3f4e24b5e20658d5c0847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityDataLst: []
+  abilityDataLst:
+  - {fileID: 11400000, guid: 9c864f162507f4fab89ae10a0601562d, type: 2}
 --- !u!1101 &5698000479083220503
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1383,6 +1385,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5610ab356098f4e91b5e943995023202, type: 2}
   - {fileID: 11400000, guid: a513ae7fd8ce648d6ade5c14d18dea06, type: 2}
   - {fileID: 11400000, guid: cc9365c792fe740fdb9553c43667147b, type: 2}
+  - {fileID: 11400000, guid: 325ad3db72dfb074293bbf98da2991d6, type: 2}
 --- !u!1101 &7821146494329057394
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1393,7 +1396,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 6
     m_ConditionEvent: transitionIndex
-    m_EventTreshold: 1
+    m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2994309929145333571}
   m_Solo: 0
@@ -1403,7 +1406,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.1
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -1448,6 +1451,7 @@ MonoBehaviour:
   abilityDataLst:
   - {fileID: 11400000, guid: c527243b59cca499c9292d0a07fe153a, type: 2}
   - {fileID: 11400000, guid: d8503d883fb7042a4b7aad0f2887aa94, type: 2}
+  - {fileID: 11400000, guid: 9f8c7f1d0a5e6a64db650aedda630896, type: 2}
 --- !u!1102 &8404490361076670832
 AnimatorState:
   serializedVersion: 6
@@ -1455,7 +1459,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Jump_Climax
+  m_Name: Jump_Normal
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
