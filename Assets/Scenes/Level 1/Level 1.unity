@@ -513,6 +513,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1021579463}
     - target: {fileID: 3403268544669607040, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
+      propertyPath: horizontalSections
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3403268544669607040, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
       propertyPath: rigs.Array.data[0]
       value: 
       objectReference: {fileID: 38920138}
@@ -839,6 +843,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7156443242160922854, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
     - {fileID: 4512681031661847527, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
+    - {fileID: 4203551154815645255, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
 --- !u!4 &251289774 stripped
 Transform:

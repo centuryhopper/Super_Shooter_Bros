@@ -9,14 +9,14 @@ namespace Game.PlayerCharacter
     {
         [Range(1, 10)]
         public float jumpForce;
-        private PlayerController playerController;
+        private PlayerMovement playerMovement = null;
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
             // ensure we don't play the landing animation too early
             a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.isGrounded], false);
 
-            playerController = character.GetPlayerController(a);
+            playerMovement = character.GetPlayerMoveMent(a);
 
             // get player rigidbody and apply force to the jump
             Rigidbody rb = character.GetPlayerMoveMent(a).RB;
@@ -29,7 +29,7 @@ namespace Game.PlayerCharacter
             // Debug.Log("second Jump: " + playerController.jump + "and num jumps: " + PlayerMovement.numJumps);
 
             // listen for another jump
-            if (playerController.jump && PlayerMovement.numJumps == 1)
+            if (playerMovement.jump && PlayerMovement.numJumps == 1)
             {
                 // Debug.Log("second jump triggered");
 

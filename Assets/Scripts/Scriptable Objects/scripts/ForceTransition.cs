@@ -12,7 +12,7 @@ namespace Game.PlayerCharacter
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            // Debug.Log($"force transitioning");
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], false);
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)

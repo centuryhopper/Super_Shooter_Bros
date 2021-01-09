@@ -7,17 +7,17 @@ namespace Game.PlayerCharacter
     [CreateAssetMenu(fileName = "CheckSprint", menuName = "ability/Check Sprint", order = 0)]
     public class CheckTurbo : StateData
     {
-        private PlayerController playerController;
+        private PlayerMovement playerMovement;
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            playerController = character.GetPlayerController(a);
+            playerMovement = character.GetPlayerMoveMent(a);
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             // check whether the player should sprint
-            if (playerController.turbo)
+            if (playerMovement.turbo)
             {
                 // Debug.Log("turbo is true");
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.turbo], true);

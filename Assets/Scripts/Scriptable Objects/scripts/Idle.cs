@@ -9,14 +9,12 @@ namespace Game.PlayerCharacter
     [CreateAssetMenu(fileName = "idle", menuName = "idle")]
     public class Idle : StateData
     {
-        private PlayerController playerController = null;
         private PlayerMovement playerMovement = null;
         private RigBuilder rigBuilder = null;
         private List<RigLayer> rigLayers = null;
 
         override public void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            playerController = c.GetPlayerController(a);
             playerMovement = c.GetPlayerMoveMent(a);
             rigBuilder = a.GetComponent<RigBuilder>();
             rigLayers = rigBuilder.layers;
@@ -41,15 +39,15 @@ namespace Game.PlayerCharacter
         {
 
             // only determine when to switch to the walk animation
-            if (playerController.moveRight)
+            if (playerMovement.moveRight)
             {
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], true);
             }
-            else if (playerController.moveLeft)
+            else if (playerMovement.moveLeft)
             {
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], true);
             }
-            else if (playerController.jump)
+            else if (playerMovement.jump)
             {
                 // Debug.Log($"jump");
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], true);

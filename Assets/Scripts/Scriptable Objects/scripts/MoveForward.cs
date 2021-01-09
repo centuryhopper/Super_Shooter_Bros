@@ -9,13 +9,11 @@ namespace Game.PlayerCharacter
     {
         public AnimationCurve speedGraph;
         public float speed;
-        private PlayerController playerController;
         private PlayerMovement playerMovement;
         public float faceDirection;
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            playerController = character.GetPlayerController(a);
             playerMovement = character.GetPlayerMoveMent(a);
         }
 
@@ -40,7 +38,7 @@ namespace Game.PlayerCharacter
             // Debug.Log($"facing: {faceDirection}");
 
             // side scroller
-            if (playerController.moveRight)
+            if (playerMovement.moveRight)
             {
                 a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.faceDirection], faceDirection);
 
@@ -60,7 +58,7 @@ namespace Game.PlayerCharacter
                 // todo rotation will be determined by the mouse position
                 // todo fix transform translate to work according to player aim
             }
-            else if (playerController.moveLeft)
+            else if (playerMovement.moveLeft)
             {
                 a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.faceDirection], -faceDirection);
 
@@ -77,8 +75,8 @@ namespace Game.PlayerCharacter
                     p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                 }
 
-                // todo rotation will be determined by the mouse position
-                // todo fix transform translate to work according to player aim
+                // todo rotation will be determined by the mouse position DONE
+                // todo fix transform translate to work according to player aim DONE
             }
             else
             {

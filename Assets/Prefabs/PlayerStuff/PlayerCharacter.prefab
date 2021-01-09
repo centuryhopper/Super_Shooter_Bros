@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1327293210905888338}
   - component: {fileID: 3403268544669607040}
   - component: {fileID: 2520653899853958378}
-  - component: {fileID: 4203551154815645255}
   - component: {fileID: 7918680335284003833}
   - component: {fileID: 8296462606703166333}
   m_Layer: 0
@@ -49,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9354ea10283ab4af1a2b2bed083a3640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animationProgress: {fileID: 0}
   crossHairTransform: {fileID: 0}
   ledgeChecker: {fileID: 7096382803104766911}
   playerSkin: {fileID: 3484063990644978126}
@@ -58,8 +58,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   faceDirection: 1
+  rigs: []
   weaponAimRig: {fileID: 0}
   tolerableDistance: 2.5
+  jump: 0
+  moveLeft: 0
+  moveRight: 0
+  moveUp: 0
+  moveDown: 0
+  turbo: 0
+  secondJump: 0
 --- !u!114 &2520653899853958378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,27 +83,7 @@ MonoBehaviour:
   firePoint: {fileID: 0}
   bulletTag: bullet
   muzzleFlash: {fileID: 0}
-  bulletSound: {fileID: 0}
   fireBulletDelay: 0.1
---- !u!114 &4203551154815645255
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327293210905888339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8278ea56b4fa7453793ca18d34cf5c06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jump: 0
-  moveLeft: 0
-  moveRight: 0
-  moveUp: 0
-  moveDown: 0
-  turbo: 0
-  secondJump: 0
 --- !u!54 &7918680335284003833
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -235,9 +223,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkLedge: {fileID: 0}
   getGrabbedLedge: {fileID: 0}
+  ledgeCalibration: {x: 0, y: 0, z: 0}
   isGrabbingLedge: 0
   collider1: {fileID: 0}
   collider2: {fileID: 0}
+  rifle: {fileID: 0}
 --- !u!1001 &3482973170828810318
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Animations.Rigging;
+using Game.Inputs;
 
 namespace Game.PlayerCharacter
 {
@@ -11,25 +12,19 @@ namespace Game.PlayerCharacter
     {
         public AnimationProgress animationProgress;
         BoxCollider boxCollider = null;
-        public BoxCollider BoxCollider
-        {
-            get => boxCollider;
-        }
-
+        public BoxCollider BoxCollider { get => boxCollider; }
         Rigidbody rb;
-        public Rigidbody RB
-        {
-            get => rb;
-        }
-
+        public Rigidbody RB { get => rb; }
         public Transform crossHairTransform = null;
         private Camera mainCam;
         [SerializeField] LedgeChecker ledgeChecker = null;
-        public LedgeChecker GetLedgeChecker { get {return ledgeChecker;} }
+        public LedgeChecker GetLedgeChecker { get => ledgeChecker; }
         public Transform playerSkin = null;
-        public List<GameObject> groundCheckers { get; private set; }
+        public List<GameObject> frontSphereGroundCheckers { get; private set; }
+        public List<GameObject> bottomSphereGroundCheckers { get; private set; }
         [SerializeField] GameObject groundCheckingSphere = null;
-        [SerializeField] int sections = 5;
+        [SerializeField] int horizontalSections = 5;
+        [SerializeField] int verticalSections = 10;
 
         /// <summary>
         /// With this, player now has double jump ability
@@ -45,6 +40,21 @@ namespace Game.PlayerCharacter
         [SerializeField] List<Rig> rigs = null;
         [SerializeField] Rig weaponAimRig = null;
         [SerializeField] float tolerableDistance = 2.5f;
+
+        [Space, Header("Player Inputs")]
+        public bool jump;
+        public bool moveLeft;
+        public bool moveRight;
+        public bool moveUp;
+        public bool moveDown;
+
+        /// <summary>
+        /// Is true when player holds down
+        /// shift or when player is "run" mode
+        /// </summary>
+        /// <value></value>
+        public bool turbo;
+        public bool secondJump;
 
         #region Messed around with animation curves
         // [SerializeField] AnimationCurve sinPlot = new AnimationCurve();
@@ -75,57 +85,78 @@ namespace Game.PlayerCharacter
         void Awake()
         {
             // Debug.Log(Input.mousePresent ? "mouse detected" : "mouse not detected");
-            groundCheckers = new List<GameObject>(sections + 2);
+            bottomSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
+            frontSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
             boxCollider = GetComponent<BoxCollider>();
             rb = GetComponent<Rigidbody>();
             t = transform;
             mainCam = Camera.main;
 
             #region groundchecking spheres
-                // y-z plane in this case
-                float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
-                float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
+            // y-z plane in this case
+            float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
+            float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
+            float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
+            float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
 
-                float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
-                float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
+            // create the spheres and add them to the list
+            GameObject topFrontSphere = CreateGroundCheckingSphere(new Vector3(0, top, front));
+            // GameObject topBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
+            GameObject bottomFrontSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, front));
+            GameObject bottomBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
 
-                // create the spheres and add them to the list
-                GameObject bottomFrontSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, front));
-                GameObject bottomBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
+            bottomSphereGroundCheckers.Add(bottomFrontSphere);
+            bottomSphereGroundCheckers.Add(bottomBackSphere);
 
-                groundCheckers.Add(bottomFrontSphere);
-                groundCheckers.Add(bottomBackSphere);
+            frontSphereGroundCheckers.Add(topFrontSphere);
+            frontSphereGroundCheckers.Add(bottomFrontSphere);
 
-                // parent the player to the spheres so the positions of the ground checkers are accurate
-                bottomFrontSphere.transform.parent = this.transform;
-                bottomBackSphere.transform.parent = this.transform;
+            // parent the player to the spheres so the positions of the ground checkers are accurate
+            bottomFrontSphere.transform.parent = this.transform;
+            bottomBackSphere.transform.parent = this.transform;
 
-                // divide into 5 sections and add a sphere for each section
-                float section = (bottomFrontSphere.transform.position
-                - bottomBackSphere.transform.position).magnitude / sections;
 
-                for (int i = 0; i < sections; ++i)
-                {
-                    // find position for each section
-                    //         X       X       X       X       X
-                    // | ..... | ..... | ..... | ..... | ..... | ..... |
-                    Vector3 position = bottomBackSphere.transform.position + (Vector3.forward * section * (i + 1));
 
-                    // instantiate sphere
-                    GameObject sphere = CreateGroundCheckingSphere(position);
+            // divide into 5 sections and add a sphere for each section
+            float horizontalSection = (bottomFrontSphere.transform.position
+            - bottomBackSphere.transform.position).magnitude / horizontalSections;
+            CreateMiddleSpheres(bottomBackSphere, transform.forward, horizontalSection, horizontalSections - 1, bottomSphereGroundCheckers);
 
-                    // parent it to the player
-                    sphere.transform.parent = this.transform;
+            // divide into 5 sections and add a sphere for each section
+            float verticalSection = (bottomFrontSphere.transform.position
+            - bottomBackSphere.transform.position).magnitude / horizontalSections;
+            CreateMiddleSpheres(bottomBackSphere, transform.forward, horizontalSection, horizontalSections - 1, bottomSphereGroundCheckers);
 
-                    // add it to the list
-                    groundCheckers.Add(sphere);
-                }
 
             #endregion
 
         }
 
         public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate(groundCheckingSphere, position, Quaternion.identity);
+
+        public void CreateMiddleSpheres(GameObject start, Vector3 direction, float section, int sections, List<GameObject> spheresList)
+        {
+            for (int i = 0; i < sections; ++i)
+            {
+                // find position for each section
+                //         X       X       X       X       X
+                // | ..... | ..... | ..... | ..... | ..... | ..... |
+                Vector3 position = start.transform.position + (direction * section * (i + 1));
+
+                // instantiate sphere
+                GameObject sphere = CreateGroundCheckingSphere(position);
+
+                // parent it to the player
+                sphere.transform.parent = this.transform;
+
+                // add it to the list
+                spheresList.Add(sphere);
+            }
+        }
+
+
+
+
 
 
         public void UpdateBoxColliderSize()
@@ -143,7 +174,6 @@ namespace Game.PlayerCharacter
                     animationProgress.targetSize,
                     Time.fixedDeltaTime * animationProgress.sizeSpeed);
             }
-
         }
 
         public void UpdateBoxColliderCenter()
@@ -233,6 +263,19 @@ namespace Game.PlayerCharacter
 
             // hover your mouse cursor over this function call for comment details
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
+
+
+
+
+
+
+            jump = VirtualInputManager.Instance.jump;
+            moveLeft = VirtualInputManager.Instance.moveLeft;
+            moveRight = VirtualInputManager.Instance.moveRight;
+            moveUp = VirtualInputManager.Instance.moveUp;
+            moveDown = VirtualInputManager.Instance.moveDown;
+            turbo = VirtualInputManager.Instance.turbo;
+            secondJump = VirtualInputManager.Instance.secondJump;
         }
 
 
@@ -308,7 +351,7 @@ namespace Game.PlayerCharacter
         //         new Vector3(transform.localScale.x,transform.localScale.y,-zScale);
         //     }
         // }
-    #endregion
+        #endregion
     }
 }
 

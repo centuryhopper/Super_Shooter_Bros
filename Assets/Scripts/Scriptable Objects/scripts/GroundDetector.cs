@@ -10,16 +10,15 @@ namespace Game.PlayerCharacter
     {
         [Range(.01f, 5)]
         public float distanceOfDetection;
+        private PlayerMovement p = null;
 
-        override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
+        override public void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            // throw new System.NotImplementedException();
+            p = c.GetPlayerMoveMent(a);
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            PlayerMovement p = c.GetPlayerMoveMent(a);
-
             if (IsGrounded(p))
             {
                 // Debug.Log("on ground");
@@ -60,15 +59,15 @@ namespace Game.PlayerCharacter
             // }
             #endregion
 
-            return p.groundCheckers.Any((GameObject obj) =>
+            return p.bottomSphereGroundCheckers.Any((GameObject obj) =>
             {
-               // show the rays
-               Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
+                // show the rays
+                Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
 
                 RaycastHit hit;
 
-               // project a ray downwards
-               return (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection));
+                // project a ray downwards
+                return (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection));
             });
         }
     }

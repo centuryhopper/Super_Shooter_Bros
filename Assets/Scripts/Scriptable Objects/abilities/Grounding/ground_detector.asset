@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: ground_detector
   m_EditorClassIdentifier: 
   distanceOfDetection: 0.35
+  checkTime: 0.01
