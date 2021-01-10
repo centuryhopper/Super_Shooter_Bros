@@ -19,5 +19,9 @@ namespace Game.PlayerCharacter
         public Vector3 targetCenter;
         public float centerSpeed;
 
+
+        [Header("Transition Helper Variables")]
+        public bool hasLockedTransition;
+
     }
 }

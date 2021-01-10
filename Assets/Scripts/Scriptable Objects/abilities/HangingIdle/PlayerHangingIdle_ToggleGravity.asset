@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cf36fcb2f5c34de59ee20d1e61e40a1, type: 3}
-  m_Name: PlayerHangToCrouch_Indexer
+  m_Script: {fileID: 11500000, guid: 4a2a7c96742ab43f38e6f95e9d3f1670, type: 3}
+  m_Name: PlayerHangingIdle_ToggleGravity
   m_EditorClassIdentifier: 
-  Index: 1
-  transitionConditions: 0000000005000000
+  gravitySwitch: 0
+  onStart: 1
+  onEnd: 0
+  customTiming: 0.1

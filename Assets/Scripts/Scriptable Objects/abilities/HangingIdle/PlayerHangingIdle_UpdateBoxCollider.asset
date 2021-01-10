@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a2a7c96742ab43f38e6f95e9d3f1670, type: 3}
-  m_Name: Player_LedgeGrab_ToggleGravity
+  m_Script: {fileID: 11500000, guid: e128d5ea55ecc704384ca795002962bc, type: 3}
+  m_Name: PlayerHangingIdle_UpdateBoxCollider
   m_EditorClassIdentifier: 
-  gravitySwitch: 0
-  onStart: 1
-  onEnd: 0
+  targetSize: {x: 0, y: 0, z: 0}
+  sizeUpdateSpeed: 0
+  targetCenter: {x: 0, y: 0, z: 0}
+  centerUpdateSpeed: 0

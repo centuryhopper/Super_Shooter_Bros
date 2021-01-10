@@ -11,5 +11,6 @@ namespace Game.Enums
         secondJump,
         transitionIndex,
         faceDirection,
+        lockTransition,
     }
 }

@@ -99,8 +99,13 @@ namespace Game.PlayerCharacter
             mainCam = Camera.main;
             SetColliderSpheres();
 
-            Debug.Log($"Player Box Collider player dimenstions");
-            Debug.Log($"top, bottom, front, back: {GetTopBottomFrontBackDimensions()}");
+            // Debug.Log($"Player Box Collider player dimenstions");
+            // Debug.Log($"top, bottom, front, back: {GetTopBottomFrontBackDimensions()}");
+
+            #region for debugging purposes only and will delete when no longer needed
+                rigs.ForEach(rig => rig.weight = 0);
+                weaponAimRig.weight = 0;
+            #endregion
 
         }
 
@@ -263,16 +268,16 @@ namespace Game.PlayerCharacter
                 RepositionFrontSpheres();
             }
 
-            if (ledgeChecker.isGrabbingLedge)
-            {
-                rigs.ForEach(rig => rig.weight = 0);
-                weaponAimRig.weight = 0;
-                return;
-            }
-            else
-            {
-                rigs.ForEach(rig => rig.weight = 1);
-            }
+            // if (ledgeChecker.isGrabbingLedge)
+            // {
+            //     rigs.ForEach(rig => rig.weight = 0);
+            //     weaponAimRig.weight = 0;
+            //     return;
+            // }
+            // else
+            // {
+            //     rigs.ForEach(rig => rig.weight = 1);
+            // }
 
             // Debug.Log($"y rotation of playerskin: {playerSkin.eulerAngles.y}");
 
@@ -285,7 +290,7 @@ namespace Game.PlayerCharacter
             // OR
             // toggle animation rig weights depending on the distance of the crosshair
             // to the player
-            if (Physics.Raycast(mouseRay, out RaycastHit hit, Mathf.Infinity, mouseAimMask))
+            if (Physics.Raycast(mouseRay, out RaycastHit hit, Mathf.Infinity, mouseAimMask) && !ledgeChecker.isGrabbingLedge)
             {
                 // Debug.Log($"ray hit something");
                 // Vector3 fromPlayerToCrossHair = crossHairTransform.position - transform.position;

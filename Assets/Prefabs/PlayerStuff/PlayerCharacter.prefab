@@ -53,7 +53,8 @@ MonoBehaviour:
   ledgeChecker: {fileID: 7096382803104766911}
   playerSkin: {fileID: 3484063990644978126}
   groundCheckingSphere: {fileID: 4664209058132775207, guid: c6e13f6502013421d8df4174707638a6, type: 3}
-  sections: 5
+  horizontalSections: 5
+  verticalSections: 10
   mouseAimMask:
     serializedVersion: 2
     m_Bits: 8
@@ -124,7 +125,6 @@ GameObject:
   - component: {fileID: 5932267673112061644}
   - component: {fileID: 7707752684049196154}
   - component: {fileID: 4826750849017939975}
-  - component: {fileID: 4512681031661847527}
   - component: {fileID: 7096382803104766911}
   m_Layer: 0
   m_Name: PlayerLedgeChecker
@@ -196,19 +196,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4512681031661847527
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8495748693219008967}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7096382803104766911
 MonoBehaviour:
   m_ObjectHideFlags: 0

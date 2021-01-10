@@ -742,7 +742,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5932267673112061644, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.87
+      value: 2.74
       objectReference: {fileID: 0}
     - target: {fileID: 5932267673112061644, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -842,8 +842,6 @@ PrefabInstance:
       objectReference: {fileID: 13400000, guid: ffbcdd6018f2b4e568b798d9ec672c30, type: 2}
     m_RemovedComponents:
     - {fileID: 7156443242160922854, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
-    - {fileID: 4512681031661847527, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
-    - {fileID: 4203551154815645255, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 68d216210f38f4a23b20d1bde959f40b, type: 3}
 --- !u!4 &251289774 stripped
 Transform:
@@ -1377,6 +1375,7 @@ MonoBehaviour:
   sizeSpeed: 0
   targetCenter: {x: 0, y: 0, z: 0}
   centerSpeed: 0
+  hasLockedTransition: 0
 --- !u!4 &334262326
 Transform:
   m_ObjectHideFlags: 0
