@@ -10,26 +10,14 @@ namespace Game.PlayerCharacter
     public class Idle : StateData
     {
         private PlayerMovement playerMovement = null;
-        private RigBuilder rigBuilder = null;
-        private List<RigLayer> rigLayers = null;
 
         override public void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             playerMovement = c.GetPlayerMoveMent(a);
-            rigBuilder = a.GetComponent<RigBuilder>();
-            rigLayers = rigBuilder.layers;
-
-            // rigBuilder.enabled = true;
-            // rigLayers.ForEach(r =>
-            // {
-            //     r.active = true;
-            //     Debug.Log($"{r.name}");
-            // });
-
-            // todo set each rig layer and child values to hardcoded values
 
             // prevents the bug: player jumping while airborne
             a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], false);
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.isGrounded], true);
 
             // player can double jump again
             PlayerMovement.numJumps = 2;

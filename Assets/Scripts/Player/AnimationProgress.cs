@@ -13,6 +13,7 @@ namespace Game.PlayerCharacter
 
         [Header("Update Box Collider")]
         public bool isUpdatingBoxCollider;
+        public bool isUpdatingSpheres;
         public Vector3 targetSize;
         public float sizeSpeed;
         public Vector3 targetCenter;

@@ -38,9 +38,28 @@ namespace Game.PlayerCharacter
 
         private bool IsGrounded(PlayerMovement p)
         {
-            if (p.RB.velocity.y > -0.01f && p.RB.velocity.y <= 0)
+            if (p.RB.velocity.y > -0.001f && p.RB.velocity.y <= 0)
             {
-                return true;
+                if (p.contactPoints != null)
+                {
+                    foreach (ContactPoint c in p.contactPoints)
+                    {
+                        // get the bottom of collider using the center position
+                        float colliderBottom = (p.transform.position.y + p.BoxCollider.center.y) - (p.BoxCollider.size.y / 2f);
+
+                        // then compare that to the contact point
+                        float yDifference = Mathf.Abs(c.point.y - colliderBottom);
+
+                        // this if check works properly
+                        // but Mathf.Approximately on yDiff and 0
+                        // did not, so keep in mind not to use that method unless
+                        // you absolutely know what you're doing
+                        if (yDifference <= .01f)
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
 
             #region old code (replaced by the linq statement below)
@@ -64,10 +83,8 @@ namespace Game.PlayerCharacter
                 // show the rays
                 Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
 
-                RaycastHit hit;
-
                 // project a ray downwards
-                return (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection));
+                return (Physics.Raycast(obj.transform.position, Vector3.down, out RaycastHit hit, distanceOfDetection));
             });
         }
     }

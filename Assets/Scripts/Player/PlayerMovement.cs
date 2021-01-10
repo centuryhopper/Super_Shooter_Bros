@@ -56,6 +56,12 @@ namespace Game.PlayerCharacter
         public bool turbo;
         public bool secondJump;
 
+        [Header("Gravity")]
+        public ContactPoint[] contactPoints;
+
+
+
+
         #region Messed around with animation curves
         // [SerializeField] AnimationCurve sinPlot = new AnimationCurve();
         // [SerializeField] AnimationCurve cosPlot = new AnimationCurve();
@@ -91,73 +97,111 @@ namespace Game.PlayerCharacter
             rb = GetComponent<Rigidbody>();
             t = transform;
             mainCam = Camera.main;
+            SetColliderSpheres();
 
-            #region groundchecking spheres
+            Debug.Log($"Player Box Collider player dimenstions");
+            Debug.Log($"top, bottom, front, back: {GetTopBottomFrontBackDimensions()}");
+
+        }
+
+        void OnCollisionStay(Collision collisionInfo)
+        {
+            contactPoints = collisionInfo.contacts;
+        }
+
+        public (float a, float b, float c, float d) GetTopBottomFrontBackDimensions()
+        {
             // y-z plane in this case
             float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
             float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
             float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
             float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
 
-            // create the spheres and add them to the list
-            GameObject topFrontSphere = CreateGroundCheckingSphere(new Vector3(0, top, front));
-            // GameObject topBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
-            GameObject bottomFrontSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, front));
-            GameObject bottomBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
-
-            bottomSphereGroundCheckers.Add(bottomFrontSphere);
-            bottomSphereGroundCheckers.Add(bottomBackSphere);
-
-            frontSphereGroundCheckers.Add(topFrontSphere);
-            frontSphereGroundCheckers.Add(bottomFrontSphere);
-
-            // parent the player to the spheres so the positions of the ground checkers are accurate
-            bottomFrontSphere.transform.parent = this.transform;
-            bottomBackSphere.transform.parent = this.transform;
-
-
-
-            // divide into 5 sections and add a sphere for each section
-            float horizontalSection = (bottomFrontSphere.transform.position
-            - bottomBackSphere.transform.position).magnitude / horizontalSections;
-            CreateMiddleSpheres(bottomBackSphere, transform.forward, horizontalSection, horizontalSections - 1, bottomSphereGroundCheckers);
-
-            // divide into 5 sections and add a sphere for each section
-            float verticalSection = (bottomFrontSphere.transform.position
-            - bottomBackSphere.transform.position).magnitude / horizontalSections;
-            CreateMiddleSpheres(bottomBackSphere, transform.forward, horizontalSection, horizontalSections - 1, bottomSphereGroundCheckers);
-
-
-            #endregion
-
+            return (top, bottom, front, back);
         }
 
-        public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate(groundCheckingSphere, position, Quaternion.identity);
-
-        public void CreateMiddleSpheres(GameObject start, Vector3 direction, float section, int sections, List<GameObject> spheresList)
+        public void RepositionFrontSpheres()
         {
-            for (int i = 0; i < sections; ++i)
+            (float top, float bottom, float front, float back) dimensions = GetTopBottomFrontBackDimensions();
+
+            frontSphereGroundCheckers[0].transform.localPosition = new Vector3(0, dimensions.bottom + 0.05f, dimensions.front) - transform.position;
+            frontSphereGroundCheckers[1].transform.localPosition = new Vector3(0, dimensions.top, dimensions.front) - transform.position;
+
+            float interval = (dimensions.top - dimensions.bottom + 0.05f) / (verticalSections - 1);
+
+            for (int i = 2; i < frontSphereGroundCheckers.Count; i++)
             {
-                // find position for each section
-                //         X       X       X       X       X
-                // | ..... | ..... | ..... | ..... | ..... | ..... |
-                Vector3 position = start.transform.position + (direction * section * (i + 1));
-
-                // instantiate sphere
-                GameObject sphere = CreateGroundCheckingSphere(position);
-
-                // parent it to the player
-                sphere.transform.parent = this.transform;
-
-                // add it to the list
-                spheresList.Add(sphere);
+                frontSphereGroundCheckers[i].transform.localPosition =
+                    new Vector3(0, dimensions.bottom + (interval * (i - 1)), dimensions.front) - transform.position;
             }
         }
 
+        public void RepositionBottomSpheres()
+        {
+            (float top, float bottom, float front, float back) dimensions = GetTopBottomFrontBackDimensions();
 
+            bottomSphereGroundCheckers[0].transform.localPosition = new Vector3(0, dimensions.bottom, dimensions.back) - transform.position;
+            bottomSphereGroundCheckers[1].transform.localPosition = new Vector3(0, dimensions.bottom, dimensions.front) - transform.position;
 
+            float interval = (dimensions.front - dimensions.back) / (horizontalSections - 1);
 
+            for (int i = 2; i < bottomSphereGroundCheckers.Count; i++)
+            {
+                bottomSphereGroundCheckers[i].transform.localPosition =
+                    new Vector3(0, dimensions.bottom, dimensions.back + (interval * (i - 1))) - transform.position;
+            }
+        }
 
+        /// <summary>
+        /// credit goes to roundbeargames for setting up these spheres
+        /// https://www.youtube.com/channel/UCAoJgVzDHnFDOQwC42raByg
+        /// </summary>
+        private void SetColliderSpheres()
+        {
+            // y-z plane in this case
+
+            // populate list
+            for (var i = 0; i < horizontalSections; i++)
+            {
+                GameObject obj = CreateGroundCheckingSphere(Vector3.zero);
+                obj.transform.parent = this.transform;
+                bottomSphereGroundCheckers.Add(obj);
+            }
+
+            // populate list
+            for (var i = 0; i < verticalSections; i++)
+            {
+                GameObject obj = CreateGroundCheckingSphere(Vector3.zero);
+                obj.transform.parent = this.transform;
+                frontSphereGroundCheckers.Add(obj);
+            }
+
+            RepositionBottomSpheres();
+            RepositionFrontSpheres();
+
+        }
+
+        public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate<GameObject>(groundCheckingSphere, position, Quaternion.identity);
+
+        // public void CreateMiddleSpheres(GameObject start, Vector3 direction, float section, int sections, List<GameObject> spheresList)
+        // {
+        //     for (int i = 0; i < sections; ++i)
+        //     {
+        //         // find position for each section
+        //         //         X       X       X       X       X
+        //         // | ..... | ..... | ..... | ..... | ..... | ..... |
+        //         Vector3 position = start.transform.position + (direction * section * (i + 1));
+
+        //         // instantiate sphere
+        //         GameObject sphere = CreateGroundCheckingSphere(position);
+
+        //         // parent it to the player
+        //         sphere.transform.parent = this.transform;
+
+        //         // add it to the list
+        //         spheresList.Add(sphere);
+        //     }
+        // }
 
         public void UpdateBoxColliderSize()
         {
@@ -172,7 +216,9 @@ namespace Game.PlayerCharacter
             {
                 boxCollider.size = Vector3.Lerp(boxCollider.size,
                     animationProgress.targetSize,
-                    Time.fixedDeltaTime * animationProgress.sizeSpeed);
+                    Time.deltaTime * animationProgress.sizeSpeed);
+
+                animationProgress.isUpdatingSpheres = true;
             }
         }
 
@@ -187,21 +233,35 @@ namespace Game.PlayerCharacter
             {
                 boxCollider.center = Vector3.Lerp(boxCollider.center,
                     animationProgress.targetCenter,
-                    Time.fixedDeltaTime * animationProgress.centerSpeed);
+                    Time.deltaTime * animationProgress.centerSpeed);
+
+                animationProgress.isUpdatingSpheres = true;
             }
         }
 
-        void FixedUpdate()
-        {
+        // void FixedUpdate()
+        // {
             // todo add a gravity multiplier
 
-            UpdateBoxColliderSize();
-            UpdateBoxColliderCenter();
-        }
+
+
+        // }
 
         // todo maybe migrate the code below over to a state machine script
         void Update()
         {
+            // Debug.Log($"top, bottom, front, back: {GetTopBottomFrontBackDimensions()}");
+
+
+            animationProgress.isUpdatingSpheres = false;
+            UpdateBoxColliderSize();
+            UpdateBoxColliderCenter();
+
+            if (animationProgress.isUpdatingSpheres)
+            {
+                RepositionBottomSpheres();
+                RepositionFrontSpheres();
+            }
 
             if (ledgeChecker.isGrabbingLedge)
             {
@@ -268,14 +328,15 @@ namespace Game.PlayerCharacter
 
 
 
-
-            jump = VirtualInputManager.Instance.jump;
-            moveLeft = VirtualInputManager.Instance.moveLeft;
-            moveRight = VirtualInputManager.Instance.moveRight;
-            moveUp = VirtualInputManager.Instance.moveUp;
-            moveDown = VirtualInputManager.Instance.moveDown;
-            turbo = VirtualInputManager.Instance.turbo;
-            secondJump = VirtualInputManager.Instance.secondJump;
+            #region Keyboardinput syncs
+                jump = VirtualInputManager.Instance.jump;
+                moveLeft = VirtualInputManager.Instance.moveLeft;
+                moveRight = VirtualInputManager.Instance.moveRight;
+                moveUp = VirtualInputManager.Instance.moveUp;
+                moveDown = VirtualInputManager.Instance.moveDown;
+                turbo = VirtualInputManager.Instance.turbo;
+                secondJump = VirtualInputManager.Instance.secondJump;
+            #endregion
         }
 
 
@@ -304,7 +365,6 @@ namespace Game.PlayerCharacter
         //     animator.SetIKPosition(AvatarIKGoal.LeftHand, targetTransform.position);
         // }
         #endregion
-
 
         #region
         // // debug code
