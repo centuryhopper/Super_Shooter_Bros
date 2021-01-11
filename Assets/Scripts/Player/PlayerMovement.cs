@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
@@ -44,7 +44,7 @@ namespace Game.PlayerCharacter
 
         public Transform targetTransform = null;
         private Camera mainCam;
-        // private Animator animator;
+        private Animator animator;
 
 
         [SerializeField] LedgeChecker ledgeChecker = null;
@@ -72,7 +72,7 @@ namespace Game.PlayerCharacter
             boxCollider = GetComponent<BoxCollider>();
             rb = GetComponent<Rigidbody>();
             mainCam = Camera.main;
-            // animator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
 
 
             #region groundchecking spheres
@@ -126,7 +126,12 @@ namespace Game.PlayerCharacter
             {
                 Debug.Log("triggered collectible");
                 PlayerStats.Points++;
+                PlayerStats.updateStats();
+                Item item = collectible.gameObject.GetComponent<ItemPickup>().item;
+                Debug.Log("picking up " + item.name);
+                Inventory.instance.Add(item);
                 Destroy(collectible.gameObject);
+                
             }
         
         }
@@ -139,9 +144,9 @@ namespace Game.PlayerCharacter
         {
             // Debug.Log($"y rotation of playerskin: {playerSkin.eulerAngles.y}");
 
-            Ray mouseRay = mainCam.ScreenPointToRay(Input.mousePosition);
+            Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(mouseRay, out RaycastHit hit, Mathf.Infinity, mouseAimMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mouseAimMask))
             {
                 // move the target transform to where the mouse cursor is
                 targetTransform.position = hit.point;

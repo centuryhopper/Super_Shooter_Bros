@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class PlayerStats : MonoBehaviour
 {
     public static int Points;
-    Text PointText;
+    private static Text PointText;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +22,6 @@ public class PlayerStats : MonoBehaviour
 
     public static void updateStats()
     {
-            //PointText.text = "";
+        PointText.text = "Points: " + Points.ToString();
     }
 }
