@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00eefcba85a0a4104ac409619ef89ced, type: 3}
-  m_Name: Player_LedgeGrab_ToggleCollider
+  m_Script: {fileID: 11500000, guid: a03318d407e8e204ea196c625e2d4101, type: 3}
+  m_Name: Player_ForwardRoll_ToggleShooting
   m_EditorClassIdentifier: 
-  colliderSwitch: 0
+  canShoot: 0
   onStart: 1
   onEnd: 0

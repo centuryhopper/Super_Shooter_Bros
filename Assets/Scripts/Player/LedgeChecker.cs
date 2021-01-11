@@ -23,7 +23,6 @@ namespace Game.PlayerCharacter
         private PlayerMovement playerMovement = null;
         private Animator playerSkinAnimator = null;
         private Shooting shooting = null;
-        [SerializeField] private GameObject rifle = null;
         private Dictionary<AnimationParameters, int> tmpDict = null;
 
         void Awake()
@@ -41,18 +40,18 @@ namespace Game.PlayerCharacter
 
         void FixedUpdate()
         {
-            if (isGrabbingLedge)
-            {
-                // disable shooting and hide the rifle
-                shooting.enabled = false;
-                rifle.SetActive(false);
-            }
-            else
-            {
-                shooting.enabled = true;
-                rifle.SetActive(true);
-                // playerMovement.RB.useGravity = true;
-            }
+            // if (isGrabbingLedge)
+            // {
+            //     // disable shooting and hide the rifle
+            //     shooting.enabled = false;
+            //     rifle.SetActive(false);
+            // }
+            // else
+            // {
+            //     shooting.enabled = true;
+            //     rifle.SetActive(true);
+            //     // playerMovement.RB.useGravity = true;
+            // }
 
             #region for debugging only
             if (!playerSkinAnimator.GetBool(tmpDict[AnimationParameters.isGrounded]))
@@ -143,12 +142,12 @@ namespace Game.PlayerCharacter
 
             if (playerMovement.IsFacingForward)
             {
-                playerMovement.RB.MovePosition(platformEdge + ledgeCalibration);
+                playerMovement.RB.MovePosition((platformEdge + ledgeCalibration) * Time.fixedDeltaTime);
             }
             else
             {
                 Vector3 newLedgeCalibration = new Vector3(0, ledgeCalibration.y, -ledgeCalibration.z);
-                playerMovement.RB.MovePosition(platformEdge + newLedgeCalibration);
+                playerMovement.RB.MovePosition((platformEdge + newLedgeCalibration) * Time.fixedDeltaTime);
             }
 
 

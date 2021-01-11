@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Animations.Rigging;
 using Game.Inputs;
+using Game.Hash;
+using Game.Enums;
 
 namespace Game.PlayerCharacter
 {
@@ -10,6 +13,8 @@ namespace Game.PlayerCharacter
     // [ExecuteInEditMode]
     public class PlayerMovement : MonoBehaviour
     {
+        [HideInInspector]
+        public Animator skinnedMeshAnimator = null;
         public AnimationProgress animationProgress;
         BoxCollider boxCollider = null;
         public BoxCollider BoxCollider { get => boxCollider; }
@@ -37,30 +42,44 @@ namespace Game.PlayerCharacter
         public float faceDirection = 1;
         public bool IsFacingForward => faceDirection == 1;
 
-        [SerializeField] List<Rig> rigs = null;
-        [SerializeField] Rig weaponAimRig = null;
+        /// <summary>
+        /// includes the 3 rig layers I have childed to the skin mesh
+        /// the weapon aim rig layer is not included because I have a
+        /// separate variable refrence that takes care of that
+        /// </summary>
+        public List<Rig> rigs = null;
+        public Rig weaponAimRig = null;
+        public GameObject rifle = null;
         [SerializeField] float tolerableDistance = 2.5f;
 
-        [Space, Header("Player Inputs")]
+        [Space, Header("Player Inputs"), ReadOnly]
         public bool jump;
+
+        [ReadOnly]
         public bool moveLeft;
+
+        [ReadOnly]
         public bool moveRight;
+
+        [ReadOnly]
         public bool moveUp;
+
+        [ReadOnly]
         public bool moveDown;
 
+        [ReadOnly]
         /// <summary>
         /// Is true when player holds down
         /// shift or when player is "run" mode
         /// </summary>
         /// <value></value>
         public bool turbo;
+
+        [ReadOnly]
         public bool secondJump;
 
         [Header("Gravity")]
         public ContactPoint[] contactPoints;
-
-
-
 
         #region Messed around with animation curves
         // [SerializeField] AnimationCurve sinPlot = new AnimationCurve();
@@ -91,6 +110,8 @@ namespace Game.PlayerCharacter
         void Awake()
         {
             // Debug.Log(Input.mousePresent ? "mouse detected" : "mouse not detected");
+
+            skinnedMeshAnimator = playerSkin.GetComponent<Animator>();
             bottomSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
             frontSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
             boxCollider = GetComponent<BoxCollider>();
@@ -99,17 +120,36 @@ namespace Game.PlayerCharacter
             mainCam = Camera.main;
             SetColliderSpheres();
 
-            // Debug.Log($"Player Box Collider player dimenstions");
-            // Debug.Log($"top, bottom, front, back: {GetTopBottomFrontBackDimensions()}");
-
-            #region for debugging purposes only and will delete when no longer needed
-                rigs.ForEach(rig => rig.weight = 0);
-                weaponAimRig.weight = 0;
-            #endregion
+            // Debug.Log($"player parent: {transform.parent is null}");
 
         }
 
-        void OnCollisionStay(Collision collisionInfo)
+        public void ToggleRigLayerWeights(int weightNumber)
+        {
+            Debug.Log($"setting rig weights to {weightNumber}");
+            // rigs.ForEach(rig => rig.weight = weightNumber);
+            rigs[1].weight = weightNumber;
+            rigs[2].weight = weightNumber;
+            weaponAimRig.weight = weightNumber;
+        }
+
+        public AnimationStateNames GetCurrentAnimatorStateName(Dictionary<int, AnimationStateNames> hashedIntStateNamePairs)
+        {
+            // get the current animator state info
+            AnimatorStateInfo stateInfo = skinnedMeshAnimator.GetCurrentAnimatorStateInfo(0);
+
+            if (hashedIntStateNamePairs.TryGetValue(stateInfo.shortNameHash, out AnimationStateNames stateName))
+            {
+                return stateName;
+            }
+            else
+            {
+                Debug.LogWarning("Unknown animator state name.");
+                return default(AnimationStateNames);
+            }
+        }
+
+        private void OnCollisionStay(Collision collisionInfo)
         {
             contactPoints = collisionInfo.contacts;
         }
@@ -246,9 +286,7 @@ namespace Game.PlayerCharacter
 
         // void FixedUpdate()
         // {
-            // todo add a gravity multiplier
-
-
+        // todo add a gravity multiplier
 
         // }
 
@@ -256,6 +294,22 @@ namespace Game.PlayerCharacter
         void Update()
         {
             // Debug.Log($"top, bottom, front, back: {GetTopBottomFrontBackDimensions()}");
+
+            // Debug.Log(GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict));
+
+            switch (GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict))
+            {
+                case AnimationStateNames.HangingIdle:
+                case AnimationStateNames.ForwardRoll:
+                    ToggleRigLayerWeights(0);
+                    break;
+                case AnimationStateNames.Idle:
+                    ToggleRigLayerWeights(1);
+                    break;
+                default:
+                    Debug.Log($"invalid state name");
+                    break;
+            }
 
 
             animationProgress.isUpdatingSpheres = false;
@@ -267,19 +321,6 @@ namespace Game.PlayerCharacter
                 RepositionBottomSpheres();
                 RepositionFrontSpheres();
             }
-
-            // if (ledgeChecker.isGrabbingLedge)
-            // {
-            //     rigs.ForEach(rig => rig.weight = 0);
-            //     weaponAimRig.weight = 0;
-            //     return;
-            // }
-            // else
-            // {
-            //     rigs.ForEach(rig => rig.weight = 1);
-            // }
-
-            // Debug.Log($"y rotation of playerskin: {playerSkin.eulerAngles.y}");
 
             // plauyer aim will follow the crosshair transform, which follows the hit.point,
             // if the hit.point is far enough
@@ -304,7 +345,9 @@ namespace Game.PlayerCharacter
                 {
                     // Debug.Log($"far enough with a distance of {fromPlayerToCrossHair.sqrMagnitude}");
                     // Debug.Log($"far enough with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
-                    weaponAimRig.weight = 1;
+
+                    // todo temporarily commented the line below out
+                    // weaponAimRig.weight = 1;
 
                     // move the target transform to where the mouse cursor is
                     // but because we're looking at the player on a y-z plane, we should only ever
@@ -319,28 +362,34 @@ namespace Game.PlayerCharacter
                 {
                     // Debug.Log($"too close with a distance of {fromPlayerToCrossHair.sqrMagnitude}");
                     // Debug.Log($"too close with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
-                    weaponAimRig.weight = 0;
+                    // weaponAimRig.weight = 0;
                 }
             }
 
-            if (!ledgeChecker.isGrabbingLedge)
+            // if (GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) != AnimationStateNames.HangingIdle &&
+            //     GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) != AnimationStateNames.LedgeClimb)
+            //     {
+            //         transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(crossHairTransform.position.z - t.position.z), transform.up);
+            //     }
+
+            if (GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) == AnimationStateNames.Idle ||
+                GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) == AnimationStateNames.Jump_Normal ||
+                GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) == AnimationStateNames.Walk)
+            {
                 transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(crossHairTransform.position.z - t.position.z), transform.up);
+            }
 
             // hover your mouse cursor over this function call for comment details
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
 
-
-
-
-
             #region Keyboardinput syncs
-                jump = VirtualInputManager.Instance.jump;
-                moveLeft = VirtualInputManager.Instance.moveLeft;
-                moveRight = VirtualInputManager.Instance.moveRight;
-                moveUp = VirtualInputManager.Instance.moveUp;
-                moveDown = VirtualInputManager.Instance.moveDown;
-                turbo = VirtualInputManager.Instance.turbo;
-                secondJump = VirtualInputManager.Instance.secondJump;
+            jump = VirtualInputManager.Instance.jump;
+            moveLeft = VirtualInputManager.Instance.moveLeft;
+            moveRight = VirtualInputManager.Instance.moveRight;
+            moveUp = VirtualInputManager.Instance.moveUp;
+            moveDown = VirtualInputManager.Instance.moveDown;
+            turbo = VirtualInputManager.Instance.turbo;
+            secondJump = VirtualInputManager.Instance.secondJump;
             #endregion
         }
 

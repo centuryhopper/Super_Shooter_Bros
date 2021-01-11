@@ -6,7 +6,7 @@ using UnityEngine.Animations.Rigging;
 
 namespace Game.PlayerCharacter
 {
-    [CreateAssetMenu(fileName = "idle", menuName = "idle")]
+    [CreateAssetMenu(fileName = "idle", menuName = "ability/idle")]
     public class Idle : StateData
     {
         private PlayerMovement playerMovement = null;

@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.singleton;
-using System;
 using Game.Enums;
 
 namespace Game.Hash
@@ -19,14 +19,38 @@ namespace Game.Hash
         /// </summary>
         public Dictionary<AnimationParameters, int> animationParamsDict = new Dictionary<AnimationParameters, int>();
 
+        public Dictionary<int, AnimationStateNames> stateNamesDict = new Dictionary<int, AnimationStateNames>();
+
         void Awake()
+        {
+            BuildStateNameDict();
+            BuildStateParamDict();
+        }
+
+        private void BuildStateParamDict()
         {
             AnimationParameters[] animStateParams = Enum.GetValues(typeof(AnimationParameters)) as AnimationParameters[];
 
             foreach (var e in animStateParams)
             {
                 // Debug.Log($"{e.ToString()}");
-                animationParamsDict.Add(e, Animator.StringToHash(e.ToString()));
+                animationParamsDict[e] = Animator.StringToHash(e.ToString());
+            }
+        }
+
+        private void BuildStateNameDict()
+        {
+            AnimationStateNames[] animStateNames = Enum.GetValues(typeof(AnimationStateNames)) as AnimationStateNames[];
+
+            if (animStateNames == null)
+            {
+                Debug.LogWarning($"Couldn't find state names");
+                return;
+            }
+
+            foreach (var stateName in animStateNames)
+            {
+                stateNamesDict[Animator.StringToHash(stateName.ToString())] = stateName;
             }
         }
     }
