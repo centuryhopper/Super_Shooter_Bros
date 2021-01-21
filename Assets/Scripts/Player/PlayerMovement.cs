@@ -210,6 +210,7 @@ namespace Game.PlayerCharacter
             {
                 GameObject obj = CreateGroundCheckingSphere(Vector3.zero);
                 obj.transform.parent = this.transform;
+                obj.name = $"bottomSphere{i}";
                 bottomSphereGroundCheckers.Add(obj);
             }
 
@@ -218,6 +219,7 @@ namespace Game.PlayerCharacter
             {
                 GameObject obj = CreateGroundCheckingSphere(Vector3.zero);
                 obj.transform.parent = this.transform;
+                obj.name = $"frontSphere{i}";
                 frontSphereGroundCheckers.Add(obj);
             }
 
@@ -297,6 +299,7 @@ namespace Game.PlayerCharacter
 
             // Debug.Log(GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict));
 
+            // todo potential bug in this switch statement
             switch (GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict))
             {
                 case AnimationStateNames.HangingIdle:
@@ -304,6 +307,7 @@ namespace Game.PlayerCharacter
                     ToggleRigLayerWeights(0);
                     break;
                 case AnimationStateNames.Idle:
+                case AnimationStateNames.Walk:
                     ToggleRigLayerWeights(1);
                     break;
                 default:

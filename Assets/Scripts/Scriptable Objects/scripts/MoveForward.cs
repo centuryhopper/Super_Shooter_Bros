@@ -31,6 +31,9 @@ namespace Game.PlayerCharacter
             a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], false);
         }
 
+
+        // TODO potential stutters may occur when moving into a wall. Need more analysis
+        // todo further down the road.
         /// <summary>
         /// moves the player left and right
         /// </summary>
@@ -50,8 +53,11 @@ namespace Game.PlayerCharacter
                 // facing right
                 if (faceDirection == 1)
                 {
-                    // multiple by the speed graph value so that we can still move while we jump
-                    p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                    if (!CheckFront(p))
+                    {
+                        // multiple by the speed graph value so that we can still move while we jump
+                        p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                    }
                 }
                 // facing left
                 else if (faceDirection == -1)
@@ -76,8 +82,11 @@ namespace Game.PlayerCharacter
                 // facing left
                 else if (faceDirection == -1)
                 {
-                    // multiple by the speed graph value so that we can still move while we jump
-                    p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                    if (!CheckFront(p))
+                    {
+                        // multiple by the speed graph value so that we can still move while we jump
+                        p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                    }
                 }
             }
             else
@@ -88,7 +97,6 @@ namespace Game.PlayerCharacter
         }
 
         // todo only move left or right if theres no obstruction
-
         /// <summary>
         /// Used to check whether the player has bumped into a wall
         /// </summary>
@@ -96,10 +104,12 @@ namespace Game.PlayerCharacter
         /// <returns></returns>
         private bool CheckFront(PlayerMovement p)
         {
-            if (p.RB.velocity.y > -0.01f && p.RB.velocity.y <= 0)
-            {
-                return true;
-            }
+            // if (p.RB.velocity.z > -0.01f && p.RB.velocity.z <= 0)
+            // {
+            //     return true;
+            // }
+
+            UnityEngine.Debug.Log($"Checking FRONT");
 
             return p.frontSphereGroundCheckers.Any((GameObject obj) =>
             {
@@ -110,5 +120,7 @@ namespace Game.PlayerCharacter
                 return (Physics.Raycast(obj.transform.position, p.transform.forward, out RaycastHit hit, distanceofDetection));
             });
         }
+
+        // Implement a CheckBack() method
     }
 }
