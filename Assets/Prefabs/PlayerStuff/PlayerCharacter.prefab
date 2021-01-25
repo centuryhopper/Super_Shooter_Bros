@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &994926645819957536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7793311310671651119}
+  m_Layer: 0
+  m_Name: HeadPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7793311310671651119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994926645819957536}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.505, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3484063990644978126}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1327293210905888339
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +41,6 @@ GameObject:
   - component: {fileID: 1327293210905888338}
   - component: {fileID: 3403268544669607040}
   - component: {fileID: 2520653899853958378}
-  - component: {fileID: 4203551154815645255}
   - component: {fileID: 7918680335284003833}
   - component: {fileID: 8296462606703166333}
   m_Layer: 0
@@ -49,17 +78,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9354ea10283ab4af1a2b2bed083a3640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skinnedMeshAnimator: {fileID: 0}
+  animationProgress: {fileID: 0}
   crossHairTransform: {fileID: 0}
   ledgeChecker: {fileID: 7096382803104766911}
   playerSkin: {fileID: 3484063990644978126}
   groundCheckingSphere: {fileID: 4664209058132775207, guid: c6e13f6502013421d8df4174707638a6, type: 3}
-  sections: 5
+  horizontalSections: 5
+  verticalSections: 10
   mouseAimMask:
     serializedVersion: 2
     m_Bits: 8
   faceDirection: 1
+  rigs: []
   weaponAimRig: {fileID: 0}
+  rifle: {fileID: 0}
   tolerableDistance: 2.5
+  jump: 0
+  moveLeft: 0
+  moveRight: 0
+  moveUp: 0
+  moveDown: 0
+  turbo: 0
+  secondJump: 0
 --- !u!114 &2520653899853958378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,27 +116,7 @@ MonoBehaviour:
   firePoint: {fileID: 0}
   bulletTag: bullet
   muzzleFlash: {fileID: 0}
-  bulletSound: {fileID: 0}
   fireBulletDelay: 0.1
---- !u!114 &4203551154815645255
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327293210905888339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8278ea56b4fa7453793ca18d34cf5c06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jump: 0
-  moveLeft: 0
-  moveRight: 0
-  moveUp: 0
-  moveDown: 0
-  turbo: 0
-  secondJump: 0
 --- !u!54 &7918680335284003833
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -136,7 +157,6 @@ GameObject:
   - component: {fileID: 5932267673112061644}
   - component: {fileID: 7707752684049196154}
   - component: {fileID: 4826750849017939975}
-  - component: {fileID: 4512681031661847527}
   - component: {fileID: 7096382803104766911}
   m_Layer: 0
   m_Name: PlayerLedgeChecker
@@ -208,19 +228,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4512681031661847527
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8495748693219008967}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7096382803104766911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkLedge: {fileID: 0}
   getGrabbedLedge: {fileID: 0}
+  ledgeCalibration: {x: 0, y: 0, z: 0}
   isGrabbingLedge: 0
   collider1: {fileID: 0}
   collider2: {fileID: 0}
@@ -252,6 +260,10 @@ PrefabInstance:
     - target: {fileID: 1997645269869836, guid: 3fc233a9407d11f46a1983e4692babf9, type: 3}
       propertyPath: m_Name
       value: Robot_Soldier_Blue
+      objectReference: {fileID: 0}
+    - target: {fileID: 4285853798653594, guid: 3fc233a9407d11f46a1983e4692babf9, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4468519549282688, guid: 3fc233a9407d11f46a1983e4692babf9, type: 3}
       propertyPath: m_RootOrder
@@ -300,6 +312,10 @@ PrefabInstance:
     - target: {fileID: 95812470430208240, guid: 3fc233a9407d11f46a1983e4692babf9, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 877410878260143727, guid: 3fc233a9407d11f46a1983e4692babf9, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 949303180917361077, guid: 3fc233a9407d11f46a1983e4692babf9, type: 3}
       propertyPath: m_LocalScale.y

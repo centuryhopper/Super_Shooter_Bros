@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Animations.Rigging;
+using Game.Inputs;
+using Game.Hash;
+using Game.Enums;
 
 namespace Game.PlayerCharacter
 {
@@ -9,31 +13,26 @@ namespace Game.PlayerCharacter
     // [ExecuteInEditMode]
     public class PlayerMovement : MonoBehaviour
     {
+        [HideInInspector]
+        public Animator skinnedMeshAnimator = null;
         public AnimationProgress animationProgress;
         BoxCollider boxCollider = null;
-        public BoxCollider BoxCollider
-        {
-            get => boxCollider;
-        }
-
+        public BoxCollider BoxCollider { get => boxCollider; }
         Rigidbody rb;
-        public Rigidbody RB
-        {
-            get => rb;
-        }
-
+        public Rigidbody RB { get => rb; }
         public Transform crossHairTransform = null;
         private Camera mainCam;
         private Animator animator;
 
 
         [SerializeField] LedgeChecker ledgeChecker = null;
-        public LedgeChecker GetLedgeChecker { get {return ledgeChecker;} }
-        [SerializeField] public Transform playerSkin = null;
-        public Transform PlayerSkin { get {return playerSkin;} set { playerSkin = value; } }
-        public List<GameObject> groundCheckers { get; private set; }
+        public LedgeChecker GetLedgeChecker { get => ledgeChecker; }
+        public Transform playerSkin = null;
+        public List<GameObject> frontSphereGroundCheckers { get; private set; }
+        public List<GameObject> bottomSphereGroundCheckers { get; private set; }
         [SerializeField] GameObject groundCheckingSphere = null;
-        [SerializeField] int sections = 5;
+        [SerializeField] int horizontalSections = 5;
+        [SerializeField] int verticalSections = 10;
 
         /// <summary>
         /// With this, player now has double jump ability
@@ -46,9 +45,44 @@ namespace Game.PlayerCharacter
         public float faceDirection = 1;
         public bool IsFacingForward => faceDirection == 1;
 
-        [SerializeField] List<Rig> rigs = null;
-        [SerializeField] Rig weaponAimRig = null;
+        /// <summary>
+        /// includes the 3 rig layers I have childed to the skin mesh
+        /// the weapon aim rig layer is not included because I have a
+        /// separate variable refrence that takes care of that
+        /// </summary>
+        public List<Rig> rigs = null;
+        public Rig weaponAimRig = null;
+        public GameObject rifle = null;
         [SerializeField] float tolerableDistance = 2.5f;
+
+        [Space, Header("Player Inputs"), ReadOnly]
+        public bool jump;
+
+        [ReadOnly]
+        public bool moveLeft;
+
+        [ReadOnly]
+        public bool moveRight;
+
+        [ReadOnly]
+        public bool moveUp;
+
+        [ReadOnly]
+        public bool moveDown;
+
+        [ReadOnly]
+        /// <summary>
+        /// Is true when player holds down
+        /// shift or when player is "run" mode
+        /// </summary>
+        /// <value></value>
+        public bool turbo;
+
+        [ReadOnly]
+        public bool secondJump;
+
+        [Header("Gravity")]
+        public ContactPoint[] contactPoints;
 
         #region Messed around with animation curves
         // [SerializeField] AnimationCurve sinPlot = new AnimationCurve();
@@ -79,57 +113,109 @@ namespace Game.PlayerCharacter
         void Awake()
         {
             // Debug.Log(Input.mousePresent ? "mouse detected" : "mouse not detected");
-            groundCheckers = new List<GameObject>(sections + 2);
+
+            skinnedMeshAnimator = playerSkin.GetComponent<Animator>();
+            bottomSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
+            frontSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
             boxCollider = GetComponent<BoxCollider>();
             rb = GetComponent<Rigidbody>();
             t = transform;
             mainCam = Camera.main;
-            animator = GetComponent<Animator>();
+            SetColliderSpheres();
 
-
-            #region groundchecking spheres
-                // y-z plane in this case
-                float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
-                float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
-
-                float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
-                float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
-
-                // create the spheres and add them to the list
-                GameObject bottomFrontSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, front));
-                GameObject bottomBackSphere = CreateGroundCheckingSphere(new Vector3(0, bottom, back));
-
-                groundCheckers.Add(bottomFrontSphere);
-                groundCheckers.Add(bottomBackSphere);
-
-                // parent the player to the spheres so the positions of the ground checkers are accurate
-                bottomFrontSphere.transform.parent = this.transform;
-                bottomBackSphere.transform.parent = this.transform;
-
-                // divide into 5 sections and add a sphere for each section
-                float section = (bottomFrontSphere.transform.position
-                - bottomBackSphere.transform.position).magnitude / sections;
-
-                for (int i = 0; i < sections; ++i)
-                {
-                    // find position for each section
-                    //         X       X       X       X       X
-                    // | ..... | ..... | ..... | ..... | ..... | ..... |
-                    Vector3 position = bottomBackSphere.transform.position + (Vector3.forward * section * (i + 1));
-
-                    // instantiate sphere
-                    GameObject sphere = CreateGroundCheckingSphere(position);
-
-                    // parent it to the player
-                    sphere.transform.parent = this.transform;
-
-                    // add it to the list
-                    groundCheckers.Add(sphere);
-                }
-
-            #endregion
+            // Debug.Log($"player parent: {transform.parent is null}");
 
         }
+
+        public void ToggleRigLayerWeights(int weightNumber)
+        {
+            Debug.Log($"setting rig weights to {weightNumber}");
+            // rigs.ForEach(rig => rig.weight = weightNumber);
+            rigs[1].weight = weightNumber;
+            rigs[2].weight = weightNumber;
+            weaponAimRig.weight = weightNumber;
+        }
+
+        public AnimationStateNames GetCurrentAnimatorStateName(Dictionary<int, AnimationStateNames> hashedIntStateNamePairs)
+        {
+            // get the current animator state info
+            AnimatorStateInfo stateInfo = skinnedMeshAnimator.GetCurrentAnimatorStateInfo(0);
+
+            if (hashedIntStateNamePairs.TryGetValue(stateInfo.shortNameHash, out AnimationStateNames stateName))
+            {
+                return stateName;
+            }
+            else
+            {
+                Debug.LogWarning("Unknown animator state name.");
+                return default(AnimationStateNames);
+            }
+        }
+
+        private void OnCollisionStay(Collision collisionInfo)
+        {
+            contactPoints = collisionInfo.contacts;
+        }
+
+        public (float a, float b, float c, float d) GetTopBottomFrontBackDimensions()
+        {
+            // y-z plane in this case
+            float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
+            float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
+            float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
+            float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
+
+            return (top, bottom, front, back);
+        }
+
+        public void RepositionFrontSpheres()
+        {
+            (float top, float bottom, float front, float back) dimensions = GetTopBottomFrontBackDimensions();
+
+            frontSphereGroundCheckers[0].transform.localPosition = new Vector3(0, dimensions.bottom + 0.05f, dimensions.front) - transform.position;
+            frontSphereGroundCheckers[1].transform.localPosition = new Vector3(0, dimensions.top, dimensions.front) - transform.position;
+
+            float interval = (dimensions.top - dimensions.bottom + 0.05f) / (verticalSections - 1);
+
+            for (int i = 2; i < frontSphereGroundCheckers.Count; i++)
+            {
+                frontSphereGroundCheckers[i].transform.localPosition =
+                    new Vector3(0, dimensions.bottom + (interval * (i - 1)), dimensions.front) - transform.position;
+            }
+        }
+
+        public void RepositionBottomSpheres()
+        {
+            (float top, float bottom, float front, float back) dimensions = GetTopBottomFrontBackDimensions();
+
+            bottomSphereGroundCheckers[0].transform.localPosition = new Vector3(0, dimensions.bottom, dimensions.back) - transform.position;
+            bottomSphereGroundCheckers[1].transform.localPosition = new Vector3(0, dimensions.bottom, dimensions.front) - transform.position;
+
+            float interval = (dimensions.front - dimensions.back) / (horizontalSections - 1);
+
+            for (int i = 2; i < bottomSphereGroundCheckers.Count; i++)
+            {
+                bottomSphereGroundCheckers[i].transform.localPosition =
+                    new Vector3(0, dimensions.bottom, dimensions.back + (interval * (i - 1))) - transform.position;
+            }
+        }
+
+        /// <summary>
+        /// credit goes to roundbeargames for setting up these spheres
+        /// https://www.youtube.com/channel/UCAoJgVzDHnFDOQwC42raByg
+        /// </summary>
+        private void SetColliderSpheres()
+        {
+            // y-z plane in this case
+
+            // populate list
+            for (var i = 0; i < horizontalSections; i++)
+            {
+                GameObject obj = CreateGroundCheckingSphere(Vector3.zero);
+                obj.transform.parent = this.transform;
+                obj.name = $"bottomSphere{i}";
+                bottomSphereGroundCheckers.Add(obj);
+            }
 
         private void OnCollisionEnter(Collision collectible)
         {
@@ -145,11 +231,33 @@ namespace Game.PlayerCharacter
                 Destroy(collectible.gameObject);
                 
             }
-        
+
+            RepositionBottomSpheres();
+            RepositionFrontSpheres();
+
         }
 
-        public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate(groundCheckingSphere, position, Quaternion.identity);
+        public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate<GameObject>(groundCheckingSphere, position, Quaternion.identity);
 
+        // public void CreateMiddleSpheres(GameObject start, Vector3 direction, float section, int sections, List<GameObject> spheresList)
+        // {
+        //     for (int i = 0; i < sections; ++i)
+        //     {
+        //         // find position for each section
+        //         //         X       X       X       X       X
+        //         // | ..... | ..... | ..... | ..... | ..... | ..... |
+        //         Vector3 position = start.transform.position + (direction * section * (i + 1));
+
+        //         // instantiate sphere
+        //         GameObject sphere = CreateGroundCheckingSphere(position);
+
+        //         // parent it to the player
+        //         sphere.transform.parent = this.transform;
+
+        //         // add it to the list
+        //         spheresList.Add(sphere);
+        //     }
+        // }
 
         public void UpdateBoxColliderSize()
         {
@@ -164,9 +272,10 @@ namespace Game.PlayerCharacter
             {
                 boxCollider.size = Vector3.Lerp(boxCollider.size,
                     animationProgress.targetSize,
-                    Time.fixedDeltaTime * animationProgress.sizeSpeed);
-            }
+                    Time.deltaTime * animationProgress.sizeSpeed);
 
+                animationProgress.isUpdatingSpheres = true;
+            }
         }
 
         public void UpdateBoxColliderCenter()
@@ -180,34 +289,51 @@ namespace Game.PlayerCharacter
             {
                 boxCollider.center = Vector3.Lerp(boxCollider.center,
                     animationProgress.targetCenter,
-                    Time.fixedDeltaTime * animationProgress.centerSpeed);
+                    Time.deltaTime * animationProgress.centerSpeed);
+
+                animationProgress.isUpdatingSpheres = true;
             }
         }
 
-        void FixedUpdate()
-        {
-            // todo add a gravity multiplier
+        // void FixedUpdate()
+        // {
+        // todo add a gravity multiplier
 
-            UpdateBoxColliderSize();
-            UpdateBoxColliderCenter();
-        }
+        // }
 
         // todo maybe migrate the code below over to a state machine script
         void Update()
         {
+            // Debug.Log($"top, bottom, front, back: {GetTopBottomFrontBackDimensions()}");
 
-            if (ledgeChecker.isGrabbingLedge)
+            // Debug.Log(GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict));
+
+            // todo potential bug in this switch statement
+            switch (GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict))
             {
-                rigs.ForEach(rig => rig.weight = 0);
-                weaponAimRig.weight = 0;
-                return;
-            }
-            else
-            {
-                rigs.ForEach(rig => rig.weight = 1);
+                case AnimationStateNames.HangingIdle:
+                case AnimationStateNames.ForwardRoll:
+                    ToggleRigLayerWeights(0);
+                    break;
+                case AnimationStateNames.Idle:
+                case AnimationStateNames.Walk:
+                    ToggleRigLayerWeights(1);
+                    break;
+                default:
+                    Debug.Log($"invalid state name");
+                    break;
             }
 
-            // Debug.Log($"y rotation of playerskin: {playerSkin.eulerAngles.y}");
+
+            animationProgress.isUpdatingSpheres = false;
+            UpdateBoxColliderSize();
+            UpdateBoxColliderCenter();
+
+            if (animationProgress.isUpdatingSpheres)
+            {
+                RepositionBottomSpheres();
+                RepositionFrontSpheres();
+            }
 
             // plauyer aim will follow the crosshair transform, which follows the hit.point,
             // if the hit.point is far enough
@@ -218,7 +344,7 @@ namespace Game.PlayerCharacter
             // OR
             // toggle animation rig weights depending on the distance of the crosshair
             // to the player
-            if (Physics.Raycast(mouseRay, out RaycastHit hit, Mathf.Infinity, mouseAimMask))
+            if (Physics.Raycast(mouseRay, out RaycastHit hit, Mathf.Infinity, mouseAimMask) && !ledgeChecker.isGrabbingLedge)
             {
                 // Debug.Log($"ray hit something");
                 // Vector3 fromPlayerToCrossHair = crossHairTransform.position - transform.position;
@@ -232,7 +358,9 @@ namespace Game.PlayerCharacter
                 {
                     // Debug.Log($"far enough with a distance of {fromPlayerToCrossHair.sqrMagnitude}");
                     // Debug.Log($"far enough with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
-                    weaponAimRig.weight = 1;
+
+                    // todo temporarily commented the line below out
+                    // weaponAimRig.weight = 1;
 
                     // move the target transform to where the mouse cursor is
                     // but because we're looking at the player on a y-z plane, we should only ever
@@ -247,15 +375,35 @@ namespace Game.PlayerCharacter
                 {
                     // Debug.Log($"too close with a distance of {fromPlayerToCrossHair.sqrMagnitude}");
                     // Debug.Log($"too close with a distance of {fromHitPointToCrossHair.sqrMagnitude}");
-                    weaponAimRig.weight = 0;
+                    // weaponAimRig.weight = 0;
                 }
             }
 
-            if (!ledgeChecker.isGrabbingLedge)
+            // if (GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) != AnimationStateNames.HangingIdle &&
+            //     GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) != AnimationStateNames.LedgeClimb)
+            //     {
+            //         transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(crossHairTransform.position.z - t.position.z), transform.up);
+            //     }
+
+            if (GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) == AnimationStateNames.Idle ||
+                GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) == AnimationStateNames.Jump_Normal ||
+                GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) == AnimationStateNames.Walk)
+            {
                 transform.rotation = Quaternion.LookRotation(Vector3.forward * Mathf.Sign(crossHairTransform.position.z - t.position.z), transform.up);
+            }
 
             // hover your mouse cursor over this function call for comment details
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
+
+            #region Keyboardinput syncs
+            jump = VirtualInputManager.Instance.jump;
+            moveLeft = VirtualInputManager.Instance.moveLeft;
+            moveRight = VirtualInputManager.Instance.moveRight;
+            moveUp = VirtualInputManager.Instance.moveUp;
+            moveDown = VirtualInputManager.Instance.moveDown;
+            turbo = VirtualInputManager.Instance.turbo;
+            secondJump = VirtualInputManager.Instance.secondJump;
+            #endregion
         }
 
 
@@ -284,7 +432,6 @@ namespace Game.PlayerCharacter
         //     animator.SetIKPosition(AvatarIKGoal.LeftHand, targetTransform.position);
         // }
         #endregion
-
 
         #region
         // // debug code
@@ -331,9 +478,7 @@ namespace Game.PlayerCharacter
         //         new Vector3(transform.localScale.x,transform.localScale.y,-zScale);
         //     }
         // }
-    #endregion
+        #endregion
     }
-
-    
 }
 

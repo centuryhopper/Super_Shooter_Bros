@@ -80,7 +80,7 @@ MonoBehaviour:
       weapon repeatedly fire (use a coroutine)\n-Animation rigging (aim ik)\n-limit
       where the crosshair game object can go (CHECK)\n-Fix forward roll bug of getting
       stuck at the end of forward roll (Maybe split the animation into begin and
-      end ones)"
+      end ones) (CHECK)"
     IsCompleted: 0
     IsDeferred: 0
     IsColored: 1

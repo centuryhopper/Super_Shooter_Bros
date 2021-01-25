@@ -11,15 +11,15 @@ namespace Game.PlayerCharacter
     {
         public int Index;
         public List<AirBorneTransitions> transitionConditions = new List<AirBorneTransitions>();
-        private PlayerController playerController = null;
+        private PlayerMovement playerMovement = null;
 
 
         public override void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            playerController = character.GetPlayerController(a);
+            playerMovement = character.GetPlayerMoveMent(a);
 
             // Debug.Log($"here in indexer");
-            if (playerController != null && ShouldMakeTransition(playerController))
+            if (playerMovement != null && ShouldMakeTransition(playerMovement))
             {
                 a.SetInteger(HashManager.Instance.animationParamsDict[AnimationParameters.transitionIndex], Index);
             }
@@ -27,7 +27,7 @@ namespace Game.PlayerCharacter
 
         public override void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            if (playerController != null && ShouldMakeTransition(playerController))
+            if (playerMovement != null && ShouldMakeTransition(playerMovement))
             {
                 a.SetInteger(HashManager.Instance.animationParamsDict[AnimationParameters.transitionIndex], Index);
             }
@@ -53,7 +53,7 @@ namespace Game.PlayerCharacter
             // }
         }
 
-        private bool ShouldMakeTransition(PlayerController playerController)
+        private bool ShouldMakeTransition(PlayerMovement playerMovement)
         {
             for (int i = 0; i < transitionConditions.Count; ++i)
             {
@@ -61,7 +61,7 @@ namespace Game.PlayerCharacter
                 {
                     case AirBorneTransitions.UP:
                     {
-                        if (!playerController.moveUp)
+                        if (!playerMovement.moveUp)
                         {
                             // Debug.Log("player isn't moving up");
                             return false;
@@ -72,7 +72,7 @@ namespace Game.PlayerCharacter
                     break;
                     case AirBorneTransitions.DOWN:
                     {
-                        if (!playerController.moveDown)
+                        if (!playerMovement.moveDown)
                         {
                             return false;
                         }
@@ -80,7 +80,7 @@ namespace Game.PlayerCharacter
                     break;
                     case AirBorneTransitions.LEFT:
                     {
-                        if (!playerController.moveLeft)
+                        if (!playerMovement.moveLeft)
                         {
                             return false;
                         }
@@ -88,7 +88,7 @@ namespace Game.PlayerCharacter
                     break;
                     case AirBorneTransitions.RIGHT:
                     {
-                        if (!playerController.moveRight)
+                        if (!playerMovement.moveRight)
                         {
                             return false;
                         }
@@ -101,7 +101,7 @@ namespace Game.PlayerCharacter
                     break;
                     case AirBorneTransitions.JUMP:
                     {
-                        if (playerController.jump)
+                        if (playerMovement.jump)
                         {
                             return false;
                         }
@@ -109,7 +109,7 @@ namespace Game.PlayerCharacter
                     break;
                     case AirBorneTransitions.GRABBING_LEDGE:
                     {
-                        if (!playerController.ledgeChecker.isGrabbingLedge)
+                        if (!playerMovement.GetLedgeChecker.isGrabbingLedge)
                         {
                             return false;
                         }

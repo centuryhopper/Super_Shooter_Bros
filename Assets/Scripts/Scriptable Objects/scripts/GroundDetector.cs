@@ -10,16 +10,15 @@ namespace Game.PlayerCharacter
     {
         [Range(.01f, 5)]
         public float distanceOfDetection;
+        private PlayerMovement p = null;
 
-        override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
+        override public void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            // throw new System.NotImplementedException();
+            p = c.GetPlayerMoveMent(a);
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            PlayerMovement p = c.GetPlayerMoveMent(a);
-
             if (IsGrounded(p))
             {
                 // Debug.Log("on ground");
@@ -39,9 +38,28 @@ namespace Game.PlayerCharacter
 
         private bool IsGrounded(PlayerMovement p)
         {
-            if (p.RB.velocity.y > -0.01f && p.RB.velocity.y <= 0)
+            if (p.RB.velocity.y > -0.001f && p.RB.velocity.y <= 0)
             {
-                return true;
+                if (p.contactPoints != null)
+                {
+                    foreach (ContactPoint c in p.contactPoints)
+                    {
+                        // get the bottom of collider using the center position
+                        float colliderBottom = (p.transform.position.y + p.BoxCollider.center.y) - (p.BoxCollider.size.y / 2f);
+
+                        // then compare that to the contact point
+                        float yDifference = Mathf.Abs(c.point.y - colliderBottom);
+
+                        // this if check works properly
+                        // but Mathf.Approximately on yDiff and 0
+                        // did not, so keep in mind not to use that method unless
+                        // you absolutely know what you're doing
+                        if (yDifference <= .01f)
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
 
             #region old code (replaced by the linq statement below)
@@ -60,15 +78,13 @@ namespace Game.PlayerCharacter
             // }
             #endregion
 
-            return p.groundCheckers.Any((GameObject obj) =>
+            return p.bottomSphereGroundCheckers.Any((GameObject obj) =>
             {
-               // show the rays
-               Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
+                // show the rays
+                Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);
 
-                RaycastHit hit;
-
-               // project a ray downwards
-               return (Physics.Raycast(obj.transform.position, Vector3.down, out hit, distanceOfDetection));
+                // project a ray downwards
+                return (Physics.Raycast(obj.transform.position, Vector3.down, out RaycastHit hit, distanceOfDetection));
             });
         }
     }

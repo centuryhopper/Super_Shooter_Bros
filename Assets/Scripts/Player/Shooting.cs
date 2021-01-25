@@ -15,7 +15,7 @@ namespace Game.PlayerCharacter
         private ObjectPooler bulletPooler;
         private WaitForSeconds waitForSeconds;
         private Coroutine fireBulletCoro;
-        private static readonly string Fire1 = "Fire1";
+        private static readonly string Fire1 = "Fire1", gunSound = "GunSound";
 
         void Awake()
         {
@@ -31,10 +31,12 @@ namespace Game.PlayerCharacter
                 // spawn from pool
                 GameObject bullet = bulletPooler.InstantiateFromPool(bulletTag, firePoint);
                 muzzleFlash.Play();
-                AudioManager.instance.Play("GunSound", 1);
+                AudioManager.instance.Play(gunSound, 1);
                 yield return waitForSeconds;
             }
         }
+
+        public void StopAllShootingCoroutines() => StopAllCoroutines();
 
         void Update()
         {
@@ -43,7 +45,7 @@ namespace Game.PlayerCharacter
                 fireBulletCoro = StartCoroutine(FireBullet());
             }
 
-            if (Input.GetButtonUp(Fire1))
+            if (Input.GetButtonUp(Fire1) && fireBulletCoro != null)
             {
                 StopCoroutine(fireBulletCoro);
             }

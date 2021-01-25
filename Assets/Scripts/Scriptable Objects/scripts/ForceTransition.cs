@@ -7,12 +7,12 @@ namespace Game.PlayerCharacter
     [CreateAssetMenu(fileName = "New State", menuName = "ability/force transition", order = 0)]
     public class ForceTransition : StateData
     {
-        [Range(0.01f, 1f)]
+        [Range(0, 1f)]
         public float transitionTime;
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            // Debug.Log($"force transitioning");
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], false);
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)

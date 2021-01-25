@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cf36fcb2f5c34de59ee20d1e61e40a1, type: 3}
-  m_Name: PlayerHangToCrouch_Indexer
+  m_Script: {fileID: 11500000, guid: 00eefcba85a0a4104ac409619ef89ced, type: 3}
+  m_Name: ToggleBoxCollider_LedgeClimb
   m_EditorClassIdentifier: 
-  Index: 1
-  transitionConditions: 0000000005000000
+  colliderSwitch: 1
+  onStart: 0
+  onEnd: 1
