@@ -10,7 +10,7 @@ using Game.Audio;
 /// </summary>
 public class CSharp8
 {
-    [RuntimeInitializeOnLoadMethod]
+    // [RuntimeInitializeOnLoadMethod]
     static void MainMethod()
     {
         // Sound sound = new Sound();
