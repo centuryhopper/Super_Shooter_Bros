@@ -1,0 +1,90 @@
+﻿using Game.Enums;
+using Game.Hash;
+using UnityEngine;
+
+namespace Game.PlayerCharacter
+{
+    [CreateAssetMenu(fileName = "New State", menuName = "ability/move", order = 0)]
+    public class MoveForward : StateData
+    {
+        public AnimationCurve speedGraph;
+        public float speed;
+        private PlayerController playerController;
+        private PlayerMovement playerMovement;
+        public float faceDirection;
+
+        override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
+        {
+            playerController = character.GetPlayerController(a);
+            playerMovement = character.GetPlayerMoveMent(a);
+        }
+
+        override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
+        {
+            MovePlayer(playerMovement, a, asi);
+        }
+
+        override public void OnExit(PlayerState c, Animator a, AnimatorStateInfo asi)
+        {
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], false);
+        }
+
+        /// <summary>
+        /// moves the player left and right
+        /// </summary>
+        void MovePlayer(PlayerMovement p, Animator a, AnimatorStateInfo asi)
+        {
+            // help decide whether to walk forward and backwards based on player's
+            // facing direction
+            faceDirection = p.faceDirection;
+            // Debug.Log($"facing: {faceDirection}");
+
+            // side scroller
+            if (playerController.moveRight)
+            {
+                a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.faceDirection], faceDirection);
+
+                // facing right
+                if (faceDirection == 1)
+                {
+                    // multiple by the speed graph value so that we can still move while we jump
+                    p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                }
+                // facing left
+                else if (faceDirection == -1)
+                {
+                    // multiple by the speed graph value so that we can still move while we jump
+                    p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                }
+
+                // todo rotation will be determined by the mouse position
+                // todo fix transform translate to work according to player aim
+            }
+            else if (playerController.moveLeft)
+            {
+                a.SetFloat(HashManager.Instance.animationParamsDict[AnimationParameters.faceDirection], -faceDirection);
+
+                // facing right
+                if (faceDirection == 1)
+                {
+                    // multiple by the speed graph value so that we can still move while we jump
+                    p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                }
+                // facing left
+                else if (faceDirection == -1)
+                {
+                    // multiple by the speed graph value so that we can still move while we jump
+                    p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                }
+
+                // todo rotation will be determined by the mouse position
+                // todo fix transform translate to work according to player aim
+            }
+            else
+            {
+                // go back to idle animation
+                a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], false);
+            }
+        }
+    }
+}

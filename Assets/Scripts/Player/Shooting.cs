@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Pooling;
+using Game.Audio;
 
 namespace Game.PlayerCharacter
 {
@@ -10,11 +11,11 @@ namespace Game.PlayerCharacter
         public Transform firePoint;
         public string bulletTag = "bullet";
         public ParticleSystem muzzleFlash;
-        public AudioSource bulletSound;
         public float fireBulletDelay = .1f;
         private ObjectPooler bulletPooler;
         private WaitForSeconds waitForSeconds;
         private Coroutine fireBulletCoro;
+        private static readonly string Fire1 = "Fire1";
 
         void Awake()
         {
@@ -30,19 +31,19 @@ namespace Game.PlayerCharacter
                 // spawn from pool
                 GameObject bullet = bulletPooler.InstantiateFromPool(bulletTag, firePoint);
                 muzzleFlash.Play();
-                bulletSound.PlayOneShot(bulletSound.clip);
+                AudioManager.instance.Play("GunSound", 1);
                 yield return waitForSeconds;
             }
         }
 
         void Update()
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown(Fire1))
             {
                 fireBulletCoro = StartCoroutine(FireBullet());
             }
 
-            if (Input.GetButtonUp("Fire1"))
+            if (Input.GetButtonUp(Fire1))
             {
                 StopCoroutine(fireBulletCoro);
             }

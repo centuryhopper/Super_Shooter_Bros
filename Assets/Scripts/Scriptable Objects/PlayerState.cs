@@ -30,7 +30,7 @@ namespace Game.PlayerCharacter
             return playerController;
         }
 
-        
+
         #endregion
 
         // list of scriptable objects
@@ -38,18 +38,18 @@ namespace Game.PlayerCharacter
 
         public void UpdateAll(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            foreach (StateData d in abilityDataLst)
+            for (int i = 0; i < abilityDataLst.Count; ++i)
             {
-                if (d == null) Debug.Log("d is null");
-                d.OnAbilityUpdate(c, a, asi);
+                if (abilityDataLst[i] == null) Debug.Log("abilityDataLst[i] is null");
+                abilityDataLst[i].OnAbilityUpdate(c, a, asi);
             }
         }
 
         override public void OnStateEnter(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
         {
-            foreach (StateData d in abilityDataLst)
+            for (int i = 0; i < abilityDataLst.Count; ++i)
             {
-                d.OnEnter(this, animator, animatorStateInfo);
+                abilityDataLst[i].OnEnter(this, animator, animatorStateInfo);
             }
         }
 
@@ -60,10 +60,11 @@ namespace Game.PlayerCharacter
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
         {
-            foreach (StateData d in abilityDataLst)
+            for (int i = 0; i < abilityDataLst.Count; ++i)
             {
-                d.OnExit(this, animator, animatorStateInfo);
+                abilityDataLst[i].OnExit(this, animator, animatorStateInfo);
             }
+
         }
     }
 }
