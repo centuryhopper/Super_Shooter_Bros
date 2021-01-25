@@ -6,32 +6,18 @@ using UnityEngine.Animations.Rigging;
 
 namespace Game.PlayerCharacter
 {
-    [CreateAssetMenu(fileName = "idle", menuName = "idle")]
+    [CreateAssetMenu(fileName = "idle", menuName = "ability/idle")]
     public class Idle : StateData
     {
-        private PlayerController playerController = null;
         private PlayerMovement playerMovement = null;
-        private RigBuilder rigBuilder = null;
-        private List<RigLayer> rigLayers = null;
 
         override public void OnEnter(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
-            playerController = c.GetPlayerController(a);
             playerMovement = c.GetPlayerMoveMent(a);
-            rigBuilder = a.GetComponent<RigBuilder>();
-            rigLayers = rigBuilder.layers;
-
-            // rigBuilder.enabled = true;
-            // rigLayers.ForEach(r =>
-            // {
-            //     r.active = true;
-            //     Debug.Log($"{r.name}");
-            // });
-
-            // todo set each rig layer and child values to hardcoded values
 
             // prevents the bug: player jumping while airborne
             a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], false);
+            a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.isGrounded], true);
 
             // player can double jump again
             PlayerMovement.numJumps = 2;
@@ -41,15 +27,15 @@ namespace Game.PlayerCharacter
         {
 
             // only determine when to switch to the walk animation
-            if (playerController.moveRight)
+            if (playerMovement.moveRight)
             {
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], true);
             }
-            else if (playerController.moveLeft)
+            else if (playerMovement.moveLeft)
             {
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], true);
             }
-            else if (playerController.jump)
+            else if (playerMovement.jump)
             {
                 // Debug.Log($"jump");
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.jump], true);

@@ -23,14 +23,11 @@ namespace Game.PlayerCharacter
         private PlayerMovement playerMovement = null;
         private Animator playerSkinAnimator = null;
         private Shooting shooting = null;
-        [SerializeField] private GameObject rifle = null;
         private Dictionary<AnimationParameters, int> tmpDict = null;
 
         void Awake()
         {
             playerMovement = GetComponentInParent<PlayerMovement>();
-
-
             playerSkinAnimator = playerMovement.playerSkin.GetComponent<Animator>();
             shooting = playerMovement.GetComponent<Shooting>();
         }
@@ -38,35 +35,33 @@ namespace Game.PlayerCharacter
         void Start()
         {
             tmpDict = HashManager.Instance.animationParamsDict;
+            isGrabbingLedge = false;
         }
 
         void FixedUpdate()
         {
-            if (isGrabbingLedge)
-            {
-                // disable shooting and hide the rifle
-                shooting.enabled = false;
-                rifle.SetActive(false);
-            }
-            else
-            {
-                shooting.enabled = true;
-                rifle.SetActive(true);
-                playerMovement.RB.useGravity = true;
-            }
+            // if (isGrabbingLedge)
+            // {
+            //     // disable shooting and hide the rifle
+            //     shooting.enabled = false;
+            //     rifle.SetActive(false);
+            // }
+            // else
+            // {
+            //     shooting.enabled = true;
+            //     rifle.SetActive(true);
+            //     // playerMovement.RB.useGravity = true;
+            // }
 
-            // if player is in the air
+            #region for debugging only
             if (!playerSkinAnimator.GetBool(tmpDict[AnimationParameters.isGrounded]))
             {
                 foreach (GameObject o in collider1.CollidedObjects)
                 {
                     if (!collider2.CollidedObjects.Contains(o))
                     {
-
-                        if (OffSetPosition(o))
-                        {
-                            break;
-                        }
+                        isGrabbingLedge = true;
+                        break;
                     }
                     else
                     {
@@ -78,6 +73,32 @@ namespace Game.PlayerCharacter
             {
                 isGrabbingLedge = false;
             }
+            #endregion
+
+            // if player is in the air
+            // if (!playerSkinAnimator.GetBool(tmpDict[AnimationParameters.isGrounded]))
+            // {
+            //     foreach (GameObject o in collider1.CollidedObjects)
+            //     {
+            //         if (!collider2.CollidedObjects.Contains(o))
+            //         {
+            //             if (OffSetPosition(o))
+            //             {
+            //                 Debug.Log($"offset position triggered");
+
+            //                 break;
+            //             }
+            //         }
+            //         else
+            //         {
+            //             isGrabbingLedge = false;
+            //         }
+            //     }
+            // }
+            // else
+            // {
+            //     isGrabbingLedge = false;
+            // }
 
             // not grabbing ledge if list is empty
             if (collider1.CollidedObjects.Count == 0)
@@ -88,11 +109,6 @@ namespace Game.PlayerCharacter
 
         bool OffSetPosition(GameObject platform)
         {
-            if (isGrabbingLedge)
-            {
-                return true;
-            }
-            isGrabbingLedge = true;
 
             BoxCollider boxCollider = platform.GetComponent<BoxCollider>();
 
@@ -102,8 +118,13 @@ namespace Game.PlayerCharacter
                 return false;
             }
 
+            if (isGrabbingLedge)
+            {
+                return false;
+            }
 
-            playerMovement.RB.useGravity = false;
+            isGrabbingLedge = true;
+            // playerMovement.RB.useGravity = false;
             playerMovement.RB.velocity = new Vector3(0,0,0);
             float y = platform.transform.position.y + (boxCollider.size.y / 2f);
             float z;
@@ -121,12 +142,12 @@ namespace Game.PlayerCharacter
 
             if (playerMovement.IsFacingForward)
             {
-                playerMovement.RB.MovePosition(platformEdge + ledgeCalibration);
+                playerMovement.RB.MovePosition((platformEdge + ledgeCalibration) * Time.fixedDeltaTime);
             }
             else
             {
                 Vector3 newLedgeCalibration = new Vector3(0, ledgeCalibration.y, -ledgeCalibration.z);
-                playerMovement.RB.MovePosition(platformEdge + newLedgeCalibration);
+                playerMovement.RB.MovePosition((platformEdge + newLedgeCalibration) * Time.fixedDeltaTime);
             }
 
 

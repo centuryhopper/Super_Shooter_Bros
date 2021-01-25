@@ -7,17 +7,17 @@ namespace Game.PlayerCharacter
     [CreateAssetMenu(fileName = "CheckMovement", menuName = "ability/Check Movement", order = 0)]
     public class CheckMovement : StateData
     {
-        private PlayerController playerController;
+        private PlayerMovement playerMovement = null;
 
         override public void OnEnter(PlayerState character, Animator a, AnimatorStateInfo asi)
         {
-            playerController = character.GetPlayerController(a);
+            playerMovement = character.GetPlayerMoveMent(a);
         }
 
         override public void OnAbilityUpdate(PlayerState c, Animator a, AnimatorStateInfo asi)
         {
             // check whether the player should sprint
-            if (playerController.moveLeft || playerController.moveRight)
+            if (playerMovement.moveLeft || playerMovement.moveRight)
             {
                 a.SetBool(HashManager.Instance.animationParamsDict[AnimationParameters.move], true);
             }

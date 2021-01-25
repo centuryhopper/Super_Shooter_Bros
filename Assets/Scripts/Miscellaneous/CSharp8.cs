@@ -10,7 +10,7 @@ using Game.Audio;
 /// </summary>
 public class CSharp8
 {
-    [RuntimeInitializeOnLoadMethod]
+    // [RuntimeInitializeOnLoadMethod]
     static void MainMethod()
     {
         // Sound sound = new Sound();
@@ -23,6 +23,10 @@ public class CSharp8
         // var tup = (1,2);
         // Debug.Log((1,2,3));
         // Debug.Log($"{tup.Item1} and {tup.Item2}");
+
+        int[] a = new int[] {1,2,3};
+
+        // Debug.Log($"{a[0..3]}");
     }
 
 
@@ -89,15 +93,16 @@ public class CSharp8
         });
 
         string RockPaperScissors(string first, string second)
-    => (first, second) switch
-    {
-        ("rock", "paper") => "rock is covered by paper. Paper wins.",
-        ("rock", "scissors") => "rock breaks scissors. Rock wins.",
-        ("paper", "rock") => "paper covers rock. Paper wins.",
-        ("paper", "scissors") => "paper is cut by scissors. Scissors wins.",
-        ("scissors", "rock") => "scissors is broken by rock. Rock wins.",
-        ("scissors", "paper") => "scissors cuts paper. Scissors wins.",
-        (_, _) => "tie"
-    };
+            => (first, second) switch
+            {
+                ("rock", "paper") => "rock is covered by paper. Paper wins.",
+                ("rock", "scissors") => "rock breaks scissors. Rock wins.",
+                ("paper", "rock") => "paper covers rock. Paper wins.",
+                ("paper", "scissors") => "paper is cut by scissors. Scissors wins.",
+                ("scissors", "rock") => "scissors is broken by rock. Rock wins.",
+                ("scissors", "paper") => "scissors cuts paper. Scissors wins.",
+                (_, _) => "tie"
+            };
+        Debug.Log($"{RockPaperScissors("rock", "paper")}");
     }
 }

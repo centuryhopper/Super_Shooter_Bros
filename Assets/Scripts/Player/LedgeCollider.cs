@@ -6,7 +6,6 @@ namespace Game.PlayerCharacter
 {
     public class LedgeCollider : MonoBehaviour
     {
-
         [SerializeField] List<GameObject> collidedObjects = new List<GameObject>();
 
         public List<GameObject> CollidedObjects
@@ -17,7 +16,7 @@ namespace Game.PlayerCharacter
         void OnTriggerEnter(Collider other)
         {
             // add collided objects to list
-            if (!collidedObjects.Contains(other.gameObject))
+            if (!collidedObjects.Contains(other.gameObject) && other.CompareTag("climbable"))
             {
                 collidedObjects.Add(other.gameObject);
             }
