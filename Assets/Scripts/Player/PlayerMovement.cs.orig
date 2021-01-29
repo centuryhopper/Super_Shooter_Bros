@@ -26,10 +26,17 @@ namespace Game.PlayerCharacter
 
 
         [SerializeField] LedgeChecker ledgeChecker = null;
+<<<<<<< HEAD
+        public LedgeChecker GetLedgeChecker { get {return ledgeChecker;} }
+        [SerializeField] public Transform playerSkin = null;
+        public Transform PlayerSkin { get {return playerSkin;} set { playerSkin = value; } }
+        public List<GameObject> groundCheckers { get; private set; }
+=======
         public LedgeChecker GetLedgeChecker { get => ledgeChecker; }
         public Transform playerSkin = null;
         public List<GameObject> frontSphereGroundCheckers { get; private set; }
         public List<GameObject> bottomSphereGroundCheckers { get; private set; }
+>>>>>>> main
         [SerializeField] GameObject groundCheckingSphere = null;
         [SerializeField] int horizontalSections = 5;
         [SerializeField] int verticalSections = 10;
@@ -121,9 +128,14 @@ namespace Game.PlayerCharacter
             rb = GetComponent<Rigidbody>();
             t = transform;
             mainCam = Camera.main;
+<<<<<<< HEAD
+            animator = GetComponent<Animator>();
+
+=======
             SetColliderSpheres();
 
             // Debug.Log($"player parent: {transform.parent is null}");
+>>>>>>> main
 
         }
 
@@ -217,18 +229,10 @@ namespace Game.PlayerCharacter
                 bottomSphereGroundCheckers.Add(obj);
             }
 
-        
-
-            RepositionBottomSpheres();
-            RepositionFrontSpheres();
-
-        }
-
-        private void OnCollisionEnter(Collision collectible)
-        {
-            //Debug.Log("Collision Detected");
-            if(collectible.gameObject.CompareTag("Collectible"))
+            // populate list
+            for (var i = 0; i < verticalSections; i++)
             {
+<<<<<<< HEAD
                 Debug.Log("triggered collectible");
                 PlayerStats.Points++;
                 PlayerStats.updateStats();
@@ -237,7 +241,17 @@ namespace Game.PlayerCharacter
                 Inventory.instance.Add(item);
                 Destroy(collectible.gameObject);
                 
+=======
+                GameObject obj = CreateGroundCheckingSphere(Vector3.zero);
+                obj.transform.parent = this.transform;
+                obj.name = $"frontSphere{i}";
+                frontSphereGroundCheckers.Add(obj);
+>>>>>>> main
             }
+
+            RepositionBottomSpheres();
+            RepositionFrontSpheres();
+
         }
 
         public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate<GameObject>(groundCheckingSphere, position, Quaternion.identity);
