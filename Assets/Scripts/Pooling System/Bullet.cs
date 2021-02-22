@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Game.PlayerCharacter;
 
 
-namespace Game.Weapons
+namespace Game.Pooling
 {
     /// <summary>
     /// projectile used by player's weapon

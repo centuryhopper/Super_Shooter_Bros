@@ -1,0 +1,21 @@
+{
+    "name": "PlayerAbilities",
+    "rootNamespace": "",
+    "references": [
+        "GUID:36d63b45937eefb4b8d4a06b0cb5898e",
+        "GUID:78514b1af5f063143959d792290c8ac8",
+        "GUID:9784c97e576c4bb43a1346107694efef",
+        "GUID:1b056e300f0953e4988b9bc7b7aac280",
+        "GUID:7f7d1af65c2641843945d409d28f2e20",
+        "GUID:47064a1b233d96a439eaaccab6dc5086"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
