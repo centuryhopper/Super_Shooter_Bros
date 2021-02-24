@@ -12,6 +12,7 @@ public class BouncerTarget : MonoBehaviour
 
     void OnTriggerEnter(Collider collision)
     {
+        // if the agent in training touches this gameobject, then reward it
         var agent = collision.gameObject.GetComponent<Agent>();
         if (agent != null)
         {
@@ -24,7 +25,7 @@ public class BouncerTarget : MonoBehaviour
     {
         gameObject.transform.localPosition =
             new Vector3(
-                (1 - 2 * Random.value) * 5f,
+                0,
                 2f + Random.value * 5f,
                 (1 - 2 * Random.value) * 5f);
     }

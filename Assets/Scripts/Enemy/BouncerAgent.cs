@@ -7,7 +7,6 @@ public class BouncerAgent : Agent
     public GameObject target;
     public GameObject agentObject;
     public float strength = 350f;
-
     Rigidbody agentRigidbody;
     Vector3 orientation;
     float jumpCoolDown;
@@ -22,7 +21,6 @@ public class BouncerAgent : Agent
         orientation = Vector3.zero;
         defaultParams = Academy.Instance.EnvironmentParameters;
     }
-
 
     //this doesn't need to be changed for the 2D conversion
     public override void CollectObservations(VectorSensor sensor)
@@ -47,12 +45,12 @@ public class BouncerAgent : Agent
 
         //adds force to rigid body for what purpose? Does it move it around? This might be the place I need to change
         //basic physics
-        agentRigidbody.AddForce(new Vector3(x, y + 1, z) * strength);
+        agentRigidbody.AddForce(new Vector3(0, y + 1, z) * strength);
 
         AddReward(-0.05f * (vectorAction[0] * vectorAction[0] + vectorAction[1] * vectorAction[1]
             + vectorAction[2] * vectorAction[2]) / 3f);
 
-        orientation = new Vector3(x, y, z);
+        orientation = new Vector3(0, y, z);
     }
 
     public override void Heuristic(float[] actionsOut)
@@ -70,7 +68,7 @@ public class BouncerAgent : Agent
         if (Physics.Raycast(transform.position, new Vector3(0f, -1f, 0f), 0.51f) && jumpCoolDown <= 0f)
         {
 
-            //Forces a decision, zeros out velocity, and decrements 'jumpsLeft'
+            // Forces a decision, zeros out velocity, and decrements 'jumpsLeft'
 
             RequestDecision();
             jumpsLeft -= 1;
