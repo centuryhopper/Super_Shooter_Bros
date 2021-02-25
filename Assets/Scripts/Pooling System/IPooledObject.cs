@@ -1,8 +1,11 @@
 using UnityEngine;
 
-public interface IPooledObject
+namespace Game.Pooling
 {
-    void OnObjectSpawn();
+    public interface IPooledObject
+    {
+        void OnObjectSpawn();
 
-    void OnObjectSpawn(Transform transform);
+        void OnObjectSpawn(Transform transform);
+    }
 }
