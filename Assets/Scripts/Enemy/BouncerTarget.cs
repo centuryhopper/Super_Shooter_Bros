@@ -23,9 +23,6 @@ public class BouncerTarget : MonoBehaviour
     public void Respawn()
     {
         gameObject.transform.localPosition =
-            new Vector3(
-                (1 - 2 * Random.value) * 5f,
-                2f + Random.value * 5f,
-                (1 - 2 * Random.value) * 5f);
+            new Vector3( 0, 2f + Random.value * 5f, (1 - 2 * Random.value) * 5f);
     }
 }
