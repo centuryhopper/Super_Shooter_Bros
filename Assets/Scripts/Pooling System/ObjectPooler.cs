@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.singleton;
 using UnityEngine;
-using Game.Weapons;
 
 namespace Game.Pooling
 {

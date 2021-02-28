@@ -1,0 +1,23 @@
+{
+    "name": "PlayerCharacter",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1b056e300f0953e4988b9bc7b7aac280",
+        "GUID:78514b1af5f063143959d792290c8ac8",
+        "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
+        "GUID:7f7d1af65c2641843945d409d28f2e20",
+        "GUID:b77727a1345bf85409240cb320cece76",
+        "GUID:47064a1b233d96a439eaaccab6dc5086",
+        "GUID:6da7a9cfd5c995c4abe6e6ab84a4ea2c",
+        "GUID:6b15b04c72438dc47b1a1835e3cffe8a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

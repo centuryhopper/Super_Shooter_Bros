@@ -1,0 +1,17 @@
+{
+    "name": "Hash",
+    "rootNamespace": "",
+    "references": [
+        "GUID:47064a1b233d96a439eaaccab6dc5086",
+        "GUID:1b056e300f0953e4988b9bc7b7aac280"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
