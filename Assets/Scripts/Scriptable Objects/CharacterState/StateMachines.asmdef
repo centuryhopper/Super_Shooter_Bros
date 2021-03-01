@@ -2,7 +2,8 @@
     "name": "StateMachines",
     "rootNamespace": "",
     "references": [
-        "PlayerCharacter"
+        "PlayerCharacter",
+        "enemy"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

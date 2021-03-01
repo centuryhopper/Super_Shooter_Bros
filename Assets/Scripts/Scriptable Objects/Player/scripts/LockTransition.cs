@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.States;
 using UnityEngine;
+using Game.GenericCharacter;
 
 namespace Game.PlayerCharacter
 {
