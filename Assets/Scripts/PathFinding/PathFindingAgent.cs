@@ -15,11 +15,19 @@ namespace Game.PathFind
     {
         [SerializeField] Transform target;
         NavMeshAgent agent;
-        Coroutine move;
         WaitForEndOfFrame waitForEndOfFrame;
 
         [ReadOnly]
         public Vector3 startOffMeshPosition, endOffMeshPosition;
+
+        // We need multiple coroutines to avoid stopping the main thing that
+        // would occur if we just used one coroutine
+        // new coroutines get appended to the end of the list
+        // and finshed ones get removed from the head.
+        // This acts just like an array deque
+        LinkedList<Coroutine> moveRoutines = new LinkedList<Coroutine>();
+        public bool hasReachedADestination;
+
 
         void Awake()
         {
@@ -29,18 +37,21 @@ namespace Game.PathFind
 
         public void GoToTarget()
         {
+            agent.enabled = true;
             agent.isStopped = false;
+            hasReachedADestination = false;
 
             if (target == null) { UnityEngine.Debug.LogWarning($"no target found"); return; }
             agent.SetDestination(target.position);
 
             // if the coroutine is already running
-            if (move != null)
+            if (moveRoutines.Count != 0)
             {
-                StopCoroutine(move);
+                StopCoroutine(moveRoutines.First.Value);
+                moveRoutines.RemoveFirst();
             }
 
-            move = StartCoroutine(Move());
+            moveRoutines.AddLast(StartCoroutine(Move()));
         }
 
         // pause the agent every time it reaches the end of an off mesh link before reaching the
@@ -60,6 +71,7 @@ namespace Game.PathFind
                     endOffMeshPosition = transform.position;
 
                     agent.isStopped = true;
+                    hasReachedADestination = true;
                     yield break;
                 }
                 else
@@ -74,6 +86,7 @@ namespace Game.PathFind
                     startOffMeshPosition = transform.position;
                     endOffMeshPosition = transform.position;
                     agent.isStopped = true;
+                    hasReachedADestination = true;
                     yield break;
                 }
 

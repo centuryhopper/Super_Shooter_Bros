@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Animations.Rigging;
 using Game.Inputs;
 using Game.Hash;
 using Game.Enums;
+using Game.GenericCharacter;
+
 
 namespace Game.PlayerCharacter
 {
 
-    // [ExecuteInEditMode]
     public class PlayerMovement : MonoBehaviour
     {
         [HideInInspector]

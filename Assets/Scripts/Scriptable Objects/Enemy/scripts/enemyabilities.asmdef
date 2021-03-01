@@ -1,0 +1,18 @@
+{
+    "name": "enemyabilities",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9784c97e576c4bb43a1346107694efef",
+        "GUID:5ecfb0105f7046b419ab8b2b1e94ec35",
+        "GUID:c213400551fd267478c17c3bef721cd2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

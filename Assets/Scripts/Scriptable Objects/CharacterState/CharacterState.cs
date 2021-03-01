@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Game.PlayerCharacter;
+using Game.EnemyAI;
 using UnityEngine;
 
 namespace Game.States
@@ -18,9 +19,20 @@ namespace Game.States
             return playerMovement;
         }
 
+        private EnemyMovement enemyMovement;
+
+        public EnemyMovement GetEnemyMovement(Animator animator)
+        {
+            if (enemyMovement == null)
+            {
+                enemyMovement = animator.GetComponentInParent<EnemyMovement>();
+            }
+
+            return enemyMovement;
+        }
+
         // list of scriptable objects
         public List<StateData> abilityDataLst = new List<StateData>();
-
         public void UpdateAll(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             for (int i = 0; i < abilityDataLst.Count; ++i)
