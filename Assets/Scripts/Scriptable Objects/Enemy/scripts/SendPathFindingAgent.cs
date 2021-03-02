@@ -2,6 +2,8 @@ using Game.PathFind;
 using Game.States;
 using UnityEngine;
 using UnityEngine.AI;
+using Game.Enums;
+using Game.Hash;
 
 namespace Game.EnemyAI
 {
@@ -36,16 +38,13 @@ namespace Game.EnemyAI
             // if the pathfinding agent has reached a destination (could be an offmesh link position or the player position), then start to physically move the enemy towards that destination as well
             if (enemyMovement.aiProgress.pathFindingAgent.hasReachedADestination)
             {
-                // todo string to hash later
-                a.SetBool(AI_Walk_Transitions.start_walking.ToString(), true);
-
+                a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], true);
             }
         }
 
         public override void OnExit(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
-            // todo string to hash later
-            a.SetBool(AI_Walk_Transitions.start_walking.ToString(), false);
+            a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
         }
     }
 

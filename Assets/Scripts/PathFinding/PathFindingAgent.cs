@@ -41,7 +41,12 @@ namespace Game.PathFind
             agent.isStopped = false;
             hasReachedADestination = false;
 
-            if (target == null) { UnityEngine.Debug.LogWarning($"no target found"); return; }
+            if (target == null)
+            {
+                UnityEngine.Debug.LogWarning($"no target found. Setting target to player character");
+                target = GameObject.FindWithTag("Player").transform;
+                return;
+            }
             agent.SetDestination(target.position);
 
             // if the coroutine is already running

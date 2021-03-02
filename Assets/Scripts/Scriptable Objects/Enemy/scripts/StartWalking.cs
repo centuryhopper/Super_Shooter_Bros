@@ -1,19 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
 using Game.PathFind;
 using Game.States;
-using UnityEngine.AI;
+using Game.Enums;
 
 namespace Game.EnemyAI
 {
-
-    public enum AI_Walk_Transitions
-    {
-        start_walking,
-
-    }
 
     [CreateAssetMenu(fileName = "StartWalking", menuName = "ability/AI/StartWalking", order = 0)]
     public class StartWalking : StateData
