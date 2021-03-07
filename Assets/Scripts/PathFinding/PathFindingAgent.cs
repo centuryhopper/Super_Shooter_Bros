@@ -24,9 +24,15 @@ namespace Game.PathFind
         // would occur if we just used one coroutine
         // new coroutines get appended to the end of the list
         // and finshed ones get removed from the head.
-        // This acts just like an array deque
-        LinkedList<Coroutine> moveRoutines = new LinkedList<Coroutine>();
+        Queue<Coroutine> moveRoutines = new Queue<Coroutine>();
         public bool hasReachedADestination;
+
+
+        void OnDrawGizmos()
+        {
+            Gizmos.DrawSphere(startOffMeshPosition, .2f);
+            Gizmos.DrawSphere(endOffMeshPosition, .2f);
+        }
 
 
         void Awake()
@@ -37,21 +43,28 @@ namespace Game.PathFind
 
         public void GoToTarget()
         {
+            #region move the agent towards destination
             agent.enabled = true;
             agent.isStopped = false;
             hasReachedADestination = false;
 
-            if (target == null) { UnityEngine.Debug.LogWarning($"no target found"); return; }
+            if (target == null)
+            {
+                UnityEngine.Debug.LogWarning($"no target found. Setting target to player character");
+                target = GameObject.FindWithTag("Player").transform;
+                return;
+            }
             agent.SetDestination(target.position);
+            #endregion
 
             // if the coroutine is already running
             if (moveRoutines.Count != 0)
             {
-                StopCoroutine(moveRoutines.First.Value);
-                moveRoutines.RemoveFirst();
+                Coroutine tmp = moveRoutines.Dequeue();
+                if (tmp != null) StopCoroutine(tmp);
             }
 
-            moveRoutines.AddLast(StartCoroutine(Move()));
+            moveRoutines.Enqueue(StartCoroutine(Move()));
         }
 
         // pause the agent every time it reaches the end of an off mesh link before reaching the
@@ -63,13 +76,12 @@ namespace Game.PathFind
                 if (agent.isOnOffMeshLink)
                 {
                     startOffMeshPosition = transform.position;
-
                     agent.CompleteOffMeshLink();
-
                     yield return waitForEndOfFrame;
-
                     endOffMeshPosition = transform.position;
 
+                    // stop the path finding agent from moving and
+                    // declare reaching a checkpoint
                     agent.isStopped = true;
                     hasReachedADestination = true;
                     yield break;
@@ -81,7 +93,7 @@ namespace Game.PathFind
 
                 // once the agent reaches destination
                 var dist = transform.position - agent.destination;
-                if (Vector3.SqrMagnitude(dist) < 0.5f)
+                if (Vector3.SqrMagnitude(dist) < 2)
                 {
                     startOffMeshPosition = transform.position;
                     endOffMeshPosition = transform.position;

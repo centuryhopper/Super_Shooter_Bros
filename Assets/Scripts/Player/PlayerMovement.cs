@@ -6,6 +6,7 @@ using Game.Inputs;
 using Game.Hash;
 using Game.Enums;
 using Game.GenericCharacter;
+using Game.Interfaces;
 
 
 namespace Game.PlayerCharacter
@@ -55,30 +56,18 @@ namespace Game.PlayerCharacter
         public GameObject rifle = null;
         [SerializeField] float tolerableDistance = 2.5f;
 
-        [Space, Header("Player Inputs"), ReadOnly]
         public bool jump;
-
-        [ReadOnly]
         public bool moveLeft;
-
-        [ReadOnly]
         public bool moveRight;
-
-        [ReadOnly]
         public bool moveUp;
-
-        [ReadOnly]
         public bool moveDown;
 
-        [ReadOnly]
         /// <summary>
         /// Is true when player holds down
         /// shift or when player is "run" mode
         /// </summary>
         /// <value></value>
         public bool turbo;
-
-        [ReadOnly]
         public bool secondJump;
 
         [Header("Gravity")]

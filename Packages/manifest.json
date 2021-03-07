@@ -11,6 +11,7 @@
     "com.unity.mathematics": "1.2.1",
     "com.unity.ml-agents": "1.0.6",
     "com.unity.physics": "0.5.1-preview.2",
+    "com.unity.postprocessing": "2.3.0",
     "com.unity.probuilder": "4.4.0",
     "com.unity.render-pipelines.universal": "10.2.2",
     "com.unity.rendering.hybrid": "0.10.0-preview.21",
