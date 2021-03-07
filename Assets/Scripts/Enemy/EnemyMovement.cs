@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Game.Interfaces;
 
 namespace Game.EnemyAI
 {
-    public class EnemyMovement : MonoBehaviour
+    public class EnemyMovement : MonoBehaviour, IControllable
     {
         [HideInInspector]
         public AIProgress aiProgress;
@@ -16,6 +17,14 @@ namespace Game.EnemyAI
         [SerializeField] private NavMeshAgent navmeshAgent;
 
         private bool isDead;
+
+        public bool jump { get; set; }
+        public bool moveLeft { get; set; }
+        public bool moveRight { get; set; }
+        public bool moveUp { get; set; }
+        public bool moveDown { get; set; }
+        public bool turbo { get; set; }
+        public bool secondJump { get; set; }
 
         private void Awake()
         {
