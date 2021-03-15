@@ -6,6 +6,7 @@ using UnityEngine.Animations.Rigging;
 using Game.Inputs;
 using Game.Hash;
 using Game.Enums;
+using Game.InventoryAssembly;
 
 namespace Game.PlayerCharacter
 {
