@@ -26,6 +26,8 @@ namespace Game.EnemyAI
         public bool turbo { get; set; }
         public bool secondJump { get; set; }
 
+        [SerializeField] private float speed = 3f;
+
         private void Awake()
         {
             aiProgress = GetComponentInChildren<AIProgress>();
@@ -39,6 +41,15 @@ namespace Game.EnemyAI
             {
                 ToggleDead();
             }
+
+            #region physical movement logic
+            // TODO set up movment physics here
+            if (moveRight)
+            {
+                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            }
+
+            #endregion
         }
 
         [ContextMenu("ToggleDead")]

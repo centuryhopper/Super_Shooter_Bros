@@ -14,7 +14,7 @@ namespace Game.EnemyAI
     [CreateAssetMenu(fileName = "StartWalking", menuName = "ability/AI/StartWalking", order = 0)]
     public class StartWalking : StateData
     {
-        [Range(0,6)]
+        [Range(0, 6)]
         public float speed;
         public AnimationCurve speedGraph;
 
@@ -44,10 +44,8 @@ namespace Game.EnemyAI
             EnemyMovement e = c.GetEnemyMovement(a);
             Vector3 direction = e.aiProgress.pathFindingAgent.transform.position - e.transform.position;
 
-            if (e.moveRight)
-            {
-                e.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
-            }
+            // vector between the enemy and the start off mesh position
+            Vector3 enemyToStartOffMesh = e.aiProgress.pathFindingAgent.startOffMeshPosition - e.transform.position;
 
             // UnityEngine.Debug.Log($"agent to ai distance: {Vector3.SqrMagnitude(direction)}");
 
@@ -59,12 +57,20 @@ namespace Game.EnemyAI
 
                 // go back to idle animation when close enough to a offmesh link check point
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
+
+            }
+            // whether we should jump on to a platform
+            else if (Vector3.SqrMagnitude(enemyToStartOffMesh) < 2f)
+            {
+                e.moveLeft = e.moveRight = false;
+                a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.jump_platform], true);
             }
         }
 
         public override void OnExit(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
+            a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.jump_platform], false);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Game.EnemyAI
             // instantiate pathfinding agent
             if (e.aiProgress.pathFindingAgent == null)
             {
-                e.aiProgress.pathFindingAgent = Instantiate(Resources.Load<PathFindingAgent>("PathFindingAgent"), e.transform.position + new Vector3(0, 0, 1f), Quaternion.identity);
+                e.aiProgress.pathFindingAgent = Instantiate(Resources.Load<PathFindingAgent>("PathFindingAgent"), e.transform.position + new Vector3(0, 1f, 1f), Quaternion.identity);
             }
 
             // turn off navmesh
