@@ -57,7 +57,7 @@ namespace Game.EnemyAI
                 // make sure the enemy is facing right when walking right
                 if (!IsFacingForward)
                 {
-                    transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 0, transform.eulerAngles.z);
+                    FaceForward(true);
                 }
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }
@@ -66,7 +66,7 @@ namespace Game.EnemyAI
                 // make sure the enemy is facing left when walking left
                 if (IsFacingForward)
                 {
-                    transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 180, transform.eulerAngles.z);
+                    FaceForward(false);
                 }
 
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
@@ -121,39 +121,17 @@ namespace Game.EnemyAI
             }
         }
 
-        // void Awake()
-        // {
-        //     aiProgress = GetComponentInChildren<AIProgress>();
+        public void FaceForward(bool shouldFaceForward)
+        {
+            if (shouldFaceForward)
+            {
+                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 0, transform.eulerAngles.z);
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 180, transform.eulerAngles.z);
+            }
+        }
 
-        //     characterJoints = GetComponentsInChildren<CharacterJoint>();
-        //     UnityEngine.Debug.Log($"number of ragdolls: {characterJoints.Length}");
-
-        //     // turn off all ragdoll parts
-        //     for (int i = 0; i < characterJoints.Length; ++i)
-        //     {
-        //         characterJoints[i].gameObject.SetActive(false);
-        //     }
-        // }
-
-        // void Update()
-        // {
-        //     if (Input.GetKeyDown(KeyCode.O))
-        //     {
-        //         print("turning on ragdoll");
-        //         for (int i = 0; i < characterJoints.Length; ++i)
-        //         {
-        //             characterJoints[i].gameObject.SetActive(true);
-        //         }
-        //     }
-
-        //     if (Input.GetKeyDown(KeyCode.L))
-        //     {
-        //         print("turning off ragdoll");
-        //         for (int i = 0; i < characterJoints.Length; ++i)
-        //         {
-        //             characterJoints[i].gameObject.SetActive(false);
-        //         }
-        //     }
-        // }
     }
 }

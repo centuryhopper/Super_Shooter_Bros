@@ -17,10 +17,11 @@ namespace Game.EnemyAI
     public class MoveTowardsPlatform : StateData
     {
         // [Range(0,10)]
-        public float glideSpeed = 13f;
+        public float glideSpeed = 1f;
 
         public override void OnEnter(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
+            UnityEngine.Debug.Log($"Moving towards end link");
         }
 
         public override void OnAbilityUpdate(CharacterState c, Animator a, AnimatorStateInfo asi)
@@ -29,16 +30,15 @@ namespace Game.EnemyAI
 
             // move enemy ai towards off meshLink end position
             // when it is close enough, then transition to landing
-            Vector3 endOffMeshPos = e.aiProgress.pathFindingAgent.endOffMeshPosition;
-            // Vector3.MoveTowards(e.transform.position, endOffMeshPos, glideSpeed * Time.deltaTime);
+            Vector3 endOffMeshPos = e.aiProgress.pathFindingAgent.endSphere.transform.position;
 
             e.transform.Translate(Vector3.forward * glideSpeed * Time.deltaTime);
 
             Vector3 enemyToEndOffMeshVector = endOffMeshPos - e.transform.position;
 
-            if (Vector3.SqrMagnitude(enemyToEndOffMeshVector) < .5f)
+            if (Vector3.SqrMagnitude(enemyToEndOffMeshVector) < .75f)
             {
-
+                UnityEngine.Debug.Log($"LANDING");
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.force_transition], true);
             }
 

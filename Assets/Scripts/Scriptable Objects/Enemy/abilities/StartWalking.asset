@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0616b23147682bf4d847a00212f59a85, type: 3}
   m_Name: StartWalking
   m_EditorClassIdentifier: 
-  speed: 2.58
+  speed: 3.9
   speedGraph:
     serializedVersion: 2
     m_Curve:

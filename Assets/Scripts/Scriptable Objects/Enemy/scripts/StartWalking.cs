@@ -22,7 +22,11 @@ namespace Game.EnemyAI
         {
             UnityEngine.Debug.Log($"AI STARTED WALKING");
             EnemyMovement e = c.GetEnemyMovement(a);
-            Vector3 direction = e.aiProgress.pathFindingAgent.startOffMeshPosition - e.transform.position;
+
+
+            // It might be better to change the vector to point to the path finder's
+            // current start or end sphere positions
+            Vector3 direction = e.aiProgress.pathFindingAgent.startSphere.transform.position - e.transform.position;
             // UnityEngine.Debug.Log($"pathfindng agent name: {e.aiProgress.pathFindingAgent.gameObject.name}");
 
             // move right if the pathfinding agent is to your right
@@ -37,20 +41,25 @@ namespace Game.EnemyAI
                 e.moveLeft = true;
                 e.moveRight = false;
             }
+
+            // Vector3 startOffMeshPos = e.aiProgress.pathFindingAgent.startSphere.transform.position;
+            // Vector3 endOffMeshPos = e.aiProgress.pathFindingAgent.endSphere.transform.position;
+            // UnityEngine.Debug.Log($"offmesh link distance {endOffMeshPos.y - startOffMeshPos.y}");
         }
 
         public override void OnAbilityUpdate(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             EnemyMovement e = c.GetEnemyMovement(a);
-            Vector3 direction = e.aiProgress.pathFindingAgent.transform.position - e.transform.position;
 
-            // vector between the enemy and the start off mesh position
-            Vector3 enemyToStartOffMesh = e.aiProgress.pathFindingAgent.startOffMeshPosition - e.transform.position;
+            Vector3 startOffMeshPos = e.aiProgress.pathFindingAgent.startSphere.transform.position;
+            Vector3 endOffMeshPos = e.aiProgress.pathFindingAgent.endSphere.transform.position;
+            Vector3 enemyToPathFindingAgent = e.aiProgress.pathFindingAgent.transform.position - e.transform.position;
+            Vector3 enemyToStartOffMesh = startOffMeshPos - e.transform.position;
 
             // UnityEngine.Debug.Log($"agent to ai distance: {Vector3.SqrMagnitude(direction)}");
 
             // checkpoint is close enough to me, so stop walking
-            if (Vector3.SqrMagnitude(direction) < 2f)
+            if (Vector3.SqrMagnitude(enemyToPathFindingAgent) < 2f)
             {
                 UnityEngine.Debug.Log($"AI STOPPING");
                 e.moveLeft = e.moveRight = false;
@@ -60,7 +69,10 @@ namespace Game.EnemyAI
 
             }
             // whether we should jump on to a platform
-            else if (Vector3.SqrMagnitude(enemyToStartOffMesh) < 2f)
+            // don't jump if the start offmesh link is at a higher position
+            // than the end offmesh link because that means there's a drop
+
+            else if (Vector3.SqrMagnitude(enemyToStartOffMesh) < 0.01f && endOffMeshPos.y > startOffMeshPos.y)
             {
                 e.moveLeft = e.moveRight = false;
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.jump_platform], true);

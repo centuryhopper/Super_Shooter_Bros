@@ -13,6 +13,7 @@ namespace Game.EnemyAI
         public override void OnEnter(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.jump_platform], false);
+            a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
 
             EnemyMovement e = c.GetEnemyMovement(a);
             UnityEngine.Debug.Log($"SENDING AGENT from {e.gameObject.name}");
@@ -25,6 +26,7 @@ namespace Game.EnemyAI
 
             // turn off navmesh
             e.aiProgress.pathFindingAgent.GetComponent<NavMeshAgent>().enabled = false;
+            e.aiProgress.pathFindingAgent.GetComponent<CapsuleCollider>().enabled = false;
 
             // AI child will be where the enemy is
             e.aiProgress.transform.position = e.transform.position;
@@ -38,10 +40,14 @@ namespace Game.EnemyAI
         public override void OnAbilityUpdate(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             EnemyMovement e = c.GetEnemyMovement(a);
+
+
             Vector3 direction = e.aiProgress.pathFindingAgent.transform.position - e.transform.position;
 
             // if the pathfinding agent has reached a destination (could be an offmesh link position or the player position), then start to physically move the enemy towards that destination as well
-            if (e.aiProgress.pathFindingAgent.hasReachedADestination && Vector3.SqrMagnitude(direction) >= 2f)
+
+            // 8f is an approximation for the SqrMagnitude of the vector from the enemy to the pathfinding agent. It may need to be tweaked later on
+            if (e.aiProgress.pathFindingAgent.hasReachedADestination && Vector3.SqrMagnitude(direction) >= 8f)
             {
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], true);
             }

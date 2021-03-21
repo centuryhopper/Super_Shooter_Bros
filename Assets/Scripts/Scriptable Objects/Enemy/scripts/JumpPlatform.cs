@@ -16,8 +16,7 @@ namespace Game.EnemyAI
     [CreateAssetMenu(fileName = "JumpPlatform", menuName = "ability/AI/JumpPlatform", order = 0)]
     public class JumpPlatform : StateData
     {
-        [Range(1, 10)]
-        public float jumpForce = 5f;
+        public float jumpForce = 4f;
 
         public override void OnEnter(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
@@ -25,6 +24,17 @@ namespace Game.EnemyAI
             EnemyMovement e = c.GetEnemyMovement(a);
 
             e.jump = e.moveUp = true;
+
+            // Ensure the enemy is facing the proper direction when making the jump
+            if (e.aiProgress.pathFindingAgent.startSphere.transform.position.z < e.aiProgress.pathFindingAgent.endSphere.transform.position.z)
+            {
+                e.FaceForward(true);
+            }
+            else
+            {
+                e.FaceForward(false);
+            }
+
             e.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
 
@@ -33,9 +43,11 @@ namespace Game.EnemyAI
         public override void OnAbilityUpdate(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             EnemyMovement e = c.GetEnemyMovement(a);
+
+            // transition when the enemy is high enough in the air
+
             // float topDist = e.aiProgress.pathFindingAgent.EndSphere.transform.position.y - e.;
             a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.force_transition], true);
-
         }
 
         public override void OnExit(CharacterState c, Animator a, AnimatorStateInfo asi)

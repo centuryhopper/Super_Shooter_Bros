@@ -17,9 +17,6 @@ namespace Game.PathFind
         NavMeshAgent agent;
         WaitForEndOfFrame waitForEndOfFrame;
 
-        [ReadOnly]
-        public Vector3 startOffMeshPosition, endOffMeshPosition;
-
         // We need multiple coroutines to avoid stopping the main thing that
         // would occur if we just used one coroutine
         // new coroutines get appended to the end of the list
@@ -44,11 +41,10 @@ namespace Game.PathFind
         void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(startOffMeshPosition, .2f);
+            Gizmos.DrawSphere(startSphere.transform.position, .2f);
             Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(endOffMeshPosition, .2f);
+            Gizmos.DrawSphere(endSphere.transform.position, .2f);
         }
-
 
         void Awake()
         {
@@ -96,17 +92,18 @@ namespace Game.PathFind
             {
                 if (agent.isOnOffMeshLink)
                 {
-                    // if they're zero vectors then initialize them!
-                    if (meshLinks.startPos == Vector3.zero && meshLinks.endPos == Vector3.zero)
-                    {
-                        meshLinks.startPos = agent.currentOffMeshLinkData.startPos;
-                        meshLinks.endPos = agent.currentOffMeshLinkData.endPos;
-                    }
+                    // // if they're zero vectors then initialize them!
+                    // if (meshLinks.startPos == Vector3.zero && meshLinks.endPos == Vector3.zero)
+                    // {
+                    //     meshLinks.startPos = agent.currentOffMeshLinkData.startPos;
+                    //     meshLinks.endPos = agent.currentOffMeshLinkData.endPos;
+                    // }
 
-                    startOffMeshPosition = transform.position;
+                    // assign positions before completing the off mesh link
+                    startSphere.transform.position = agent.currentOffMeshLinkData.startPos;
+                    endSphere.transform.position = agent.currentOffMeshLinkData.endPos;
                     agent.CompleteOffMeshLink();
                     yield return waitForEndOfFrame;
-                    endOffMeshPosition = transform.position;
 
                     // stop the path finding agent from moving and
                     // declare reaching a checkpoint
@@ -123,14 +120,14 @@ namespace Game.PathFind
                 var dist = transform.position - agent.destination;
                 if (Vector3.SqrMagnitude(dist) < 2)
                 {
-                    if (meshLinks.startPos != Vector3.zero && meshLinks.endPos != Vector3.zero)
-                    {
-                        startSphere.transform.position = meshLinks.startPos;
-                        endSphere.transform.position = meshLinks.endPos;
-                    }
-
-                    startOffMeshPosition = transform.position;
-                    endOffMeshPosition = transform.position;
+                    // if (meshLinks.startPos != Vector3.zero && meshLinks.endPos != Vector3.zero)
+                    // {
+                    //     startSphere.transform.position = meshLinks.startPos;
+                    //     endSphere.transform.position = meshLinks.endPos;
+                    // }
+                    //  no links at this point, just the detination, which is the player
+                    startSphere.transform.position = agent.destination;
+                    endSphere.transform.position = agent.destination;
                     agent.isStopped = true;
                     hasReachedADestination = true;
                     yield break;
