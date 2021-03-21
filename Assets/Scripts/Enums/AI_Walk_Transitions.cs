@@ -4,5 +4,7 @@ namespace Game.Enums
     {
         start_walking,
         jump_platform,
+        force_transition,
+        
     }
 }

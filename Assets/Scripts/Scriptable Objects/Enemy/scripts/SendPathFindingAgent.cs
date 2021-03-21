@@ -12,6 +12,8 @@ namespace Game.EnemyAI
     {
         public override void OnEnter(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
+            a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.jump_platform], false);
+
             EnemyMovement e = c.GetEnemyMovement(a);
             UnityEngine.Debug.Log($"SENDING AGENT from {e.gameObject.name}");
 

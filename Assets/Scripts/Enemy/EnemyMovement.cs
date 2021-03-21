@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Game.Interfaces;
+using NaughtyAttributes;
 
 namespace Game.EnemyAI
 {
@@ -14,10 +15,9 @@ namespace Game.EnemyAI
         // CharacterJoint[] characterJoints;
         [SerializeField] private GameObject ragDoll;
         [SerializeField] private GameObject animatedModel;
-        [SerializeField] private NavMeshAgent navmeshAgent;
+        // [SerializeField] private NavMeshAgent navmeshAgent;
 
         private bool isDead;
-
         public bool jump { get; set; }
         public bool moveLeft { get; set; }
         public bool moveRight { get; set; }
@@ -28,14 +28,22 @@ namespace Game.EnemyAI
 
         [SerializeField] private float speed = 3f;
 
+        [ReadOnly]
+        public float faceDirection = 1;
+        public bool IsFacingForward => faceDirection == 1;
+        public Rigidbody rb = null;
+
         private void Awake()
         {
+            rb = GetComponent<Rigidbody>();
             aiProgress = GetComponentInChildren<AIProgress>();
             ragDoll.gameObject.SetActive(false);
         }
 
         private void Update()
         {
+            faceDirection = Vector3.Dot(transform.forward, Vector3.forward);
+
             // for debugging
             if (Input.GetKeyDown(KeyCode.O))
             {
@@ -46,8 +54,24 @@ namespace Game.EnemyAI
             // TODO set up movment physics here
             if (moveRight)
             {
+                // make sure the enemy is facing right when walking right
+                if (!IsFacingForward)
+                {
+                    transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 0, transform.eulerAngles.z);
+                }
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }
+            else if (moveLeft)
+            {
+                // make sure the enemy is facing left when walking left
+                if (IsFacingForward)
+                {
+                    transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 180, transform.eulerAngles.z);
+                }
+
+                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            }
+
 
             #endregion
         }
@@ -59,17 +83,17 @@ namespace Game.EnemyAI
 
             if (isDead)
             {
-                CopyTransformData(animatedModel.transform, ragDoll.transform, navmeshAgent.velocity);
+                CopyTransformData(animatedModel.transform, ragDoll.transform, rb.velocity);
                 ragDoll.gameObject.SetActive(true);
                 animatedModel.gameObject.SetActive(false);
-                navmeshAgent.enabled = false;
+                // navmeshAgent.enabled = false;
             }
             else
             {
                 // Switch back to the model and disable the ragdoll
                 ragDoll.gameObject.SetActive(false);
                 animatedModel.gameObject.SetActive(true);
-                navmeshAgent.enabled = true;
+                // navmeshAgent.enabled = true;
             }
 
         }

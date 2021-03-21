@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fdc0511ded74f44bb58dae0047c9c3f, type: 3}
   m_Name: JumpPlatform
   m_EditorClassIdentifier: 
+  jumpForce: 10
