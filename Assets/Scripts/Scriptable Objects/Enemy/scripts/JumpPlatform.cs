@@ -20,7 +20,7 @@ namespace Game.EnemyAI
 
         public override void OnEnter(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
-            UnityEngine.Debug.Log($"AI STARTED JUMPING");
+            UnityEngine.Debug.Log($"AI JUMPED");
             EnemyMovement e = c.GetEnemyMovement(a);
 
             e.jump = e.moveUp = true;

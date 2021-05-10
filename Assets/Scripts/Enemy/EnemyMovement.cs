@@ -59,6 +59,9 @@ namespace Game.EnemyAI
                 {
                     FaceForward(true);
                 }
+
+                UnityEngine.Debug.Log($"Moving right");
+
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }
             else if (moveLeft)
@@ -68,6 +71,8 @@ namespace Game.EnemyAI
                 {
                     FaceForward(false);
                 }
+
+                UnityEngine.Debug.Log($"Moving left");
 
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }

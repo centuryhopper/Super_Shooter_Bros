@@ -22,21 +22,14 @@ namespace Game.PathFind
         // new coroutines get appended to the end of the list
         // and finshed ones get removed from the head.
         Queue<Coroutine> moveRoutines = new Queue<Coroutine>();
-        public bool hasReachedADestination;
+        public bool hasReachedADestination, enemyShouldMove;
         public GameObject startSphere;
         public GameObject endSphere;
-        public struct MeshLinks
+
+        public void SetSpeed(float speed)
         {
-            public Vector3 startPos, endPos;
-            public MeshLinks(Vector3 s=new Vector3(), Vector3 e=new Vector3())
-            {
-                startPos = s; endPos = e;
-            }
+            agent.speed = speed;
         }
-
-        // lightweight handling of start and end positions on the offmesh link
-        public MeshLinks meshLinks;
-
 
         void OnDrawGizmos()
         {
@@ -57,7 +50,6 @@ namespace Game.PathFind
         public void GoToTarget()
         {
             #region move the agent towards destination
-            meshLinks = new MeshLinks();
             agent.enabled = true;
             agent.isStopped = false;
             hasReachedADestination = false;
@@ -69,7 +61,7 @@ namespace Game.PathFind
             {
                 UnityEngine.Debug.LogWarning($"no target found. Setting target to player character");
                 target = GameObject.FindWithTag("Player").transform;
-                return;
+                // return;
             }
             agent.SetDestination(target.position);
             #endregion
@@ -92,13 +84,6 @@ namespace Game.PathFind
             {
                 if (agent.isOnOffMeshLink)
                 {
-                    // // if they're zero vectors then initialize them!
-                    // if (meshLinks.startPos == Vector3.zero && meshLinks.endPos == Vector3.zero)
-                    // {
-                    //     meshLinks.startPos = agent.currentOffMeshLinkData.startPos;
-                    //     meshLinks.endPos = agent.currentOffMeshLinkData.endPos;
-                    // }
-
                     // assign positions before completing the off mesh link
                     startSphere.transform.position = agent.currentOffMeshLinkData.startPos;
                     endSphere.transform.position = agent.currentOffMeshLinkData.endPos;
@@ -120,11 +105,6 @@ namespace Game.PathFind
                 var dist = transform.position - agent.destination;
                 if (Vector3.SqrMagnitude(dist) < 2)
                 {
-                    // if (meshLinks.startPos != Vector3.zero && meshLinks.endPos != Vector3.zero)
-                    // {
-                    //     startSphere.transform.position = meshLinks.startPos;
-                    //     endSphere.transform.position = meshLinks.endPos;
-                    // }
                     //  no links at this point, just the detination, which is the player
                     startSphere.transform.position = agent.destination;
                     endSphere.transform.position = agent.destination;

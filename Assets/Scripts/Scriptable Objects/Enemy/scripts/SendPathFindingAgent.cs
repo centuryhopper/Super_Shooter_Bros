@@ -22,6 +22,9 @@ namespace Game.EnemyAI
             if (e.aiProgress.pathFindingAgent == null)
             {
                 e.aiProgress.pathFindingAgent = Instantiate(Resources.Load<PathFindingAgent>("PathFindingAgent"), e.transform.position + new Vector3(0, 1f, 1f), Quaternion.identity);
+
+                // set speed
+                e.aiProgress.pathFindingAgent.SetSpeed(60f);
             }
 
             // turn off navmesh
@@ -47,6 +50,8 @@ namespace Game.EnemyAI
             // if the pathfinding agent has reached a destination (could be an offmesh link position or the player position), then start to physically move the enemy towards that destination as well
 
             // 8f is an approximation for the SqrMagnitude of the vector from the enemy to the pathfinding agent. It may need to be tweaked later on
+            //// may need a distance check: && Vector3.SqrMagnitude(direction) >= 0.01f
+            // move only when pathfinding agent is far enough and reached a destination
             if (e.aiProgress.pathFindingAgent.hasReachedADestination && Vector3.SqrMagnitude(direction) >= 8f)
             {
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], true);
