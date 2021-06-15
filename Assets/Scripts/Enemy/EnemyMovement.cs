@@ -32,6 +32,7 @@ namespace Game.EnemyAI
         public float faceDirection = 1;
         public bool IsFacingForward => faceDirection == 1;
         public Rigidbody rb = null;
+        // public bool hasReachedStartOffMesh = false;
 
         private void Awake()
         {

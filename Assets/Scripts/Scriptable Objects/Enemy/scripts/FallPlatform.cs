@@ -38,6 +38,7 @@ namespace Game.EnemyAI
             // facing right
             if (e.IsFacingForward)
             {
+                // move right towards the pathfinding agent
                 if (e.transform.position.z < e.aiProgress.pathFindingAgent.endSphere.transform.position.z)
                 {
                     e.moveRight = true;

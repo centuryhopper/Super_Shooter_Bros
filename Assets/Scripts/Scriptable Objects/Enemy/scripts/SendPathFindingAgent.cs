@@ -35,7 +35,7 @@ namespace Game.EnemyAI
             e.aiProgress.transform.position = e.transform.position;
 
             #region temporarily commented out so that the editor button I created has full control over pathfinding agent
-            // e.aiProgress.pathFindingAgent.GoToTarget();
+            e.aiProgress.pathFindingAgent.GoToTarget();
             #endregion
 
         }
@@ -44,15 +44,15 @@ namespace Game.EnemyAI
         {
             EnemyMovement e = c.GetEnemyMovement(a);
 
-
-            Vector3 direction = e.aiProgress.pathFindingAgent.transform.position - e.transform.position;
+            // if player is far enough, send pathfinding agent once again (TEMPORARY SOLUTION because we'll probably move this logic to the enemy fight state machine script)
+            Vector3 agentToPlayer = e.aiProgress.player.position - e.aiProgress.pathFindingAgent.transform.position;
+            if (Vector3.SqrMagnitude(agentToPlayer) > 3f)
+            {
+                // e.aiProgress.pathFindingAgent.GoToTarget();
+            }
 
             // if the pathfinding agent has reached a destination (could be an offmesh link position or the player position), then start to physically move the enemy towards that destination as well
-
-            // 8f is an approximation for the SqrMagnitude of the vector from the enemy to the pathfinding agent. It may need to be tweaked later on
-            //// may need a distance check: && Vector3.SqrMagnitude(direction) >= 0.01f
-            // move only when pathfinding agent is far enough and reached a destination
-            if (e.aiProgress.pathFindingAgent.hasReachedADestination && Vector3.SqrMagnitude(direction) >= 8f)
+            if (e.aiProgress.pathFindingAgent.enemyShouldMove)
             {
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], true);
             }
@@ -60,6 +60,7 @@ namespace Game.EnemyAI
 
         public override void OnExit(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
+            // a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
         }
     }
 
