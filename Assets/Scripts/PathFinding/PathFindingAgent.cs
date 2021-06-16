@@ -99,6 +99,8 @@ namespace Game.PathFind
 
                     agent.isStopped = true;
                     enemyShouldMove = true;
+
+                    // https://riptutorial.com/csharp/example/29811/the-difference-between-break-and-yield-break
                     break;
                 }
 
