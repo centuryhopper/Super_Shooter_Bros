@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class ProvideDamage : MonoBehaviour
 {
+    // jab animation event (needs monobehaviour to work)
     public void damagePlayer()
     {
         HealthDamageManager.Instance.Jab();

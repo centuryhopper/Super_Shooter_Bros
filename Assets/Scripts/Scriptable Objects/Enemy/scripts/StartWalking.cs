@@ -31,6 +31,7 @@ namespace Game.EnemyAbilities
 
         public void WalkToTarget(EnemyMovement e)
         {
+            UnityEngine.Debug.Log($"AI walking to player");
             player = GameObject.FindWithTag("Player").transform;
 
             // My observation so far is that the vector from enemy to end off mesh yields less bugs
@@ -67,7 +68,10 @@ namespace Game.EnemyAbilities
             // TODO If the player is within range, transition to attack state
             if (Vector3.SqrMagnitude(enemyToPlayer) <= 2f)
             {
+                UnityEngine.Debug.Log($"AI transitioning to attack state");
+                e.moveLeft = e.moveRight = false;
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.attack_player], true);
+                a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
             }
 
 
@@ -81,7 +85,7 @@ namespace Game.EnemyAbilities
             // TODO theres currently a bug for when you change the startOffMesPos too early to a place thats unreachable to the enemy, it will keep on sprinting forever because it only stops until it reaches the startOffMesPos. A fix to this could be to not move the pathfinding agent until the enemy AI reached its startoffmesh position first
             if (Vector3.SqrMagnitude(enemyToPathFindingAgent) < 2f)
             {
-                UnityEngine.Debug.Log($"AI STOPPING");
+                UnityEngine.Debug.Log($"AI going back to idle state");
                 e.moveLeft = e.moveRight = false;
 
                 // go back to idle animation when close enough to a offmesh link check point

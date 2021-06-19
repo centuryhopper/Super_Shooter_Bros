@@ -33,13 +33,15 @@ namespace Game.EnemyAbilities
             EnemyMovement e = c.GetEnemyMovement(a);
             Vector3 enemyToPlayer = player.transform.position - e.transform.position;
 
-            // TODO if player is out of range, transition back to start-walking state
+            // TODO if player is out of range, transition back to start-walking state DONE
+            // TODO there's a subtle bug of the enemy switching back to start-walking state and then only playing the animation but never physically moving towards the player
             if (Vector3.SqrMagnitude(enemyToPlayer) > 2f)
             {
+                a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.attack_player], false);
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], true);
             }
 
-            
+
 
         }
 

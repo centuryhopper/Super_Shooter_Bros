@@ -8,18 +8,10 @@ namespace Game.HealthManager
 {
     public class HealthDamageManager : Singleton<HealthDamageManager>
     {
-        [SerializeField] Health health;
-        [SerializeField] float damageAmt = 10f;
+        Health health;
+        float damageAmt = 5f;
 
-        void Awake()
-        {
-            if (health == null)
-            {
-                health = GameObject.FindWithTag("Player").GetComponent<Health>();
-            }
-        }
 
-        // jab animation event (needs monobehaviour to work)
         public void Jab()
         {
             UnityEngine.Debug.Log($"here in Jab()");
@@ -28,6 +20,11 @@ namespace Game.HealthManager
 
         public void playerTakeDamage()
         {
+            if (health == null)
+            {
+                health = GameObject.FindWithTag("Player").GetComponent<Health>();
+            }
+
             if (health != null)
             {
                 health.takeDamage(damageAmt);
