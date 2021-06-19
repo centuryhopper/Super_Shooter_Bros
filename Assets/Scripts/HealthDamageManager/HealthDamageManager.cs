@@ -2,45 +2,63 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.PlayerCharacter;
-using Game.singleton;
 
 namespace Game.HealthManager
 {
-    public class HealthDamageManager : Singleton<HealthDamageManager>
+    public class HealthDamageManager : MonoBehaviour
     {
-        Health health;
+        [SerializeField] GameObject playerRobot = null;
+        [SerializeField] GameObject playerRobotRagdoll = null;
+        [SerializeField] Health health = null;
         float damageAmt = 5f;
+
+        public static HealthDamageManager instance;
+
+        void Awake()
+        {
+            #region singleton init
+
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
+            #endregion
+
+            // persist this manager between scenes
+            DontDestroyOnLoad(gameObject);
+        }
+
+        void Start()
+        {
+            // initially disable ragdoll
+            playerRobotRagdoll.SetActive(false);
+        }
 
 
         public void Jab()
         {
             UnityEngine.Debug.Log($"here in Jab()");
             playerTakeDamage();
+
+            // if player is dead, disable player robot model and enable its ragdoll version
         }
 
         public void playerTakeDamage()
         {
-            if (health == null)
-            {
-                health = GameObject.FindWithTag("Player").GetComponent<Health>();
-            }
-
             if (health != null)
             {
                 health.takeDamage(damageAmt);
             }
+            else
+            {
+                Debug.LogWarning("health is null");
+            }
         }
 
-        void Update()
-        {
-            // check the distance between each enemy in enemies and the player
-            // foreach (var enemy in enemies)
-            // {
-            //     if (Vector3.SqrMagnitude(health.transform.position - enemy.transform.position) <= 2.5f)
-            //     {
-            //         health.takeDamage(damageAmt);
-            //     }
-            // }
-        }
     }
 }

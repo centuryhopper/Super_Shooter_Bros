@@ -82,6 +82,8 @@ namespace Game.EnemyAI
             #endregion
         }
 
+
+        // TODO use this for player death as well
         [ContextMenu("ToggleDead")]
         private void ToggleDead()
         {
