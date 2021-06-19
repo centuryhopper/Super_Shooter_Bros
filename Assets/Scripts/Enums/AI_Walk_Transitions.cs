@@ -6,6 +6,7 @@ namespace Game.Enums
         jump_platform,
         fall_platform,
         force_transition,
+        attack_player,
 
     }
 }

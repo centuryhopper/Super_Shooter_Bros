@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Game.Enums;
 using Game.Hash;
 using Game.States;
@@ -14,8 +15,15 @@ namespace Game.PlayerCharacter
         public float faceDirection;
 
         [Range(.01f, 5)]
-        public float distanceofDetection = 0.3f;
+        public float directionBlock = 0.3f;
         private PlayerMovement playerMovement;
+
+        private float movementDirection = 1;
+        private List<GameObject> spheresList;
+        public float distanceOfDetection = 0;
+
+
+
 
         override public void OnEnter(CharacterState character, Animator a, AnimatorStateInfo asi)
         {
@@ -54,8 +62,9 @@ namespace Game.PlayerCharacter
                 // facing right
                 if (faceDirection == 1)
                 {
-                    if (!CheckFront(p))
+                    if (!IsBlocked(p))
                     {
+                        movementDirection = 1;
                         // multiple by the speed graph value so that we can still move while we jump
                         p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                     }
@@ -63,6 +72,7 @@ namespace Game.PlayerCharacter
                 // facing left
                 else if (faceDirection == -1)
                 {
+                    movementDirection = -1;
                     // multiple by the speed graph value so that we can still move while we jump
                     p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                 }
@@ -77,14 +87,16 @@ namespace Game.PlayerCharacter
                 // facing right
                 if (faceDirection == 1)
                 {
+                    movementDirection = -1;
                     // multiple by the speed graph value so that we can still move while we jump
                     p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                 }
                 // facing left
                 else if (faceDirection == -1)
                 {
-                    if (!CheckFront(p))
+                    if (!IsBlocked(p))
                     {
+                        movementDirection = 1;
                         // multiple by the speed graph value so that we can still move while we jump
                         p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                     }
@@ -103,22 +115,33 @@ namespace Game.PlayerCharacter
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        private bool CheckFront(PlayerMovement p)
+        private bool IsBlocked(PlayerMovement p)
         {
             // if (p.RB.velocity.z > -0.01f && p.RB.velocity.z <= 0)
             // {
             //     return true;
             // }
 
-            UnityEngine.Debug.Log($"Checking FRONT");
+            if (movementDirection > 0)
+            {
+                spheresList = p.collisionSpheres.frontSphereGroundCheckers;
+                directionBlock = 0.3f;
+            }
+            else if (movementDirection < 0)
+            {
+                spheresList = p.collisionSpheres.backSphereGroundCheckers;
+                directionBlock = -0.3f;
+            }
 
-            return p.frontSphereGroundCheckers.Any((GameObject obj) =>
+            UnityEngine.Debug.Log($"Checking for obstacles");
+
+            return spheresList.Any((GameObject obj) =>
             {
                 // show the rays
-                Debug.DrawRay(obj.transform.position, p.transform.forward * distanceofDetection, Color.black);
+                Debug.DrawRay(obj.transform.position, p.transform.forward * directionBlock, Color.black);
 
                 // project a ray downwards
-                return (Physics.Raycast(obj.transform.position, p.transform.forward, out RaycastHit hit, distanceofDetection));
+                return (Physics.Raycast(obj.transform.position, p.transform.forward * directionBlock, out RaycastHit hit, directionBlock));
             });
         }
 

@@ -6,8 +6,9 @@ using Game.PathFind;
 using Game.States;
 using Game.Enums;
 using Game.Hash;
+using Game.EnemyAI;
 
-namespace Game.EnemyAI
+namespace Game.EnemyAbilities
 {
     // NPC follows the path finding agent. And the path finding agent follows the player
 
@@ -18,14 +19,13 @@ namespace Game.EnemyAI
         public float speed;
         public AnimationCurve speedGraph;
         private Transform player;
+        public float range = 2f;
 
         public override void OnEnter(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             UnityEngine.Debug.Log($"AI STARTED WALKING");
             EnemyMovement e = c.GetEnemyMovement(a);
             WalkToTarget(e);
-
-            
 
         }
 
@@ -61,6 +61,15 @@ namespace Game.EnemyAI
         public override void OnAbilityUpdate(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             EnemyMovement e = c.GetEnemyMovement(a);
+
+            Vector3 enemyToPlayer = player.transform.position - e.transform.position;
+
+            // TODO If the player is within range, transition to attack state
+            if (Vector3.SqrMagnitude(enemyToPlayer) <= 2f)
+            {
+                a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.attack_player], true);
+            }
+
 
             Vector3 startOffMeshPos = e.aiProgress.pathFindingAgent.startSphere.transform.position;
             Vector3 endOffMeshPos = e.aiProgress.pathFindingAgent.endSphere.transform.position;

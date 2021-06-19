@@ -106,7 +106,7 @@ namespace Game.PathFind
 
                 // once the agent reaches destination
                 var dist = transform.position - agent.destination;
-                UnityEngine.Debug.Log($"agent to player distance: {Vector3.SqrMagnitude(dist)}");
+                // UnityEngine.Debug.Log($"agent to player distance: {Vector3.SqrMagnitude(dist)}");
                 if (Vector3.SqrMagnitude(dist) <= 1f)
                 {
                     if (meshLinks.Count > 0)

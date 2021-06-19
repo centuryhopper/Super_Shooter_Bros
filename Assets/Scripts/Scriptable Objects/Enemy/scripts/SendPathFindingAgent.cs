@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using Game.Enums;
 using Game.Hash;
+using Game.EnemyAI;
 
-namespace Game.EnemyAI
+namespace Game.EnemyAbilities
 {
     [CreateAssetMenu(fileName = "SendPathFindingAgent", menuName = "ability/AI/SendPathFindingAgent", order = 0)]
     public class SendPathFindingAgent : StateData

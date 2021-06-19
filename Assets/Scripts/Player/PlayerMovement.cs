@@ -17,7 +17,7 @@ namespace Game.PlayerCharacter
         [HideInInspector]
         public Animator skinnedMeshAnimator = null;
         public AnimationProgress animationProgress;
-        BoxCollider boxCollider = null;
+        public BoxCollider boxCollider = null;
         public BoxCollider BoxCollider { get => boxCollider; }
         Rigidbody rb;
         public Rigidbody RB { get => rb; }
@@ -26,11 +26,7 @@ namespace Game.PlayerCharacter
         [SerializeField] LedgeChecker ledgeChecker = null;
         public LedgeChecker GetLedgeChecker { get => ledgeChecker; }
         public Transform playerSkin = null;
-        public List<GameObject> frontSphereGroundCheckers { get; private set; }
-        public List<GameObject> bottomSphereGroundCheckers { get; private set; }
-        [SerializeField] GameObject groundCheckingSphere = null;
-        [SerializeField] int horizontalSections = 5;
-        [SerializeField] int verticalSections = 10;
+        public CollisionSpheres collisionSpheres = null;
 
         /// <summary>
         /// With this, player now has double jump ability
@@ -100,17 +96,19 @@ namespace Game.PlayerCharacter
         {
             // Debug.Log(Input.mousePresent ? "mouse detected" : "mouse not detected");
 
+            collisionSpheres = GetComponentInChildren<CollisionSpheres>();
             skinnedMeshAnimator = playerSkin.GetComponent<Animator>();
-            bottomSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
-            frontSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
             boxCollider = GetComponent<BoxCollider>();
             rb = GetComponent<Rigidbody>();
             t = transform;
             mainCam = Camera.main;
-            SetColliderSpheres();
-
+            collisionSpheres.owner = this;
             // Debug.Log($"player parent: {transform.parent is null}");
+        }
 
+        void Start()
+        {
+            collisionSpheres.SetColliderSpheres();
         }
 
         public void ToggleRigLayerWeights(int weightNumber)
@@ -142,82 +140,6 @@ namespace Game.PlayerCharacter
         {
             contactPoints = collisionInfo.contacts;
         }
-
-        public (float a, float b, float c, float d) GetTopBottomFrontBackDimensions()
-        {
-            // y-z plane in this case
-            float top = boxCollider.bounds.center.y + boxCollider.bounds.extents.y;
-            float bottom = boxCollider.bounds.center.y - boxCollider.bounds.extents.y;
-            float front = boxCollider.bounds.center.z + boxCollider.bounds.extents.z;
-            float back = boxCollider.bounds.center.z - boxCollider.bounds.extents.z;
-
-            return (top, bottom, front, back);
-        }
-
-        public void RepositionFrontSpheres()
-        {
-            (float top, float bottom, float front, float back) dimensions = GetTopBottomFrontBackDimensions();
-
-            frontSphereGroundCheckers[0].transform.localPosition = new Vector3(0, dimensions.bottom + 0.05f, dimensions.front) - transform.position;
-            frontSphereGroundCheckers[1].transform.localPosition = new Vector3(0, dimensions.top, dimensions.front) - transform.position;
-
-            float interval = (dimensions.top - dimensions.bottom + 0.05f) / (verticalSections - 1);
-
-            for (int i = 2; i < frontSphereGroundCheckers.Count; i++)
-            {
-                frontSphereGroundCheckers[i].transform.localPosition =
-                    new Vector3(0, dimensions.bottom + (interval * (i - 1)), dimensions.front) - transform.position;
-            }
-        }
-
-        public void RepositionBottomSpheres()
-        {
-            (float top, float bottom, float front, float back) dimensions = GetTopBottomFrontBackDimensions();
-
-            bottomSphereGroundCheckers[0].transform.localPosition = new Vector3(0, dimensions.bottom, dimensions.back) - transform.position;
-            bottomSphereGroundCheckers[1].transform.localPosition = new Vector3(0, dimensions.bottom, dimensions.front) - transform.position;
-
-            float interval = (dimensions.front - dimensions.back) / (horizontalSections - 1);
-
-            for (int i = 2; i < bottomSphereGroundCheckers.Count; i++)
-            {
-                bottomSphereGroundCheckers[i].transform.localPosition =
-                    new Vector3(0, dimensions.bottom, dimensions.back + (interval * (i - 1))) - transform.position;
-            }
-        }
-
-        /// <summary>
-        /// credit goes to roundbeargames for setting up these spheres
-        /// https://www.youtube.com/channel/UCAoJgVzDHnFDOQwC42raByg
-        /// </summary>
-        private void SetColliderSpheres()
-        {
-            // y-z plane in this case
-
-            // populate list
-            for (var i = 0; i < horizontalSections; i++)
-            {
-                GameObject obj = CreateGroundCheckingSphere(Vector3.zero);
-                obj.transform.parent = this.transform;
-                obj.name = $"bottomSphere{i}";
-                bottomSphereGroundCheckers.Add(obj);
-            }
-
-            // populate list
-            for (var i = 0; i < verticalSections; i++)
-            {
-                GameObject obj = CreateGroundCheckingSphere(Vector3.zero);
-                obj.transform.parent = this.transform;
-                obj.name = $"frontSphere{i}";
-                frontSphereGroundCheckers.Add(obj);
-            }
-
-            RepositionBottomSpheres();
-            RepositionFrontSpheres();
-
-        }
-
-        public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate<GameObject>(groundCheckingSphere, position, Quaternion.identity);
 
         // public void CreateMiddleSpheres(GameObject start, Vector3 direction, float section, int sections, List<GameObject> spheresList)
         // {
@@ -311,8 +233,9 @@ namespace Game.PlayerCharacter
 
             if (animationProgress.isUpdatingSpheres)
             {
-                RepositionBottomSpheres();
-                RepositionFrontSpheres();
+                collisionSpheres.RepositionBottomSpheres();
+                collisionSpheres.RepositionFrontSpheres();
+                collisionSpheres.RepositionBackSpheres();
             }
 
             // plauyer aim will follow the crosshair transform, which follows the hit.point,

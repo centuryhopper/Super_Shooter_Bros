@@ -6,8 +6,9 @@ using Game.PathFind;
 using Game.States;
 using Game.Enums;
 using Game.Hash;
+using Game.EnemyAI;
 
-namespace Game.EnemyAI
+namespace Game.EnemyAbilities
 {
     // NPC follows the path finding agent. And the path finding agent follows the player
 
