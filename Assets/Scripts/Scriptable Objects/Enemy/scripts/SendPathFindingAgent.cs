@@ -28,6 +28,8 @@ namespace Game.EnemyAbilities
                 e.aiProgress.pathFindingAgent.SetSpeed(60f);
             }
 
+            if (!e.aiProgress.pathFindingAgent.isActiveAndEnabled) return;
+
             // turn off navmesh
             e.aiProgress.pathFindingAgent.GetComponent<NavMeshAgent>().enabled = false;
             e.aiProgress.pathFindingAgent.GetComponent<CapsuleCollider>().enabled = false;
@@ -44,6 +46,8 @@ namespace Game.EnemyAbilities
         public override void OnAbilityUpdate(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             EnemyMovement e = c.GetEnemyMovement(a);
+
+            if (!e.aiProgress.pathFindingAgent.isActiveAndEnabled) return;
 
             // if player is far enough, send pathfinding agent once again (TEMPORARY SOLUTION because we'll probably move this logic to the enemy fight state machine script)
             Vector3 agentToPlayer = e.aiProgress.player.position - e.aiProgress.pathFindingAgent.transform.position;

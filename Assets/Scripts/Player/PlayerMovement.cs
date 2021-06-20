@@ -49,6 +49,8 @@ namespace Game.PlayerCharacter
         public GameObject rifle = null;
         [SerializeField] float tolerableDistance = 2.5f;
 
+
+        [Header("Player movements")]
         public bool jump;
         public bool moveLeft;
         public bool moveRight;
@@ -310,9 +312,6 @@ namespace Game.PlayerCharacter
         }
 
 
-
-
-
         /// <summary>
         /// Returns...<br/>
         /// 1 if both vectors are facing the same direction with each other.<br/>
@@ -320,68 +319,6 @@ namespace Game.PlayerCharacter
         /// 0 if both vectors are perpendicular with each other.
         /// </summary>
         private float DotProductWithComments(Vector3 l, Vector3 r) => Vector3.Dot(l, r);
-
-        #region old code
-        // This method can't be called if this script and the animator component aren't
-        // attached to the same game object
-        // void OnAnimatorIK()
-        // {
-        //     // Weapon aim at target ik
-
-        //     // position sets for ik goals
-        //     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.5f);
-        //     animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0.5f);
-        //     animator.SetIKPosition(AvatarIKGoal.RightHand, targetTransform.position);
-        //     animator.SetIKPosition(AvatarIKGoal.LeftHand, targetTransform.position);
-        // }
-        #endregion
-
-        #region
-        // // debug code
-        // void OnCollisionEnter(Collision collisionInfo)
-        // {
-        //     print(collisionInfo.gameObject.name);
-        // }
-
-        // /// <summary>
-        // /// moves the player left and right
-        // /// </summary>
-        // void MovePlayer()
-        // {
-        //     // side scroller
-        //     print("here");
-        //     if (Input.GetKey(KeyCode.D))
-        //     {
-        //         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        //         // transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        //         transform.rotation = Quaternion.LookRotation(Vector3.forward, transform.up);
-        //         anim.SetBool(AnimationParameters.move.ToString(), true);
-        //     }
-        //     else if (Input.GetKey(KeyCode.A))
-        //     {
-        //         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        //         // transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-        //         transform.rotation = Quaternion.LookRotation(-Vector3.forward, transform.up);
-        //         anim.SetBool(AnimationParameters.move.ToString(), true);
-        //     }
-        //     else
-        //     {
-        //         anim.SetBool(AnimationParameters.move.ToString(), false);
-        //     }
-        // }
-
-        // void FlipSprite()
-        // {
-        //     // don't cache Input.GetAxis("Horizontal"), or it will not work
-        //     if (Input.GetAxis("Horizontal") != 0)
-        //     {
-        //         float zScale = Mathf.Abs(transform.localScale.z);
-        //         transform.localScale = (Input.GetAxis("Horizontal") > 0) ?
-        //         new Vector3(transform.localScale.x,transform.localScale.y,zScale) :
-        //         new Vector3(transform.localScale.x,transform.localScale.y,-zScale);
-        //     }
-        // }
-        #endregion
     }
 }
 

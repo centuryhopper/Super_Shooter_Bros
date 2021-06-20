@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.PlayerCharacter;
+// using Game.EnemyAI;
 
 namespace Game.HealthManager
 {
     public class HealthDamageManager : MonoBehaviour
     {
-        [SerializeField] GameObject playerRobot = null;
-        [SerializeField] GameObject playerRobotRagdoll = null;
         [SerializeField] Health health = null;
-        float damageAmt = 5f;
+        // public PlayerMovement playerMovement = null;
+        public Transform player {get => health? health.transform : null;}
+        [SerializeField] float damageAmt = 5f;
 
         public static HealthDamageManager instance;
 
@@ -31,13 +32,11 @@ namespace Game.HealthManager
 
             // persist this manager between scenes
             DontDestroyOnLoad(gameObject);
+
+            // playerMovement = health.GetComponent<PlayerMovement>();
         }
 
-        void Start()
-        {
-            // initially disable ragdoll
-            playerRobotRagdoll.SetActive(false);
-        }
+        public bool isPlayerDead => health.isDead;
 
 
         public void Jab()

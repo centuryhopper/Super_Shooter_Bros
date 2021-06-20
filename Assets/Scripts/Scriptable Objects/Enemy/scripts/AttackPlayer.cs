@@ -8,7 +8,7 @@ using Game.Enums;
 using Game.Hash;
 using Game.EnemyAI;
 using Game.HealthManager;
-using Game.singleton;
+
 
 namespace Game.EnemyAbilities
 {
@@ -23,7 +23,7 @@ namespace Game.EnemyAbilities
         {
             UnityEngine.Debug.Log($"AI is in attack mode");
             EnemyMovement e = c.GetEnemyMovement(a);
-            player = GameObject.FindWithTag("Player").transform;
+            player = HealthDamageManager.instance.player;
 
 
         }
@@ -33,6 +33,15 @@ namespace Game.EnemyAbilities
             EnemyMovement e = c.GetEnemyMovement(a);
             Vector3 enemyToPlayer = player.transform.position - e.transform.position;
 
+            if (HealthDamageManager.instance.isPlayerDead)
+            {
+                // disable pathFindingAgent
+                e.aiProgress.pathFindingAgent.gameObject.SetActive(false);
+
+                // go back to idle
+                a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.attack_player], false);
+            }
+
             // TODO if player is out of range, transition back to start-walking state DONE
             // TODO there's a subtle bug of the enemy switching back to start-walking state and then only playing the animation but never physically moving towards the player
             if (Vector3.SqrMagnitude(enemyToPlayer) > 2f)
@@ -40,6 +49,8 @@ namespace Game.EnemyAbilities
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.attack_player], false);
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], true);
             }
+
+
 
 
 
