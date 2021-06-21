@@ -51,6 +51,7 @@ namespace Game.PlayerCharacter
 
 
         [Header("Player movements")]
+
         public bool jump;
         public bool moveLeft;
         public bool moveRight;
@@ -92,7 +93,7 @@ namespace Game.PlayerCharacter
         #endregion
 
         Transform t;
-
+        public bool allowMovement {get; set;} = true;
 
         void Awake()
         {
@@ -299,6 +300,8 @@ namespace Game.PlayerCharacter
 
             // hover your mouse cursor over this function call for comment details
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
+
+            if (!allowMovement) return;
 
             #region Keyboardinput syncs
             jump = VirtualInputManager.Instance.jump;

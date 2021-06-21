@@ -23,6 +23,8 @@ namespace Game.PlayerCharacter
 
         public void stopAllPlayerMovement()
         {
+            UnityEngine.Debug.Log($"stopping all player movement");
+            playerMovement.allowMovement = false;
             playerMovement.jump = false;
             playerMovement.moveUp = false;
             playerMovement.moveDown = false;
@@ -72,6 +74,7 @@ namespace Game.PlayerCharacter
             }
 
             CopyTransformData(playerRobot.transform, playerRobotRagdoll.transform, rb.velocity);
+            rb.velocity = Vector3.zero;
 
             // turn on ragdoll and turn off player robot mesh
             playerRobot.SetActive(false);
@@ -79,6 +82,8 @@ namespace Game.PlayerCharacter
 
             stopAllPlayerMovement();
             playerMovement.enabled = false;
+            playerMovement.GetComponent<Shooting>().enabled = false;
+
         }
 
         private void die()
