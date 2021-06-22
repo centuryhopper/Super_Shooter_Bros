@@ -5,53 +5,57 @@ using UnityEngine;
 using UnityEngine.Audio;
 using TMPro;
 
-public class SettingsMenu : MonoBehaviour
+namespace Game.GameUI
 {
-    public AudioMixer audioMixer;
-    Resolution[] resolutions;
-    public TMP_Dropdown resolutionDropdown;
-
-    void Start()
+    public class SettingsMenu : MonoBehaviour
     {
-        resolutions = Screen.resolutions;
-        // just to be safe
-        resolutionDropdown.ClearOptions();
+        public AudioMixer audioMixer;
+        Resolution[] resolutions;
+        public TMP_Dropdown resolutionDropdown;
 
-        int currentResIndex = 0;
-        resolutionDropdown.AddOptions(
-            resolutions.Select((res, i) => {
-            if (Screen.currentResolution.width == resolutions[i].width &&
-            Screen.currentResolution.height == resolutions[i].height)
-            {
-                currentResIndex = i;
-            }
-            return res.width + " x " + res.height;
-        }).ToList());
+        void Start()
+        {
+            resolutions = Screen.resolutions;
+            // just to be safe
+            resolutionDropdown.ClearOptions();
 
-        resolutionDropdown.value = currentResIndex;
-        resolutionDropdown.RefreshShownValue();
+            int currentResIndex = 0;
+            resolutionDropdown.AddOptions(
+                resolutions.Select((res, i) =>
+                {
+                    if (Screen.currentResolution.width == resolutions[i].width &&
+                Screen.currentResolution.height == resolutions[i].height)
+                    {
+                        currentResIndex = i;
+                    }
+                    return res.width + " x " + res.height;
+                }).ToList());
 
-    }
+            resolutionDropdown.value = currentResIndex;
+            resolutionDropdown.RefreshShownValue();
 
-    public void setResolution(int i)
-    {
-        Screen.SetResolution(resolutions[i].width, resolutions[i].height, Screen.fullScreen);
-    }
+        }
 
-    public void setVolume(float volume)
-    {
-        // UnityEngine.Debug.Log($"volume: {volume}");
-        audioMixer.SetFloat("Volume", volume);
-    }
+        public void setResolution(int i)
+        {
+            Screen.SetResolution(resolutions[i].width, resolutions[i].height, Screen.fullScreen);
+        }
 
-    public void setQuality(int qualityIndex)
-    {
-        UnityEngine.Debug.Log($"{qualityIndex}");
-        QualitySettings.SetQualityLevel(qualityIndex);
-    }
+        public void setVolume(float volume)
+        {
+            // UnityEngine.Debug.Log($"volume: {volume}");
+            audioMixer.SetFloat("Volume", volume);
+        }
 
-    public void setFullScreen(bool isFullScreen)
-    {
-        Screen.fullScreen = isFullScreen;
+        public void setQuality(int qualityIndex)
+        {
+            UnityEngine.Debug.Log($"{qualityIndex}");
+            QualitySettings.SetQualityLevel(qualityIndex);
+        }
+
+        public void setFullScreen(bool isFullScreen)
+        {
+            Screen.fullScreen = isFullScreen;
+        }
     }
 }
