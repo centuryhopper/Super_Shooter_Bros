@@ -17,7 +17,11 @@ namespace Game.EnemyAI
         [SerializeField] private GameObject animatedModel;
         // [SerializeField] private NavMeshAgent navmeshAgent;
 
+        // [Header("AI movements")]
         private bool isDead;
+
+        // ai movements
+        public bool canAttack { get; set; }
         public bool jump { get; set; }
         public bool moveLeft { get; set; }
         public bool moveRight { get; set; }

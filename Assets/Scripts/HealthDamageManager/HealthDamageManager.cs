@@ -10,7 +10,7 @@ namespace Game.HealthManager
     {
         [SerializeField] Health health = null;
         // public PlayerMovement playerMovement = null;
-        public Transform player {get => health? health.transform : null;}
+        public Transform player = null;
         [SerializeField] float damageAmt = 5f;
 
         public static HealthDamageManager instance;
@@ -23,21 +23,24 @@ namespace Game.HealthManager
             {
                 instance = this;
             }
-            else
-            {
-                Destroy(gameObject);
-                return;
-            }
+            // else
+            // {
+            //     Destroy(gameObject);
+            //     return;
+            // }
             #endregion
 
             // persist this manager between scenes
-            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject);
+        }
 
-            // playerMovement = health.GetComponent<PlayerMovement>();
+        void OnEnable()
+        {
+            player = GameObject.FindWithTag("Player").transform;
+            health = player?.GetComponent<Health>();
         }
 
         public bool isPlayerDead => health.isDead;
-
 
         public void Jab()
         {
@@ -49,14 +52,7 @@ namespace Game.HealthManager
 
         public void playerTakeDamage()
         {
-            if (health != null)
-            {
-                health.takeDamage(damageAmt);
-            }
-            else
-            {
-                Debug.LogWarning("health is null");
-            }
+            health?.takeDamage(damageAmt);
         }
 
     }

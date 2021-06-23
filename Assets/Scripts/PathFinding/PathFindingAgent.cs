@@ -24,10 +24,11 @@ namespace Game.PathFind
         public Transform enemyTarget;
         public List<Vector3> meshLinks = new List<Vector3>(2);
 
-        public void SetSpeed(float speed)
-        {
-            agent.speed = speed;
-        }
+        public void setSpeed(float speed) => agent.speed = speed;
+
+        public void setAcceleration(float acceleration) => agent.acceleration = acceleration;
+
+        public void setAngularSpeed(float angularSpeed) => agent.angularSpeed = angularSpeed;
 
         void OnDrawGizmos()
         {
@@ -129,9 +130,9 @@ namespace Game.PathFind
                     break;
                 }
 
-                yield return waitForEndOfFrame;
+                yield return null;
             }
-            yield return waitForSeconds;
+            yield return null;
         }
 
     }

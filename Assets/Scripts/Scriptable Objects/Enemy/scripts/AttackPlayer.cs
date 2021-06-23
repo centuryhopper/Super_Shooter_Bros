@@ -31,6 +31,7 @@ namespace Game.EnemyAbilities
         public override void OnAbilityUpdate(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
             EnemyMovement e = c.GetEnemyMovement(a);
+            if (player is null || e is null) return;
             Vector3 enemyToPlayer = player.transform.position - e.transform.position;
 
             if (HealthDamageManager.instance.isPlayerDead)

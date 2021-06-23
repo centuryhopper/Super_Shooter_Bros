@@ -24,8 +24,10 @@ namespace Game.EnemyAbilities
             {
                 e.aiProgress.pathFindingAgent = Instantiate(Resources.Load<PathFindingAgent>("PathFindingAgent"), e.transform.position + new Vector3(0, 1f, 1f), Quaternion.identity);
 
-                // set speed
-                e.aiProgress.pathFindingAgent.SetSpeed(60f);
+                // this makes the pathfinding agent go super fast
+                e.aiProgress.pathFindingAgent.setSpeed(50f);
+                e.aiProgress.pathFindingAgent.setAcceleration(200f);
+                e.aiProgress.pathFindingAgent.setAngularSpeed(200f);
             }
 
             if (!e.aiProgress.pathFindingAgent.isActiveAndEnabled) return;

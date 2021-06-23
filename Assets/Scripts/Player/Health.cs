@@ -42,6 +42,7 @@ namespace Game.PlayerCharacter
                 // the level
                 // we will just ask the player for now and do the other
                 // two things as we progress
+                // Invoke("restartGameDelegate", 0f);
                 die();
                 handleDeath();
             }
@@ -83,7 +84,6 @@ namespace Game.PlayerCharacter
             stopAllPlayerMovement();
             playerMovement.enabled = false;
             playerMovement.GetComponent<Shooting>().enabled = false;
-
         }
 
         private void die()

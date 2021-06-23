@@ -7,7 +7,6 @@ namespace Game.GameUI
 {
     public class GamePauseMenu : MonoBehaviour
     {
-        [HideInInspector]
         public static bool isGamePaused = false;
         [SerializeField] GameObject pauseMenuUI = null;
 
