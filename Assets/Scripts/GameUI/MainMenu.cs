@@ -1,20 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game.GameUI
 {
     public class MainMenu : MonoBehaviour
     {
-        public void PlayGame()
+        [SerializeField] string sceneName = "MainMenu";
+        public void loadMainMenu()
         {
-            // go to next scene
-            UnityEngine.Debug.Log($"moving to next scene");
-        }
-
-        public void quitGame()
-        {
-            UnityEngine.Debug.Log($"Quitting game");
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(sceneName);
         }
     }
 }

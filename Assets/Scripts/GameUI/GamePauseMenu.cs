@@ -7,6 +7,7 @@ namespace Game.GameUI
 {
     public class GamePauseMenu : MonoBehaviour
     {
+        [HideInInspector]
         public static bool isGamePaused = false;
         [SerializeField] GameObject pauseMenuUI = null;
 
@@ -38,16 +39,5 @@ namespace Game.GameUI
             isGamePaused = false;
         }
 
-        public void loadMenu()
-        {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene("MainMenu");
-        }
-
-        public void QuitGame()
-        {
-            UnityEngine.Debug.Log($"Quitting game");
-            Application.Quit();
-        }
     }
 }
