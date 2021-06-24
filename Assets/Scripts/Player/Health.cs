@@ -1,16 +1,16 @@
 using System;
 using UnityEngine;
+using Game.Interfaces;
 
 namespace Game.PlayerCharacter
 {
-    public class Health : MonoBehaviour
+    public class Health : MonoBehaviour, IDamageable, IHealable, IKillable
     {
         public float playerHealth = 100f;
-        public bool isDead = false;
+        public bool isDead { get; set;} = false;
         [SerializeField] GameObject playerRobot = null;
         [SerializeField] GameObject playerRobotRagdoll = null;
         PlayerMovement playerMovement = null;
-
         Rigidbody rb = null;
 
         void Start()
@@ -86,7 +86,7 @@ namespace Game.PlayerCharacter
             playerMovement.GetComponent<Shooting>().enabled = false;
         }
 
-        private void die()
+        public void die()
         {
             // TODO pop up a menu asking the player to either quit or restart the game
             UnityEngine.Debug.Log($"player is dead");
@@ -95,6 +95,7 @@ namespace Game.PlayerCharacter
 
         public void takeDamage(float damage)
         {
+            UnityEngine.Debug.Log($"player taking damage");
             playerHealth -= damage;
             if (playerHealth < 0f)
             {

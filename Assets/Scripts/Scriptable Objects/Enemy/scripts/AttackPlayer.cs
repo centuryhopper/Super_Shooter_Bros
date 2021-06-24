@@ -23,7 +23,8 @@ namespace Game.EnemyAbilities
         {
             UnityEngine.Debug.Log($"AI is in attack mode");
             EnemyMovement e = c.GetEnemyMovement(a);
-            player = HealthDamageManager.instance.player;
+            // temporary solution for getting the player
+            player = GameObject.FindWithTag("Player").transform;
 
 
         }

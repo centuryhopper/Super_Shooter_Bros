@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathFindingAgent: {fileID: 0}
+  player: {fileID: 0}
 --- !u!114 &6850514335719515024
 MonoBehaviour:
   m_ObjectHideFlags: 0

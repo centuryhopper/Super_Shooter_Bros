@@ -44,11 +44,20 @@ namespace Game.Pooling
 
         void OnCollisionEnter(Collision collisionInfo)
         {
+            if (collisionInfo.transform.CompareTag("EnemyFighter"))
+            {
+                // enemy takes damage
+                
+            }
+
+
+            #region old plan
             //  instantiate bullet contact effect
 
             // put bullet back in the queue
 
             // destroy particle after a couple seconds
+            #endregion
         }
 
 

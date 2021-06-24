@@ -4,14 +4,17 @@ using Game.HealthManager;
 using UnityEngine;
 
 
-/// <summary>
-/// a component on the ai animated model for calling animation events
-/// </summary>
-public class ProvideDamage : MonoBehaviour
+namespace Game.EnemyAI
 {
-    // jab animation event (needs monobehaviour to work)
-    public void damagePlayer()
+    /// <summary>
+    /// a component on the ai animated model for calling animation events
+    /// </summary>
+    public class ProvideDamage : MonoBehaviour
     {
-        HealthDamageManager.instance.Jab();
+        // jab animation event (needs monobehaviour to work)
+        public void damagePlayer()
+        {
+            HealthDamageManager.instance.Jab();
+        }
     }
 }

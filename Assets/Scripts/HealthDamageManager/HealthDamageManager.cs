@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.PlayerCharacter;
 // using Game.EnemyAI;
+using Game.Interfaces;
 
 namespace Game.HealthManager
 {
+    // depend on the interface for who to damage and who to kill
+    // interfaces are also components in Unity!!!
     public class HealthDamageManager : MonoBehaviour
     {
-        [SerializeField] Health health = null;
-        // public PlayerMovement playerMovement = null;
-        public Transform player = null;
-        [SerializeField] float damageAmt = 5f;
-
+        [SerializeField] float playerDamageAmount = 100f;
+        [SerializeField] float enemyDamageAmount = 10f;
+        [SerializeField] float playerGainHealthAmount = 10f;
         public static HealthDamageManager instance;
+        [SerializeField] List<GameObject> entitiesWithHealth = null;
+
+        GameObject player = null;
 
         void Awake()
         {
@@ -32,27 +36,48 @@ namespace Game.HealthManager
 
             // persist this manager between scenes
             // DontDestroyOnLoad(gameObject);
+            foreach (var entity in entitiesWithHealth)
+            {
+                if (entity.CompareTag("Player"))
+                {
+                    player = entity;
+                    // only one player in the game
+                    break;
+                }
+            }
         }
 
-        void OnEnable()
-        {
-            player = GameObject.FindWithTag("Player").transform;
-            health = player?.GetComponent<Health>();
-        }
+        public bool isPlayerDead => player.GetComponent<IKillable>().isDead;
 
-        public bool isPlayerDead => health.isDead;
-
+        /// <summary>
+        /// So far this is getting called by the Enemy's provide damage class
+        /// </summary>
         public void Jab()
         {
             UnityEngine.Debug.Log($"here in Jab()");
-            playerTakeDamage();
-
-            // if player is dead, disable player robot model and enable its ragdoll version
+            damagePlayer();
         }
 
-        public void playerTakeDamage()
+        public void playerGainHealth()
         {
-            health?.takeDamage(damageAmt);
+            player.GetComponent<IHealable>().gainHealth(playerGainHealthAmount);
+        }
+
+        public void damagePlayer()
+        {
+            player.GetComponent<IDamageable>().takeDamage(playerDamageAmount);
+        }
+
+        public void damageEnemy()
+        {
+            foreach (var entity in entitiesWithHealth)
+            {
+                // TODO need to single in on the correct enemy once we have multiple enemies
+                if (entity.CompareTag("EnemyFighter"))
+                {
+                    entity.GetComponent<IDamageable>().takeDamage(enemyDamageAmount);
+                }
+            }
         }
 
     }
