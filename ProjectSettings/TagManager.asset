@@ -9,6 +9,7 @@ TagManager:
   - FxTemporaire
   - Fire
   - EnemyFighter
+  - playerBullet
   layers:
   - Default
   - TransparentFX

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.singleton;
 using UnityEngine;
+using Game.Interfaces;
 
 namespace Game.Pooling
 {
@@ -25,6 +26,7 @@ namespace Game.Pooling
 
         private Vector3 zeroVector;
 
+        private int poolSize = 10;
         void Awake()
         {
             zeroVector = Vector3.zero;
@@ -34,7 +36,7 @@ namespace Game.Pooling
             {
                 tag = "bullet",
                 prefab = Resources.Load<GameObject>("Bullet"),
-                size = 5
+                size = poolSize
             });
         }
 
@@ -48,7 +50,8 @@ namespace Game.Pooling
                 // every pool in our list will have a queue that can be accessed with a tag
                 Queue<GameObject> objectPoolQueue = new Queue<GameObject>();
 
-                // pool.size is 100 for my case bc I set that in the inspector
+                // pool.size will be the number of objects to spawn and recycled for use
+                // again during runtime
                 for (int i = 0; i < pool.size; i++)
                 {
                     GameObject obj = Instantiate(pool.prefab);
@@ -98,7 +101,7 @@ namespace Game.Pooling
             }
             #endregion
 
-            // once spawned, we want to
+            // once spawned, we want to enqueue it again for reuse
             poolDictionary[tag].Enqueue(objectToSpawn);
             // print("recycling");
 

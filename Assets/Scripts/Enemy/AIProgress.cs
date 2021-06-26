@@ -1,5 +1,6 @@
 using UnityEngine;
 using Game.PathFind;
+using Game.HealthManager;
 
 namespace Game.EnemyAI
 {
@@ -10,9 +11,9 @@ namespace Game.EnemyAI
         public PathFindingAgent pathFindingAgent;
         public Transform player;
 
-        void Awake()
+        void Start()
         {
-            player = GameObject.FindWithTag("Player").transform;
+            player = HealthDamageManager.instance.player.transform;
         }
 
         void Update()

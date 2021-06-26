@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Game.Interfaces;
+using Game.HealthManager;
 
 namespace Game.PlayerCharacter
 {
@@ -50,31 +51,7 @@ namespace Game.PlayerCharacter
 
         public void handleDeath()
         {
-
-            void CopyTransformData(Transform sourceTransform, Transform destinationTransform, Vector3 velocity)
-            {
-                if (sourceTransform.childCount != destinationTransform.childCount)
-                {
-                    Debug.LogWarning("Invalid transform copy, they need to match transform hierarchies");
-                    return;
-                }
-
-                for (int i = 0; i < sourceTransform.childCount; i++)
-                {
-                    Transform source = sourceTransform.GetChild(i);
-                    Transform destination = destinationTransform.GetChild(i);
-                    destination.position = source.position;
-                    destination.rotation = source.rotation;
-                    Rigidbody rb = destination.GetComponent<Rigidbody>();
-                    if (rb != null)
-                        rb.velocity = velocity;
-
-                    // recursive call on children
-                    CopyTransformData(source, destination, velocity);
-                }
-            }
-
-            CopyTransformData(playerRobot.transform, playerRobotRagdoll.transform, rb.velocity);
+            HealthDamageManager.instance.copyTransformData(playerRobot.transform, playerRobotRagdoll.transform, rb.velocity);
             rb.velocity = Vector3.zero;
 
             // turn on ragdoll and turn off player robot mesh

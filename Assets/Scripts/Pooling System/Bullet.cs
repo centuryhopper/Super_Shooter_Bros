@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Game.Interfaces;
 
 namespace Game.Pooling
 {
@@ -15,6 +15,10 @@ namespace Game.Pooling
         public float sideForce = .1f;
         public bool shouldCallOnObjectSpawn = false;
         public bool shouldCallOnObjectSpawnWithParam = true;
+        public float damageAmount = 10f;
+
+        // public float[] damageAmounst
+        // Dictionary of enum values (enemy type) as keys and float values (damageAmount) as values
 
         public void OnObjectSpawn()
         {
@@ -42,23 +46,30 @@ namespace Game.Pooling
             // print("fired off into the distance");
         }
 
-        void OnCollisionEnter(Collision collisionInfo)
+        // give the enemy a trigger collider
+        // 
+        void OnTriggerEnter(Collider other)
         {
-            if (collisionInfo.transform.CompareTag("EnemyFighter"))
+            if (other.CompareTag("EnemyFighter"))
             {
-                // enemy takes damage
-                
+                // damage enemy
+                UnityEngine.Debug.Log($"shot enemy");
+
+                // generate spark effect
+                other.GetComponent<IDamageable>().takeDamage(damageAmount);
+
             }
-
-
-            #region old plan
-            //  instantiate bullet contact effect
-
-            // put bullet back in the queue
-
-            // destroy particle after a couple seconds
-            #endregion
         }
+
+
+        //     #region old plan
+        //     //  instantiate bullet contact effect
+
+        //     // put bullet back in the queue
+
+        //     // destroy particle after a couple seconds
+        //     #endregion
+        // }
 
 
 

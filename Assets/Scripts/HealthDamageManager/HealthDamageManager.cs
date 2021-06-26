@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.PlayerCharacter;
-// using Game.EnemyAI;
 using Game.Interfaces;
 
 namespace Game.HealthManager
@@ -17,7 +15,7 @@ namespace Game.HealthManager
         public static HealthDamageManager instance;
         [SerializeField] List<GameObject> entitiesWithHealth = null;
 
-        GameObject player = null;
+        public GameObject player {get; private set; } = null;
 
         void Awake()
         {
@@ -47,6 +45,29 @@ namespace Game.HealthManager
             }
         }
 
+        public void copyTransformData(Transform sourceTransform, Transform destinationTransform, Vector3 velocity)
+        {
+            if (sourceTransform.childCount != destinationTransform.childCount)
+            {
+                Debug.LogWarning("Invalid transform copy, they need to match transform hierarchies");
+                return;
+            }
+
+            for (int i = 0; i < sourceTransform.childCount; i++)
+            {
+                Transform source = sourceTransform.GetChild(i);
+                Transform destination = destinationTransform.GetChild(i);
+                destination.position = source.position;
+                destination.rotation = source.rotation;
+                Rigidbody rb = destination.GetComponent<Rigidbody>();
+                if (rb != null)
+                    rb.velocity = velocity;
+
+                // recursive call on children
+                copyTransformData(source, destination, velocity);
+            }
+        }
+
         public bool isPlayerDead => player.GetComponent<IKillable>().isDead;
 
         /// <summary>
@@ -73,7 +94,7 @@ namespace Game.HealthManager
             foreach (var entity in entitiesWithHealth)
             {
                 // TODO need to single in on the correct enemy once we have multiple enemies
-                if (entity.CompareTag("EnemyFighter"))
+                if (entity.name == "EnemyFighter")
                 {
                     entity.GetComponent<IDamageable>().takeDamage(enemyDamageAmount);
                 }

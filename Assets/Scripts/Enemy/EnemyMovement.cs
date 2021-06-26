@@ -15,7 +15,6 @@ namespace Game.EnemyAI
         // CharacterJoint[] characterJoints;
         [SerializeField] private GameObject ragDoll;
         [SerializeField] private GameObject animatedModel;
-        // [SerializeField] private NavMeshAgent navmeshAgent;
 
         // [Header("AI movements")]
         private bool isDead;
