@@ -11,7 +11,6 @@ using Game.Interfaces;
 
 namespace Game.PlayerCharacter
 {
-
     public class PlayerMovement : MonoBehaviour
     {
         [HideInInspector]
@@ -241,6 +240,8 @@ namespace Game.PlayerCharacter
                 collisionSpheres.RepositionBackSpheres();
             }
 
+            #region temporarily commented out when I debug the game without ability to aim
+            
             // plauyer aim will follow the crosshair transform, which follows the hit.point,
             // if the hit.point is far enough
             Ray mouseRay = mainCam.ScreenPointToRay(Input.mousePosition);
@@ -284,6 +285,7 @@ namespace Game.PlayerCharacter
                     // weaponAimRig.weight = 0;
                 }
             }
+            #endregion
 
             // if (GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) != AnimationStateNames.HangingIdle &&
             //     GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) != AnimationStateNames.LedgeClimb)

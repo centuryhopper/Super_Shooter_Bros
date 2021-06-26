@@ -50,5 +50,10 @@ namespace Game.EnemyAI
             enemyRobot.SetActive(false);
             enemyRobotRagdoll.SetActive(true);
         }
+
+        public void resetDeathStatus()
+        {
+            this.isDead = false;
+        }
     }
 }

@@ -14,7 +14,6 @@ namespace Game.HealthManager
         [SerializeField] float playerGainHealthAmount = 10f;
         public static HealthDamageManager instance;
         [SerializeField] List<GameObject> entitiesWithHealth = null;
-
         public GameObject player {get; private set; } = null;
 
         void Awake()
@@ -69,6 +68,8 @@ namespace Game.HealthManager
         }
 
         public bool isPlayerDead => player.GetComponent<IKillable>().isDead;
+
+        public void resetPlayerDeath() => player.GetComponent<IKillable>().resetDeathStatus();
 
         /// <summary>
         /// So far this is getting called by the Enemy's provide damage class

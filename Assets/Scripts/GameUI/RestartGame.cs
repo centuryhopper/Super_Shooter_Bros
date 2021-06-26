@@ -2,47 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Game.PlayerCharacter;
+using Game.HealthManager;
 
 public class RestartGame : MonoBehaviour
 {
     public static bool gameHasEnded = false;
     [SerializeField] GameObject gameOverMenuUI = null;
-    [SerializeField] Health playerHealth = null;
+    [SerializeField] bool shouldDelayShowingMenu = true;
+    [SerializeField] float delayTime = 5f;
+    WaitForSeconds delay;
+    Coroutine showGameOverMenu = null;
 
-    void OnEnable()
+    void Start()
     {
+        UnityEngine.Debug.Log($"gameHasEnded: {gameHasEnded}");
         gameOverMenuUI.SetActive(false);
-        // Health.restartGameDelegate += gameOverMenu;
-        if (playerHealth == null)
+        delay = new WaitForSeconds(delayTime);
+
+        // stop the previous coroutine from running if one exists
+        if (showGameOverMenu != null)
         {
-            playerHealth = GameObject.FindWithTag("Player").GetComponent<Health>();
+            StopCoroutine(showGameOverMenu);
         }
+
     }
 
     void Update()
     {
-        if (playerHealth.isDead)
+        if (HealthDamageManager.instance.isPlayerDead && !gameHasEnded)
         {
-            gameOverMenu();
+            gameHasEnded = true;
+            // include a short delay before showing the game over menu
+            showGameOverMenu = StartCoroutine(gameOverMenu());
         }
     }
 
-    public void gameOverMenu()
+    IEnumerator gameOverMenu()
     {
-        if (!gameHasEnded)
-        {
-            gameHasEnded = true;
-            UnityEngine.Debug.Log($"game over");
-            // show game over menu
-            gameOverMenuUI.SetActive(true);
-        }
+        yield return delay;
+        UnityEngine.Debug.Log($"game over");
+        // show game over menu
+        gameOverMenuUI.SetActive(true);
     }
 
     public void restartGame()
     {
         // reset variables for the next time the scene is loaded
-        playerHealth.isDead = gameHasEnded = false;
+        gameHasEnded = false;
+        HealthDamageManager.instance.resetPlayerDeath();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

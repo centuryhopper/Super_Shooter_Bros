@@ -88,5 +88,10 @@ namespace Game.PlayerCharacter
                 playerHealth = 100f;
             }
         }
+
+        public void resetDeathStatus()
+        {
+            this.isDead = false;
+        }
     }
 }

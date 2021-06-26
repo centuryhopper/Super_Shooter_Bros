@@ -6,5 +6,6 @@ namespace Game.Interfaces
         // void die();
         // void handleDeath();
         bool isDead { get;set;}
+        void resetDeathStatus();
     }
 }
