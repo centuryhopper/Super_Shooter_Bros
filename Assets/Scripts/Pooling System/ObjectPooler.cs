@@ -62,7 +62,7 @@ namespace Game.Pooling
                 poolDictionary.Add(pool.tag, objectPoolQueue);
             }
 
-            Debug.Log($"your bullet pool size is {poolDictionary["bullet"].Count}");
+            // Debug.Log($"your bullet pool size is {poolDictionary["bullet"].Count}");
         }
 
         public GameObject InstantiateFromPool(string tag, Transform trans)

@@ -52,6 +52,12 @@ namespace Game.HealthManager
                 return;
             }
 
+            if (!sourceTransform.gameObject.activeInHierarchy)
+            {
+                // UnityEngine.Debug.LogWarning($"source transform is inactive");
+                return;
+            }
+
             for (int i = 0; i < sourceTransform.childCount; i++)
             {
                 Transform source = sourceTransform.GetChild(i);

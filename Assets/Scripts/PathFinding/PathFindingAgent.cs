@@ -51,7 +51,7 @@ namespace Game.PathFind
 
         void OnEnable()
         {
-            UnityEngine.Debug.Log($"stopping the previous coroutine");
+            // UnityEngine.Debug.Log($"stopping the previous coroutine");
             if (moveRoutine != null)
             {
                 StopCoroutine(moveRoutine);
@@ -123,7 +123,7 @@ namespace Game.PathFind
 
 
                     //  no links at this point, just the destination, which is the player
-                    UnityEngine.Debug.Log($"pathfinding agent has reached the player");
+                    // UnityEngine.Debug.Log($"pathfinding agent has reached the player");
                     agent.isStopped = true;
                     hasReachedADestination = true;
                     enemyShouldMove = true;

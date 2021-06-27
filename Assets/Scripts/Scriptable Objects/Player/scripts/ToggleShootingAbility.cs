@@ -14,7 +14,7 @@ namespace Game.PlayerCharacter
 
         public override void OnEnter(CharacterState c, Animator a, AnimatorStateInfo asi)
         {
-            Debug.Log(asi.IsName("HangingIdle") ? "shooting disabled" : "shooting enabled");
+            // Debug.Log(asi.IsName("HangingIdle") ? "shooting disabled" : "shooting enabled");
 
             playerMovement = c.GetPlayerMoveMent(a);
 

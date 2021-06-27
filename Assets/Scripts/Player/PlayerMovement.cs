@@ -92,6 +92,8 @@ namespace Game.PlayerCharacter
         #endregion
 
         Transform t;
+        private bool paused;
+
         public bool allowMovement {get; set;} = true;
 
         void Awake()
@@ -115,7 +117,7 @@ namespace Game.PlayerCharacter
 
         public void ToggleRigLayerWeights(int weightNumber)
         {
-            Debug.Log($"setting rig weights to {weightNumber}");
+            // Debug.Log($"setting rig weights to {weightNumber}");
             // rigs.ForEach(rig => rig.weight = weightNumber);
             rigs[1].weight = weightNumber;
             rigs[2].weight = weightNumber;
@@ -208,6 +210,21 @@ namespace Game.PlayerCharacter
         // todo maybe migrate the code below over to a state machine script
         void Update()
         {
+            // custom pause
+            if (Input.GetKeyDown(KeyCode.P) && !paused)
+            {
+                Time.timeScale = 0f;
+                paused = true;
+                return;
+            }
+            else if (Input.GetKeyDown(KeyCode.P))
+            {
+                Time.timeScale = 1f;
+                paused = false;
+                return;
+            }
+
+
             // Debug.Log($"top, bottom, front, back: {GetTopBottomFrontBackDimensions()}");
 
             // Debug.Log(GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict));
@@ -224,7 +241,7 @@ namespace Game.PlayerCharacter
                     ToggleRigLayerWeights(1);
                     break;
                 default:
-                    Debug.Log($"invalid state name");
+                    // Debug.Log($"invalid state name");
                     break;
             }
 

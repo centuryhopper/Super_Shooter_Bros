@@ -4,6 +4,8 @@ using Game.Enums;
 using Game.Hash;
 using Game.States;
 using UnityEngine;
+using Game.HealthManager;
+using Game.Interfaces;
 
 namespace Game.PlayerCharacter
 {
@@ -16,8 +18,10 @@ namespace Game.PlayerCharacter
 
         [Range(.01f, 5)]
         public float directionBlock = 0.3f;
-        private PlayerMovement playerMovement;
 
+        [Range(.01f,5f)]
+        public float blockDistance = 0.5f;
+        private PlayerMovement playerMovement;
         private float movementDirection = 1;
         private List<GameObject> spheresList;
         public float distanceOfDetection = 0;
@@ -52,7 +56,6 @@ namespace Game.PlayerCharacter
             // and backwards based on player's
             // facing direction
             faceDirection = p.faceDirection;
-            // Debug.Log($"facing: {faceDirection}");
 
             // side scroller
             if (playerMovement.moveRight)
@@ -67,6 +70,10 @@ namespace Game.PlayerCharacter
                         movementDirection = 1;
                         // multiple by the speed graph value so that we can still move while we jump
                         p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                    }
+                    else
+                    {
+                        UnityEngine.Debug.Log($"obstruction on the right");
                     }
                 }
                 // facing left
@@ -100,6 +107,10 @@ namespace Game.PlayerCharacter
                         // multiple by the speed graph value so that we can still move while we jump
                         p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                     }
+                    else
+                    {
+                        UnityEngine.Debug.Log($"obstruction on the left");
+                    }
                 }
             }
             else
@@ -117,11 +128,6 @@ namespace Game.PlayerCharacter
         /// <returns></returns>
         private bool IsBlocked(PlayerMovement p)
         {
-            // if (p.RB.velocity.z > -0.01f && p.RB.velocity.z <= 0)
-            // {
-            //     return true;
-            // }
-
             if (movementDirection > 0)
             {
                 spheresList = p.collisionSpheres.frontSphereGroundCheckers;
@@ -133,15 +139,33 @@ namespace Game.PlayerCharacter
                 directionBlock = -0.3f;
             }
 
-            UnityEngine.Debug.Log($"Checking for obstacles");
-
-            return spheresList.Any((GameObject obj) =>
+            return spheresList.Any((GameObject sphere) =>
             {
                 // show the rays
-                Debug.DrawRay(obj.transform.position, p.transform.forward * directionBlock, Color.black);
+                Debug.DrawRay(sphere.transform.position, p.transform.forward * directionBlock, Color.black);
 
+                bool didRayHitSomething = Physics.Raycast(sphere.transform.position, p.transform.forward * directionBlock, out RaycastHit hit, blockDistance);
+
+                if (didRayHitSomething)
+                {
+                    UnityEngine.Debug.Log($"checking to see if it was an enemy");
+                    // check if it was an enemy
+                    // if it was, make sure it's dead before crossing it, otherwise,
+                    // will not be able to walk thru it
+                    bool isEnemyDead = hit.transform.root.name.Contains("Ragdoll");
+                    // found an enemy
+                    if (isEnemyDead)
+                    {
+                        UnityEngine.Debug.Log($"enemy is dead");
+                        return false;
+                    }
+                    UnityEngine.Debug.Log($"enemy is not dead");
+                    UnityEngine.Debug.Log($"{hit.transform.root.name}");
+                }
+
+                UnityEngine.Debug.Log($"Still returning {didRayHitSomething} here");
                 // project a ray downwards
-                return (Physics.Raycast(obj.transform.position, p.transform.forward * directionBlock, out RaycastHit hit, directionBlock));
+                return didRayHitSomething;
             });
         }
 

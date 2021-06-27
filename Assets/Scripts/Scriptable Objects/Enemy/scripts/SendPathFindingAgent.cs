@@ -17,7 +17,7 @@ namespace Game.EnemyAbilities
             a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
 
             EnemyMovement e = c.GetEnemyMovement(a);
-            UnityEngine.Debug.Log($"SENDING AGENT from {e.gameObject.name}");
+            // UnityEngine.Debug.Log($"SENDING AGENT from {e.gameObject.name}");
 
             // instantiate pathfinding agent
             if (e.aiProgress.pathFindingAgent == null)

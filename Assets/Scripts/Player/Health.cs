@@ -35,7 +35,7 @@ namespace Game.PlayerCharacter
 
         void Update()
         {
-            if (playerHealth == 0f)
+            if (playerHealth <= 0f && !isDead)
             {
                 // disable player movement
                 // play death animation
@@ -57,10 +57,12 @@ namespace Game.PlayerCharacter
             // turn on ragdoll and turn off player robot mesh
             playerRobot.SetActive(false);
             playerRobotRagdoll.SetActive(true);
+            playerRobotRagdoll.transform.parent = null;
+            this.gameObject.SetActive(false);
 
-            stopAllPlayerMovement();
-            playerMovement.enabled = false;
-            playerMovement.GetComponent<Shooting>().enabled = false;
+            // stopAllPlayerMovement();
+            // playerMovement.enabled = false;
+            // playerMovement.GetComponent<Shooting>().enabled = false;
         }
 
         public void die()

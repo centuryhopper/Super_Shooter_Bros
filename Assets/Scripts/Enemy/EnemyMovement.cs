@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine;
 using Game.Interfaces;
 using NaughtyAttributes;
 
@@ -16,10 +16,9 @@ namespace Game.EnemyAI
         [SerializeField] private GameObject ragDoll;
         [SerializeField] private GameObject animatedModel;
 
-        // [Header("AI movements")]
         private bool isDead;
 
-        // ai movements
+        #region ai movements
         public bool canAttack { get; set; }
         public bool jump { get; set; }
         public bool moveLeft { get; set; }
@@ -28,31 +27,35 @@ namespace Game.EnemyAI
         public bool moveDown { get; set; }
         public bool turbo { get; set; }
         public bool secondJump { get; set; }
-
+        public bool allowMovement { get; set; } = true;
+        #endregion
+        
         [SerializeField] private float speed = 3f;
 
         [ReadOnly]
         public float faceDirection = 1;
         public bool IsFacingForward => faceDirection == 1;
         public Rigidbody rb = null;
-        // public bool hasReachedStartOffMesh = false;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
             aiProgress = GetComponentInChildren<AIProgress>();
-            ragDoll.gameObject.SetActive(false);
+            // ragDoll.gameObject.SetActive(false);
         }
 
         private void Update()
         {
+            // TODO initialize allowMovement to true
+            if (!allowMovement) return;
             faceDirection = Vector3.Dot(transform.forward, Vector3.forward);
 
+            // UnityEngine.Debug.Log($"INSIDE ENEMY UPDATE");
             // for debugging
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                ToggleDead();
-            }
+            // if (Input.GetKeyDown(KeyCode.O))
+            // {
+            //     ToggleDead();
+            // }
 
             #region physical movement logic
             // TODO set up movment physics here

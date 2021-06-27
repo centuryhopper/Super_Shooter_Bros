@@ -15,7 +15,7 @@ public class RestartGame : MonoBehaviour
 
     void Start()
     {
-        UnityEngine.Debug.Log($"gameHasEnded: {gameHasEnded}");
+        // UnityEngine.Debug.Log($"gameHasEnded: {gameHasEnded}");
         gameOverMenuUI.SetActive(false);
         delay = new WaitForSeconds(delayTime);
 

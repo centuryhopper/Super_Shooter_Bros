@@ -33,7 +33,6 @@ namespace Game.Pooling
             GetComponent<Rigidbody>().velocity = force;
         }
 
-
         // fire off to a distance!
         public void OnObjectSpawn(Transform spawnPointTransform)
         {
@@ -53,10 +52,12 @@ namespace Game.Pooling
             if (other.CompareTag("EnemyFighter"))
             {
                 // damage enemy
-                UnityEngine.Debug.Log($"shot enemy");
+                // UnityEngine.Debug.Log($"shot enemy");
 
-                // generate spark effect
                 other.GetComponent<IDamageable>().takeDamage(damageAmount);
+
+                // TODO generate spark effect
+
 
             }
         }
