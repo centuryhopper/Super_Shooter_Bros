@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Interfaces;
+using Game.HealthManager;
 
 namespace Game.EnemyAI
 {
@@ -46,7 +47,7 @@ namespace Game.EnemyAI
 
         public void handleDeath()
         {
-            // HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
+            HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
             rb.velocity = Vector3.zero;
 
             // TODO need to stop using this because it won't scale for multiple enemies

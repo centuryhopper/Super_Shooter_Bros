@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using Game.Pooling;
 using Game.Audio;
@@ -30,6 +30,7 @@ namespace Game.PlayerCharacter
             {
                 // spawn from pool
                 GameObject bullet = bulletPooler.InstantiateFromPool(bulletTag, firePoint);
+                bullet.GetComponent<Bullet>().meshRenderer.enabled = true;
                 muzzleFlash.Play();
                 AudioManager.instance.Play(gunSound, 1);
                 yield return waitForSeconds;
@@ -42,6 +43,7 @@ namespace Game.PlayerCharacter
         {
             if (Input.GetButtonDown(Fire1))
             {
+                if (fireBulletCoro != null) StopCoroutine(fireBulletCoro);
                 fireBulletCoro = StartCoroutine(FireBullet());
             }
 

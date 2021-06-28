@@ -7,5 +7,7 @@ namespace Game.Interfaces
         void OnObjectSpawn();
 
         void OnObjectSpawn(Transform transform);
+
+        void OnObjectSpawn(Vector3 position);
     }
 }

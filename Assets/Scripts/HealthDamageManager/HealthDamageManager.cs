@@ -10,8 +10,8 @@ namespace Game.HealthManager
     public class HealthDamageManager : MonoBehaviour
     {
         [SerializeField] float playerDamageAmount = 100f;
-        [SerializeField] float enemyDamageAmount = 10f;
-        [SerializeField] float playerGainHealthAmount = 10f;
+        public float enemyDamageAmount = 1f;
+        public float playerGainHealthAmount = 10f;
         public static HealthDamageManager instance;
         [SerializeField] List<GameObject> entitiesWithHealth = null;
         public GameObject player {get; private set; } = null;

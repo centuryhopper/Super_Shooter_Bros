@@ -1,5 +1,7 @@
 using UnityEngine;
 using Game.Interfaces;
+using Game.HealthManager;
+using System.Collections;
 
 namespace Game.Pooling
 {
@@ -13,12 +15,33 @@ namespace Game.Pooling
         public float bulletForce;
         public float upForce = 1f;
         public float sideForce = .1f;
-        public bool shouldCallOnObjectSpawn = false;
-        public bool shouldCallOnObjectSpawnWithParam = true;
-        public float damageAmount = 10f;
+        [SerializeField] bool shouldCallOnObjectSpawn = false;
+        [SerializeField] bool shouldCallOnObjectSpawnWithParam = true;
+        [SerializeField] bool shouldCallOnObjectSpawnWithPosition = false;
+        public string particleTag = "particle";
+        ObjectPooler particlePooler = null;
+
+        [HideInInspector]
+        public MeshRenderer meshRenderer = null;
+        Rigidbody rb = null;
+        Coroutine delayForAFrame = null;
+        GameObject fleshEffect = null;
 
         // public float[] damageAmounst
         // Dictionary of enum values (enemy type) as keys and float values (damageAmount) as values
+
+        void Awake()
+        {
+            particlePooler = ObjectPooler.Instance;
+            meshRenderer = GetComponentInChildren<MeshRenderer>();
+            rb = GetComponent<Rigidbody>();
+            fleshEffect = Resources.Load<GameObject>("BulletImpactFleshSmallEffect");
+        }
+
+        public void stopPreviousCoroutine()
+        {
+            if (delayForAFrame != null) StopCoroutine(delayForAFrame);
+        }
 
         public void OnObjectSpawn()
         {
@@ -30,36 +53,89 @@ namespace Game.Pooling
 
             Vector3 force = new Vector3(xForce, yForce, zForce);
 
-            GetComponent<Rigidbody>().velocity = force;
+            rb.velocity = force;
         }
+        //
 
         // fire off to a distance!
         public void OnObjectSpawn(Transform spawnPointTransform)
         {
             if (!shouldCallOnObjectSpawnWithParam) return;
 
-            Rigidbody rb = GetComponent<Rigidbody>();
-
             // add force in the direction of the fire point position
             rb.AddForce(bulletForce * spawnPointTransform.forward, ForceMode.Impulse);
             // print("fired off into the distance");
         }
 
+        IEnumerator delay()
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawCube(transform.localPosition, Vector3.one / 6f);
+            // Gizmos.color = Color.magenta;
+            // Gizmos.DrawLine(transform.localPosition, transform.forward);
+        }
+
+        void Update()
+        {
+            Debug.DrawRay(transform.localPosition, transform.forward*1.5f, Color.red);
+        }
+
         // give the enemy a trigger collider
-        // 
         void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("EnemyFighter"))
             {
                 // damage enemy
-                // UnityEngine.Debug.Log($"shot enemy");
+                other.GetComponent<IDamageable>()?.takeDamage(HealthDamageManager.instance.enemyDamageAmount);
 
-                other.GetComponent<IDamageable>().takeDamage(damageAmount);
+                // collide with anything except the bullet itself and the player
+                if (Physics.Raycast(transform.localPosition, transform.forward*1.5f, out RaycastHit hit))
+                {
+                    // UnityEngine.Debug.Log($"hit the enemy at {hit.point}");
+                    GameObject obj = Instantiate(fleshEffect, hit.point, Quaternion.identity);
+                    ParticleSystem fleshHitEffects = obj.GetComponent<ParticleSystem>();
+                    fleshHitEffects.Play();
+                    Destroy(obj, 1.5f);
 
-                // TODO generate spark effect
+                    #region I tried to optimize the particle system for reusing instead of destroying but I failed
+                    // var fleshEffect = particlePooler.InstantiateFromPool(particleTag, hit.point);
+                    // // fleshEffect.GetComponent<ParticleSystem>().Play();
+                    // // stopPreviousCoroutine();
+                    // // delayForAFrame = StartCoroutine(delay());
+                    // // fleshEffect.SetActive(false);
+                    #endregion
+                    
+                }
+                else
+                {
+                    // UnityEngine.Debug.Log($"layername: {LayerMask.LayerToName(7)}");
+                    UnityEngine.Debug.Log($"didnt hit anything");
+                }
 
+                // stop the velocity and move somewhere outside of the game area
+                // rb.velocity = Vector3.zero;
+                // transform.position = Vector3.zero;
 
+                this.gameObject.SetActive(false);
+                // meshRenderer.enabled = false;
             }
+        }
+
+        void ProcessTriggerCollision()
+        {
+
+        }
+
+        public void OnObjectSpawn(Vector3 position)
+        {
+            if (!shouldCallOnObjectSpawnWithPosition) return;
+
+            throw new System.NotImplementedException();
         }
 
 

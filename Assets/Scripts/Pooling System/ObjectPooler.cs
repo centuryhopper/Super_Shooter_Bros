@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using Game.singleton;
 using UnityEngine;
 using Game.Interfaces;
+using System;
 
 namespace Game.Pooling
 {
+    /// <summary>
+    /// Stores a bunch of objects to be used and recycled for use again
+    /// </summary>
     public class ObjectPooler : Singleton<ObjectPooler>
     {
-        [System.Serializable]
+        [Serializable]
         public struct Pool
         {
             public string tag;
@@ -23,13 +27,9 @@ namespace Game.Pooling
         /// Will be used to identify the proper Queue based on the pool tag
         /// </summary>
         public Dictionary<string, Queue<GameObject>> poolDictionary;
-
-        private Vector3 zeroVector;
-
         private int poolSize = 10;
         void Awake()
         {
-            zeroVector = Vector3.zero;
             pools = new List<Pool>(3);
 
             pools.Add(new Pool
@@ -38,6 +38,13 @@ namespace Game.Pooling
                 prefab = Resources.Load<GameObject>("Bullet"),
                 size = poolSize
             });
+
+            // pools.Add(new Pool
+            // {
+            //     tag = "particle",
+            //     prefab = Resources.Load<GameObject>("BulletImpactFleshSmallEffect"),
+            //     size = poolSize
+            // });
         }
 
         void Start()
@@ -65,6 +72,13 @@ namespace Game.Pooling
             // Debug.Log($"your bullet pool size is {poolDictionary["bullet"].Count}");
         }
 
+        /// <summary>
+        /// This method takes the object's transform features into account when
+        /// instantiating one at runtime
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="trans"></param>
+        /// <returns>The gameObject to be instantiated at runtime</returns>
         public GameObject InstantiateFromPool(string tag, Transform trans)
         {
             // codes defensively to check if user spelled the tag correctly
@@ -81,13 +95,12 @@ namespace Game.Pooling
             if (objectToSpawn != null)
             {
                 // reset bullet velocity if it has already been used before
-                objectToSpawn.GetComponent<Rigidbody>().velocity = zeroVector;
+                Rigidbody rb = objectToSpawn.GetComponent<Rigidbody>();
+                if (rb != null) rb.velocity = Vector3.zero;
                 objectToSpawn.SetActive(true);
                 objectToSpawn.transform.position = trans.position;
                 objectToSpawn.transform.rotation = trans.rotation;
             }
-
-            #region I May need to move or delete this
 
             // search for the interface component in the game object spawned, which happens to be
             // from the Bullet.cs since that script implements IPooledObject, check that it's not null
@@ -99,12 +112,45 @@ namespace Game.Pooling
                 pooledObj.OnObjectSpawn();
                 pooledObj.OnObjectSpawn(trans);
             }
-            #endregion
 
             // once spawned, we want to enqueue it again for reuse
             poolDictionary[tag].Enqueue(objectToSpawn);
-            // print("recycling");
+            UnityEngine.Debug.Log($"recycling {objectToSpawn.name}");
 
+
+            return objectToSpawn;
+        }
+
+
+        /// <summary>
+        /// This method takes only the object's position into account when
+        /// instantiating one at runtime
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="trans"></param>
+        /// <returns>The gameObject to be instantiated at runtime</returns>
+        public GameObject InstantiateFromPool(string tag, Vector3 position)
+        {
+            // codes defensively to check if user spelled the tag correctly
+            if (!poolDictionary.ContainsKey(tag))
+            {
+                Debug.LogWarning("Pool with tag" + tag + "dosen't exist");
+                return null;
+            }
+
+            // Should not be empty because of Start() method populating it
+            GameObject objectToSpawn = poolDictionary[tag].Dequeue();
+
+            // make it active in the game
+            if (objectToSpawn != null)
+            {
+                objectToSpawn.SetActive(true);
+                objectToSpawn.transform.position = position;
+            }
+
+            // once spawned, we want to enqueue it again for reuse
+            poolDictionary[tag].Enqueue(objectToSpawn);
+            UnityEngine.Debug.Log($"recycling {objectToSpawn.name}");
 
             return objectToSpawn;
         }
