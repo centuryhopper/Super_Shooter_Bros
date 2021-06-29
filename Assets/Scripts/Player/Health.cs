@@ -1,4 +1,4 @@
-using System;
+// using System;
 using UnityEngine;
 using Game.Interfaces;
 using Game.HealthManager;
@@ -13,9 +13,11 @@ namespace Game.PlayerCharacter
         [SerializeField] GameObject playerRobotRagdoll = null;
         PlayerMovement playerMovement = null;
         Rigidbody rb = null;
+        private float playerMaxHealth;
 
         void Start()
         {
+            playerMaxHealth = playerHealth;
             rb = GetComponent<Rigidbody>();
             playerMovement = GetComponent<PlayerMovement>();
             // initially disable ragdoll
@@ -72,28 +74,8 @@ namespace Game.PlayerCharacter
             isDead = true;
         }
 
-        public void takeDamage(float damage)
-        {
-            UnityEngine.Debug.Log($"player taking damage");
-            playerHealth -= damage;
-            if (playerHealth < 0f)
-            {
-                playerHealth = 0f;
-            }
-        }
-
-        public void gainHealth(float health)
-        {
-            playerHealth += health;
-            if (playerHealth > 100f)
-            {
-                playerHealth = 100f;
-            }
-        }
-
-        public void resetDeathStatus()
-        {
-            this.isDead = false;
-        }
+        public void takeDamage(float damage) => playerHealth = Mathf.Max(playerHealth - damage, 0f);
+        public void gainHealth(float health) => playerHealth = Mathf.Min(playerHealth + health, playerMaxHealth);
+        public void resetDeathStatus() => this.isDead = false;
     }
 }

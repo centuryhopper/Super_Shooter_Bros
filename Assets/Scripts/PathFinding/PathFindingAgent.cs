@@ -60,7 +60,11 @@ namespace Game.PathFind
 
         public void GoToTarget()
         {
-            meshLinks.Clear();
+            meshLinks?.Clear();
+            if (moveRoutine != null)
+            {
+                StopCoroutine(moveRoutine);
+            }
 
             #region move the agent towards destination
             agent.enabled = true;

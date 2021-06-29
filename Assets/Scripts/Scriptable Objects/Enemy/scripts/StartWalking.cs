@@ -70,44 +70,51 @@ namespace Game.EnemyAbilities
                 e.moveLeft = e.moveRight = false;
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.attack_player], true);
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
+                return;
             }
 
 
-            Vector3 startOffMeshPos = e.aiProgress.pathFindingAgent.startSphere.transform.position;
-            Vector3 endOffMeshPos = e.aiProgress.pathFindingAgent.endSphere.transform.position;
-            Vector3 enemyToPathFindingAgent = e.aiProgress.pathFindingAgent.transform.position - e.transform.position;
+            // Vector3 startOffMeshPos = e.aiProgress.pathFindingAgent.startSphere.transform.position;
+            // Vector3 endOffMeshPos = e.aiProgress.pathFindingAgent.endSphere.transform.position;
+            // Vector3 enemyToPathFindingAgent = e.aiProgress.pathFindingAgent.transform.position - e.transform.position;
 
-            Vector3 enemyToStartOffMesh = startOffMeshPos - e.transform.position;
+            // Vector3 enemyToStartOffMesh = startOffMeshPos - e.transform.position;
 
             // checkpoint is close enough to me, so stop walking
             // TODO theres currently a bug for when you change the startOffMesPos too early to a place thats unreachable to the enemy, it will keep on sprinting forever because it only stops until it reaches the startOffMesPos. A fix to this could be to not move the pathfinding agent until the enemy AI reached its startoffmesh position first
-            if (Vector3.SqrMagnitude(enemyToPathFindingAgent) < 2f)
-            {
-                // UnityEngine.Debug.Log($"AI going back to idle state");
-                e.moveLeft = e.moveRight = false;
 
-                // go back to idle animation when close enough to a offmesh link check point
-                a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
-            }
+            // TODO may need to delete this if check
+            // if (Vector3.SqrMagnitude(enemyToPathFindingAgent) < 2f)
+            // {
+            //     // UnityEngine.Debug.Log($"AI going back to idle state");
+            //     e.moveLeft = e.moveRight = false;
+
+            //     // go back to idle animation when close enough to a offmesh link check point
+            //     a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.start_walking], false);
+            // }
 
             // whether we should jump on to a platform
             // don't jump if the start offmesh link is at a higher position
             // than the end offmesh link because that means there's a drop
 
-            else if (e.aiProgress.EnemyToStartOffMeshDistance() < 0.01f && endOffMeshPos.y > startOffMeshPos.y)
+            // jump
+            if (e.aiProgress.EnemyToStartOffMeshDistance() < 0.08f && e.aiProgress.isEndSphereHigher())
             {
                 // e.hasReachedStartOffMesh = true;
                 e.moveLeft = e.moveRight = false;
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.jump_platform], true);
+                return;
             }
 
-            else if (e.aiProgress.EnemyToStartOffMeshDistance() < 0.01f && endOffMeshPos.y < startOffMeshPos.y)
+            // fall
+            else if (e.aiProgress.EnemyToStartOffMeshDistance() < 0.01f && e.aiProgress.isEndSphereLower())
             {
                 // e.hasReachedStartOffMesh = true;
                 a.SetBool(HashManager.Instance.aiWalkParamsDict[AI_Walk_Transitions.fall_platform], true);
+                return;
             }
 
-            else if (e.aiProgress.EnemyToStartOffMeshDistance() < 0.5f && endOffMeshPos.y == startOffMeshPos.y)
+            else if (e.aiProgress.EnemyToStartOffMeshDistance() < 0.5f && e.aiProgress.endSphereIsStraight())
             {
                 e.moveLeft = e.moveRight = false;
 

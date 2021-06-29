@@ -26,8 +26,8 @@ namespace Game.EnemyAbilities
 
                 // this makes the pathfinding agent go super fast
                 e.aiProgress.pathFindingAgent.setSpeed(50f);
-                e.aiProgress.pathFindingAgent.setAcceleration(200f);
-                e.aiProgress.pathFindingAgent.setAngularSpeed(200f);
+                e.aiProgress.pathFindingAgent.setAcceleration(50f);
+                e.aiProgress.pathFindingAgent.setAngularSpeed(50f);
             }
 
             if (!e.aiProgress.pathFindingAgent.isActiveAndEnabled) return;
@@ -49,14 +49,16 @@ namespace Game.EnemyAbilities
         {
             EnemyMovement e = c.GetEnemyMovement(a);
 
+            // stay idle if the pathfinding agent is disabled
             if (!e.aiProgress.pathFindingAgent.isActiveAndEnabled) return;
 
-            // if player is far enough, send pathfinding agent once again (TEMPORARY SOLUTION because we'll probably move this logic to the enemy fight state machine script)
-            Vector3 agentToPlayer = e.aiProgress.player.position - e.aiProgress.pathFindingAgent.transform.position;
-            if (Vector3.SqrMagnitude(agentToPlayer) > 3f)
-            {
-                // e.aiProgress.pathFindingAgent.GoToTarget();
-            }
+            // // if player is far enough, send pathfinding agent once again (TEMPORARY SOLUTION because we'll probably move this logic to the enemy fight state machine script)
+            // Vector3 agentToPlayer = e.aiProgress.player.position - e.aiProgress.pathFindingAgent.transform.position;
+            // if (Vector3.SqrMagnitude(agentToPlayer) > 3f)
+            // {
+            //     // todo comment out
+            //     e.aiProgress.pathFindingAgent.GoToTarget();
+            // }
 
             // if the pathfinding agent has reached a destination (could be an offmesh link position or the player position), then start to physically move the enemy towards that destination as well
             if (e.aiProgress.pathFindingAgent.enemyShouldMove)

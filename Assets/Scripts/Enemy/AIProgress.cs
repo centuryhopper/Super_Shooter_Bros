@@ -25,6 +25,28 @@ namespace Game.EnemyAI
 
         }
 
+        public bool isEndSphereHigher()
+        {
+            if (endSphereIsStraight()) return false;
+            return pathFindingAgent.endSphere.transform.position.y > pathFindingAgent.startSphere.transform.position.y;
+        }
+
+        public bool isEndSphereLower()
+        {
+            if (endSphereIsStraight()) return false;
+            return pathFindingAgent.endSphere.transform.position.y < pathFindingAgent.startSphere.transform.position.y;
+        }
+
+
+        /// <summary>
+        /// returns true if start and end sphere are roughly on the same level
+        /// </summary>
+        /// <returns></returns>
+        public bool endSphereIsStraight()
+        {
+            return Mathf.Abs(pathFindingAgent.endSphere.transform.position.y - pathFindingAgent.startSphere.transform.position.y) <= 0.01f;
+        }
+
         // TODO use these functions in the state machine scripts (replace wherever we get the distance)
         public float EnemyToEndOffMeshDistance()
         {

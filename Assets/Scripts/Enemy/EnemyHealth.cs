@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,11 +34,7 @@ namespace Game.EnemyAI
 
         public void takeDamage(float damage)
         {
-            enemyHealth -= damage;
-            if (enemyHealth < 0f)
-            {
-                enemyHealth = 0f;
-            }
+            enemyHealth = Mathf.Max(enemyHealth - damage, 0f);
         }
 
         public void die()
