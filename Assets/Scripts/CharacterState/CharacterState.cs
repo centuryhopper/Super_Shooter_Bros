@@ -31,6 +31,19 @@ namespace Game.States
             return enemyMovement;
         }
 
+
+        private EnemyAIController enemyAIController;
+
+        public EnemyAIController GetEnemyAIController(Animator animator)
+        {
+            if (enemyAIController == null)
+            {
+                enemyAIController = animator.GetComponentInParent<EnemyAIController>();
+            }
+
+            return enemyAIController;
+        }
+
         // list of scriptable objects
         public List<StateData> abilityDataLst = new List<StateData>();
         public void UpdateAll(CharacterState c, Animator a, AnimatorStateInfo asi)

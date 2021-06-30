@@ -47,7 +47,7 @@ namespace Game.EnemyAI
             HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
             rb.velocity = Vector3.zero;
 
-            // TODO need to stop using this because it won't scale for multiple enemies
+            // TODO need to stop using IgnoreLayerCollision because it won't scale for multiple different types of enemies
             // Physics.IgnoreLayerCollision(7,8, true);
             // UnityEngine.Debug.Log($"ignoring collisions between {LayerMask.LayerToName(7)} and {LayerMask.LayerToName(8)}");
 
