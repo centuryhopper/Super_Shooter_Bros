@@ -55,7 +55,6 @@ namespace Game.Pooling
 
             rb.velocity = force;
         }
-        //
 
         // fire off to a distance!
         public void OnObjectSpawn(Transform spawnPointTransform)

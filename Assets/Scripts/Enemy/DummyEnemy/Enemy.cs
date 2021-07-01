@@ -1,0 +1,109 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Game.Pooling;
+using UnityEngine.AI;
+using Game.Interfaces;
+
+namespace Game.EnemyAI
+{
+    public class Enemy : MonoBehaviour, IPooledObject, IDamageable
+    {
+        public EnemyAIController aiController;
+        public NavMeshAgent agent;
+        public EnemyBaseStats enemyBaseStats;
+        public float enemyHealth = 100;
+        private const string attack = "attack";
+        public AttackRadius attackRadius;
+        public Animator animator;
+        Coroutine lookRoutine;
+        
+        void onAttack(IDamageable target)
+        {
+            animator.SetTrigger(attack);
+            if (lookRoutine != null)
+            {
+                StopCoroutine(lookRoutine);
+            }
+
+            lookRoutine = StartCoroutine(lookAt(target.getTransform()));
+        }
+
+        IEnumerator lookAt(Transform target)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(target.position - transform.position);
+
+            float time = 0;
+            while (time < 1f)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, time);
+                time += Time.deltaTime * 2;
+                yield return null;
+            }
+
+            transform.rotation = lookRotation;
+        }
+
+        void OnEnable()
+        {
+            attackRadius.OnAttack += onAttack;
+            SetupAgentFromConfiguration();
+        }
+
+        void OnDisable()
+        {
+            attackRadius.OnAttack -= onAttack;
+            agent.enabled = false;
+        }
+
+        public void SetupAgentFromConfiguration()
+        {
+            agent.acceleration = enemyBaseStats.Acceleration;
+            agent.angularSpeed = enemyBaseStats.AngularSpeed;
+            agent.areaMask = enemyBaseStats.AreaMask;
+            agent.avoidancePriority = enemyBaseStats.AvoidancePriority;
+            agent.baseOffset = enemyBaseStats.BaseOffset;
+            agent.height = enemyBaseStats.Height;
+            agent.obstacleAvoidanceType = enemyBaseStats.ObstacleAvoidanceType;
+            agent.radius = enemyBaseStats.Radius;
+            agent.speed = enemyBaseStats.Speed;
+            agent.stoppingDistance = enemyBaseStats.StoppingDistance;
+            aiController.updateRate = enemyBaseStats.AIUpdateInterval;
+            enemyHealth = enemyBaseStats.Health;
+            attackRadius.sphereCollider.radius = enemyBaseStats.attackRadius;
+            attackRadius.attackDelay = enemyBaseStats.attackDelay;
+            attackRadius.damage = enemyBaseStats.damage;
+        }
+
+        public void OnObjectSpawn()
+        {
+            
+        }
+
+        public void OnObjectSpawn(Transform transform)
+        {
+            
+        }
+
+        public void OnObjectSpawn(Vector3 position)
+        {
+            
+        }
+
+        public void takeDamage(float damage)
+        {
+            enemyHealth = Mathf.Max(enemyHealth - damage, 0f);
+
+            if (enemyHealth <= 0f)
+            {
+                // TODO disable the animated model and enable the ragdoll
+                // gameObject.SetActive(false);
+            }
+        }
+
+        public Transform getTransform()
+        {
+            return transform;
+        }
+    }
+}

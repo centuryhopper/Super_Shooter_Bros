@@ -77,5 +77,10 @@ namespace Game.PlayerCharacter
         public void takeDamage(float damage) => playerHealth = Mathf.Max(playerHealth - damage, 0f);
         public void gainHealth(float health) => playerHealth = Mathf.Min(playerHealth + health, playerMaxHealth);
         public void resetDeathStatus() => this.isDead = false;
+
+        public Transform getTransform()
+        {
+            return transform;
+        }
     }
 }

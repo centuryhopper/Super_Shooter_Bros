@@ -64,5 +64,10 @@ namespace Game.EnemyAI
         {
             this.isDead = false;
         }
+
+        public Transform getTransform()
+        {
+            return transform;
+        }
     }
 }

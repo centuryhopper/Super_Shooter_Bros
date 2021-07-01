@@ -13,10 +13,8 @@ namespace Game.EnemyAI
         private const string didLand = "didLand";
         private AgentLinkMover linkMover = null;
         private Animator animator = null;
-
-
         public Transform target = null;
-        public float updateSpeed = 0.1f;
+        public float updateRate = 0.1f;
         private NavMeshAgent agent = null;
 
         void OnEnable()
@@ -45,7 +43,7 @@ namespace Game.EnemyAI
 
         IEnumerator Start()
         {
-            WaitForSeconds wait = new WaitForSeconds(updateSpeed);
+            WaitForSeconds wait = new WaitForSeconds(updateRate);
 
             while (this.enabled)
             {
@@ -54,11 +52,17 @@ namespace Game.EnemyAI
             }
         }
 
+        /// <summary>
+        /// Handles what animation to play when starting the jump
+        /// </summary>
         private void handleLinkStart()
         {
             animator.SetTrigger(jump);
         }
 
+        /// <summary>
+        /// Handles what animation to play when finishing the jump
+        /// </summary>
         private void handleLinkEnd()
         {
             animator.SetTrigger(didLand);

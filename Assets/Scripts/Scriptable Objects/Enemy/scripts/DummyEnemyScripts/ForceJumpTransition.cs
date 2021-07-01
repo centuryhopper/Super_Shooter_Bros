@@ -1,9 +1,7 @@
-using Game.Enums;
-using Game.Hash;
 using Game.States;
 using UnityEngine;
 
-namespace Game.PlayerCharacter
+namespace Game.EnemyAbilities
 {
     [CreateAssetMenu(fileName = "New State", menuName = "AI/ability/force transition", order = 0)]
     public class ForceJumpTransition : StateData
