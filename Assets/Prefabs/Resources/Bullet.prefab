@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1625877705635882514}
   - component: {fileID: 1625877705635882513}
   - component: {fileID: -329714472752906806}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Bullet
   m_TagString: playerBullet
   m_Icon: {fileID: 0}
@@ -67,6 +67,7 @@ MonoBehaviour:
   sideForce: 0.1
   shouldCallOnObjectSpawn: 0
   shouldCallOnObjectSpawnWithParam: 1
+  shouldCallOnObjectSpawnWithPosition: 0
   particleTag: particle
   meshRenderer: {fileID: 0}
 --- !u!65 &-329714472752906806

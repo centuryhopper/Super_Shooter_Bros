@@ -41,6 +41,7 @@ namespace Game.EnemyAI
             animator.SetBool(isMoving, agent.velocity.magnitude > 0.01f);
         }
 
+        // change this to a follow target coroutine so we can call it when enemy has spotted the player
         IEnumerator Start()
         {
             WaitForSeconds wait = new WaitForSeconds(updateRate);

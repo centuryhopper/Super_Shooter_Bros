@@ -1,8 +1,9 @@
 {
   "dependencies": {
+    "com.unity.ai.navigation.components": "https://github.com/Unity-Technologies/NavMeshComponents.git#package",
     "com.unity.animation.rigging": "1.0.3",
     "com.unity.burst": "1.5.4",
-    "com.unity.cinemachine": "2.7.3",
+    "com.unity.cinemachine": "2.7.4",
     "com.unity.collab-proxy": "1.5.7",
     "com.unity.entities": "0.16.0-preview.21",
     "com.unity.ide.rider": "3.0.7",
@@ -15,7 +16,7 @@
     "com.unity.probuilder": "5.0.3",
     "com.unity.render-pipelines.universal": "11.0.0",
     "com.unity.rendering.hybrid": "0.10.0-preview.21",
-    "com.unity.test-framework": "1.1.24",
+    "com.unity.test-framework": "1.1.26",
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.5.5",
     "com.unity.ugui": "1.0.0",
@@ -49,7 +50,6 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.unity.ai.navigation.components": "https://github.com/Unity-Technologies/NavMeshComponents.git#package"
+    "com.unity.modules.xr": "1.0.0"
   }
 }

@@ -3,6 +3,7 @@ using Game.Interfaces;
 using Game.HealthManager;
 using System.Collections;
 
+
 namespace Game.Pooling
 {
     /// <summary>
@@ -89,8 +90,7 @@ namespace Game.Pooling
         {
             if (other.CompareTag("Enemy"))
             {
-                // damage enemy
-                other.GetComponent<IDamageable>()?.takeDamage(HealthDamageManager.instance.enemyDamageAmount);
+                UnityEngine.Debug.Log($"{other.transform.root.name} was shot");
 
                 // collide with anything except the bullet itself and the player
                 if (Physics.Raycast(transform.localPosition, transform.forward*1.5f, out RaycastHit hit))
@@ -99,7 +99,7 @@ namespace Game.Pooling
                     GameObject obj = Instantiate(fleshEffect, hit.point, Quaternion.identity);
                     ParticleSystem fleshHitEffects = obj.GetComponent<ParticleSystem>();
                     fleshHitEffects.Play();
-                    Destroy(obj, 1.5f);
+                    Destroy(obj, .5f);
 
                     #region I tried to optimize the particle system for reusing instead of destroying but I failed
                     // var fleshEffect = particlePooler.InstantiateFromPool(particleTag, hit.point);
@@ -108,7 +108,8 @@ namespace Game.Pooling
                     // // delayForAFrame = StartCoroutine(delay());
                     // // fleshEffect.SetActive(false);
                     #endregion
-                    
+                    // damage enemy
+                    other.transform.root.GetComponent<IDamageable>()?.takeDamage(HealthDamageManager.instance.enemyDamageAmount);
                 }
                 else
                 {
@@ -121,7 +122,6 @@ namespace Game.Pooling
                 // transform.position = Vector3.zero;
 
                 this.gameObject.SetActive(false);
-                // meshRenderer.enabled = false;
             }
         }
 

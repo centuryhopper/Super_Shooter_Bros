@@ -73,9 +73,6 @@ public class AttackRadius : MonoBehaviour
 
                 // play ai attack animation
                 OnAttack?.Invoke(damageable);
-
-                damageable?.takeDamage(damage);
-
             }
 
 
@@ -83,6 +80,8 @@ public class AttackRadius : MonoBehaviour
 
             yield return wait;
 
+            // TODO may not need this line below because player attack system is a little different from
+            // the enemies'
             damageables.RemoveAll(DisabledDamageables);
         }
 

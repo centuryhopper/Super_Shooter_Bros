@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.Pooling;
 using UnityEngine.AI;
 using Game.Interfaces;
 using Game.HealthManager;
@@ -33,7 +32,6 @@ namespace Game.EnemyAI
             lookRoutine = StartCoroutine(lookAt(target.getTransform()));
         }
 
-        
         
         IEnumerator lookAt(Transform target)
         {
