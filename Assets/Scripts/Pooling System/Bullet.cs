@@ -87,7 +87,7 @@ namespace Game.Pooling
         // give the enemy a trigger collider
         void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("EnemyFighter"))
+            if (other.CompareTag("Enemy"))
             {
                 // damage enemy
                 other.GetComponent<IDamageable>()?.takeDamage(HealthDamageManager.instance.enemyDamageAmount);

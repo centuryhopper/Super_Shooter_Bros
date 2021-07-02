@@ -96,17 +96,17 @@ namespace Game.HealthManager
             player.GetComponent<IDamageable>().takeDamage(playerDamageAmount);
         }
 
-        public void damageEnemy()
-        {
-            foreach (var entity in entitiesWithHealth)
-            {
-                // TODO need to single in on the correct enemy once we have multiple enemies
-                if (entity.name == "EnemyFighter")
-                {
-                    entity.GetComponent<IDamageable>().takeDamage(enemyDamageAmount);
-                }
-            }
-        }
+        // public void damageEnemy()
+        // {
+        //     foreach (var entity in entitiesWithHealth)
+        //     {
+        //         // TODO need to single in on the correct enemy once we have multiple enemies
+        //         if (entity.name == "EnemyFighter")
+        //         {
+        //             entity.GetComponent<IDamageable>().takeDamage(enemyDamageAmount);
+        //         }
+        //     }
+        // }
 
     }
 }

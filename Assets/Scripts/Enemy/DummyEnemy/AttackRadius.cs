@@ -14,6 +14,8 @@ public class AttackRadius : MonoBehaviour
     public AttackEvent OnAttack;
     private Coroutine attackCoroutine;
     WaitForSeconds wait;
+    [SerializeField] Animator animator = null;
+    private const string attack = "attack";
 
     private void Awake()
     {
@@ -40,32 +42,42 @@ public class AttackRadius : MonoBehaviour
         IDamageable damageable = other.GetComponent<IDamageable>();
         if (damageable != null)
         {
+            UnityEngine.Debug.Log($"player leaving range");
+
             damageables.Remove(damageable);
             if (damageables.Count == 0)
             {
+                UnityEngine.Debug.LogWarning($"enemy has nothing to attack");
                 StopCoroutine(attackCoroutine);
                 attackCoroutine = null;
+            }
+            else
+            {
+                UnityEngine.Debug.Log($"enemy still has something to attack");
             }
         }
     }
 
+    // coroutine for attacking the player
     private IEnumerator Attack()
     {
         yield return wait;
 
         while (damageables.Count > 0)
         {
+            UnityEngine.Debug.Log($"here in attack coroutine");
             IDamageable damageable = null;
             for (var i = 0; i < damageables.Count; i++)
             {
                 damageable = damageables[i];
+
+                // play ai attack animation
+                OnAttack?.Invoke(damageable);
+
+                damageable?.takeDamage(damage);
+
             }
 
-            if (damageable != null)
-            {
-                OnAttack?.Invoke(damageable);
-                damageable.takeDamage(damage);
-            }
 
             damageable = null;
 

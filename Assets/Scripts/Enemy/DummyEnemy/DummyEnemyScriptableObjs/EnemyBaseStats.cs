@@ -31,6 +31,6 @@ namespace Game.EnemyAI
         public ObstacleAvoidanceType ObstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
         public float Radius = 0.5f;
         public float Speed = 3f;
-        public float StoppingDistance = 0.5f;
+        public float StoppingDistance = 2f;
     }
 }

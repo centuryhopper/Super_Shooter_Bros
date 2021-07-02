@@ -4,6 +4,7 @@ using UnityEngine;
 using Game.Pooling;
 using UnityEngine.AI;
 using Game.Interfaces;
+using Game.HealthManager;
 
 namespace Game.EnemyAI
 {
@@ -17,7 +18,10 @@ namespace Game.EnemyAI
         public AttackRadius attackRadius;
         public Animator animator;
         Coroutine lookRoutine;
-        
+        Rigidbody rb = null;
+        [SerializeField] GameObject enemyRobot = null;
+        [SerializeField] GameObject enemyRobotRagdoll = null;
+
         void onAttack(IDamageable target)
         {
             animator.SetTrigger(attack);
@@ -29,6 +33,8 @@ namespace Game.EnemyAI
             lookRoutine = StartCoroutine(lookAt(target.getTransform()));
         }
 
+        
+        
         IEnumerator lookAt(Transform target)
         {
             Quaternion lookRotation = Quaternion.LookRotation(target.position - transform.position);
@@ -46,6 +52,7 @@ namespace Game.EnemyAI
 
         void OnEnable()
         {
+            rb = GetComponent<Rigidbody>();
             attackRadius.OnAttack += onAttack;
             SetupAgentFromConfiguration();
         }
@@ -77,17 +84,17 @@ namespace Game.EnemyAI
 
         public void OnObjectSpawn()
         {
-            
+
         }
 
         public void OnObjectSpawn(Transform transform)
         {
-            
+
         }
 
         public void OnObjectSpawn(Vector3 position)
         {
-            
+
         }
 
         public void takeDamage(float damage)
@@ -97,7 +104,16 @@ namespace Game.EnemyAI
             if (enemyHealth <= 0f)
             {
                 // TODO disable the animated model and enable the ragdoll
-                // gameObject.SetActive(false);
+                HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
+                rb.velocity = Vector3.zero;
+
+                // turn on ragdoll and turn off player robot mesh
+                enemyRobot.SetActive(false);
+                enemyRobotRagdoll.SetActive(true);
+
+                // TODO destroy the enemy ragdoll after x seconds
+                enemyRobotRagdoll.transform.parent = null;
+                this.gameObject.SetActive(false);
             }
         }
 
