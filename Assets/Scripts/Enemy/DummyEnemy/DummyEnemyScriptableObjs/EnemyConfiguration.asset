@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 218e773ba4bd242eca0fa6d102e08f94, type: 3}
   m_Name: EnemyConfiguration
   m_EditorClassIdentifier: 
-  Health: 100
+  Health: 25
   attackDelay: 1
   damage: 5
   attackRadius: 1.5

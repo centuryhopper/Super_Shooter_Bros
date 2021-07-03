@@ -12,16 +12,19 @@ namespace Game.PlayerCharacter
         public string bulletTag = "bullet";
         public ParticleSystem muzzleFlash;
         public float fireBulletDelay = .1f;
+        public int numBullets = 100;
         private ObjectPooler bulletPooler;
+        ObjectPool bulletPool = null;
         private WaitForSeconds waitForSeconds;
         private Coroutine fireBulletCoro;
-        private static readonly string Fire1 = "Fire1", gunSound = "GunSound";
+        private const string Fire1 = "Fire1", gunSound = "GunSound";
 
         void Awake()
         {
             // initialize bullet gameobject pooler
-            bulletPooler = ObjectPooler.Instance;
+            // bulletPooler = ObjectPooler.Instance;
             waitForSeconds = new WaitForSeconds(fireBulletDelay);
+            bulletPool = ObjectPool.CreateInstance(Resources.Load<Bullet>("Bullet"), numBullets);
         }
 
         IEnumerator FireBullet()
@@ -29,8 +32,19 @@ namespace Game.PlayerCharacter
             while (true)
             {
                 // spawn from pool
-                GameObject bullet = bulletPooler.InstantiateFromPool(bulletTag, firePoint);
-                bullet.GetComponent<Bullet>().meshRenderer.enabled = true;
+                PoolableObject bullet = bulletPool.GetAndSetObject(firePoint);
+                if (bullet == null)
+                {
+                    UnityEngine.Debug.LogWarning($"Out of bullets");
+                    // stop the entire coroutine
+                    yield break;
+                }
+
+                // make sure the bullet comes out of the gun fire point
+                // bullet.transform.SetParent(firePoint);
+                // bullet.transform.localPosition = firePoint.position;
+
+                // show gun shooting spark and sound effect
                 muzzleFlash.Play();
                 AudioManager.instance.Play(gunSound, 1);
                 yield return waitForSeconds;

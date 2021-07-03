@@ -4,11 +4,11 @@ namespace Game.Pooling
 {
     public class PoolableObject : MonoBehaviour
     {
-        // public ObjectPooler owner = null;
+        public ObjectPool Parent;
 
         public virtual void OnDisable()
         {
-            
+            Parent.ReturnObjectToPool(this);
         }
     }
 }

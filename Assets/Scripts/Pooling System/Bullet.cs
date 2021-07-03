@@ -11,21 +11,15 @@ namespace Game.Pooling
     /// </summary>
 
     [RequireComponent(typeof(Rigidbody))]
-    public class Bullet : MonoBehaviour, IPooledObject
+    public class Bullet : AutoDestroyPoolableObject
     {
         public float bulletForce;
         public float upForce = 1f;
         public float sideForce = .1f;
-        [SerializeField] bool shouldCallOnObjectSpawn = false;
-        [SerializeField] bool shouldCallOnObjectSpawnWithParam = true;
-        [SerializeField] bool shouldCallOnObjectSpawnWithPosition = false;
         public string particleTag = "particle";
-        ObjectPooler particlePooler = null;
-
         [HideInInspector]
         public MeshRenderer meshRenderer = null;
         Rigidbody rb = null;
-        Coroutine delayForAFrame = null;
         GameObject fleshEffect = null;
 
         // public float[] damageAmounst
@@ -33,43 +27,44 @@ namespace Game.Pooling
 
         void Awake()
         {
-            particlePooler = ObjectPooler.Instance;
             meshRenderer = GetComponentInChildren<MeshRenderer>();
             rb = GetComponent<Rigidbody>();
             fleshEffect = Resources.Load<GameObject>("BulletImpactFleshSmallEffect");
         }
 
-        public void stopPreviousCoroutine()
+        public override void OnDisable()
         {
-            if (delayForAFrame != null) StopCoroutine(delayForAFrame);
+            base.OnDisable();
+            rb.velocity = Vector3.zero;
         }
 
-        public void OnObjectSpawn()
+        void OnEnable()
         {
-            if (!shouldCallOnObjectSpawn) return;
-
-            float xForce = Random.Range(-sideForce, sideForce);
-            float yForce = Random.Range(upForce / 2f, upForce);
-            float zForce = Random.Range(-sideForce, sideForce);
-
-            Vector3 force = new Vector3(xForce, yForce, zForce);
-
-            rb.velocity = force;
+            base.OnEnable();
+            OnObjectSpawn();
         }
+
+        #region old code
+        // public void OnObjectSpawn()
+        // {
+        //     if (!shouldCallOnObjectSpawn) return;
+
+        //     float xForce = Random.Range(-sideForce, sideForce);
+        //     float yForce = Random.Range(upForce / 2f, upForce);
+        //     float zForce = Random.Range(-sideForce, sideForce);
+
+        //     Vector3 force = new Vector3(xForce, yForce, zForce);
+
+        //     rb.velocity = force;
+        // }
+        #endregion
 
         // fire off to a distance!
-        public void OnObjectSpawn(Transform spawnPointTransform)
+        public void OnObjectSpawn()
         {
-            if (!shouldCallOnObjectSpawnWithParam) return;
-
             // add force in the direction of the fire point position
-            rb.AddForce(bulletForce * spawnPointTransform.forward, ForceMode.Impulse);
+            rb.AddForce(bulletForce * transform.forward, ForceMode.Impulse);
             // print("fired off into the distance");
-        }
-
-        IEnumerator delay()
-        {
-            yield return new WaitForEndOfFrame();
         }
 
         void OnDrawGizmos()
@@ -124,19 +119,6 @@ namespace Game.Pooling
                 this.gameObject.SetActive(false);
             }
         }
-
-        void ProcessTriggerCollision()
-        {
-
-        }
-
-        public void OnObjectSpawn(Vector3 position)
-        {
-            if (!shouldCallOnObjectSpawnWithPosition) return;
-
-            throw new System.NotImplementedException();
-        }
-
 
         //     #region old plan
         //     //  instantiate bullet contact effect

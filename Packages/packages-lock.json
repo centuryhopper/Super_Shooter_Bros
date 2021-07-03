@@ -250,15 +250,6 @@
         "com.unity.shadergraph": "11.0.0"
       }
     },
-    "com.unity.rendering.hybrid": {
-      "version": "0.10.0-preview.21",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.entities": "0.16.0-preview.21"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.scriptablebuildpipeline": {
       "version": "1.15.2",
       "depth": 1,
