@@ -80,8 +80,7 @@ public class AttackRadius : MonoBehaviour
 
             yield return wait;
 
-            // TODO may not need this line below because player attack system is a little different from
-            // the enemies'
+            // TODO may not need this line below because player attack system is a little different from the enemies'
             damageables.RemoveAll(DisabledDamageables);
         }
 
