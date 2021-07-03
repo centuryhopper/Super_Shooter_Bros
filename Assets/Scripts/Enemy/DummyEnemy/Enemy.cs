@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.AI;
 using Game.Interfaces;
 using Game.HealthManager;
+using Game.Pooling;
 
 namespace Game.EnemyAI
 {
-    public class Enemy : MonoBehaviour, IPooledObject, IDamageable
+    public class Enemy : PoolableObject, IDamageable
     {
         public EnemyAIController aiController;
         public NavMeshAgent agent;
@@ -31,7 +32,6 @@ namespace Game.EnemyAI
 
             lookRoutine = StartCoroutine(lookAt(target.getTransform()));
         }
-
         
         IEnumerator lookAt(Transform target)
         {
@@ -55,8 +55,10 @@ namespace Game.EnemyAI
             SetupAgentFromConfiguration();
         }
 
-        void OnDisable()
+        public override void OnDisable()
         {
+            base.OnDisable();
+
             attackRadius.OnAttack -= onAttack;
             agent.enabled = false;
         }
@@ -78,21 +80,6 @@ namespace Game.EnemyAI
             attackRadius.sphereCollider.radius = enemyBaseStats.attackRadius;
             attackRadius.attackDelay = enemyBaseStats.attackDelay;
             attackRadius.damage = enemyBaseStats.damage;
-        }
-
-        public void OnObjectSpawn()
-        {
-
-        }
-
-        public void OnObjectSpawn(Transform transform)
-        {
-
-        }
-
-        public void OnObjectSpawn(Vector3 position)
-        {
-
         }
 
         public void takeDamage(float damage)

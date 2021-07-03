@@ -49,7 +49,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!114 &1625877705635882513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,13 +62,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed70b8ee482e0745a648eb53288349a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoDestroyTime: 5
   bulletForce: 50
   upForce: 1
   sideForce: 0.1
-  shouldCallOnObjectSpawn: 0
-  shouldCallOnObjectSpawnWithParam: 1
-  shouldCallOnObjectSpawnWithPosition: 0
-  particleTag: particle
   meshRenderer: {fileID: 0}
 --- !u!65 &-329714472752906806
 BoxCollider:

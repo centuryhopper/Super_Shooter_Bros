@@ -16,7 +16,9 @@ namespace Game.EnemyAI
         public Transform target = null;
         public float updateRate = 0.1f;
         private NavMeshAgent agent = null;
-
+        private Coroutine followCoroutine = null;
+        public Transform player = null;
+        
         void OnEnable()
         {
             linkMover.onLinkStart += handleLinkStart;
@@ -42,13 +44,36 @@ namespace Game.EnemyAI
         }
 
         // change this to a follow target coroutine so we can call it when enemy has spotted the player
-        IEnumerator Start()
+        // IEnumerator Start()
+        // {
+        //     WaitForSeconds wait = new WaitForSeconds(updateRate);
+
+        //     while (this.enabled)
+        //     {
+        //         agent.SetDestination(target.position);
+        //         yield return wait;
+        //     }
+        // }
+
+        public void StartChasing()
+        {
+            if (followCoroutine == null)
+            {
+                followCoroutine = StartCoroutine(FollowTarget());
+            }
+            else
+            {
+                Debug.LogWarning("Called StartChasing on Enemy that is already chasing! This is likely a bug in some calling class!");
+            }
+        }
+
+        private IEnumerator FollowTarget()
         {
             WaitForSeconds wait = new WaitForSeconds(updateRate);
 
-            while (this.enabled)
+            while (gameObject.activeSelf)
             {
-                agent.SetDestination(target.position);
+                agent.SetDestination(player.transform.position);
                 yield return wait;
             }
         }

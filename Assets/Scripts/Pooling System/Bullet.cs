@@ -3,7 +3,6 @@ using Game.Interfaces;
 using Game.HealthManager;
 using System.Collections;
 
-
 namespace Game.Pooling
 {
     /// <summary>
@@ -16,7 +15,7 @@ namespace Game.Pooling
         public float bulletForce;
         public float upForce = 1f;
         public float sideForce = .1f;
-        public string particleTag = "particle";
+        
         [HideInInspector]
         public MeshRenderer meshRenderer = null;
         Rigidbody rb = null;
@@ -38,10 +37,10 @@ namespace Game.Pooling
             rb.velocity = Vector3.zero;
         }
 
-        void OnEnable()
+        public override void OnEnable()
         {
             base.OnEnable();
-            OnObjectSpawn();
+            spawnBullet();
         }
 
         #region old code
@@ -60,11 +59,11 @@ namespace Game.Pooling
         #endregion
 
         // fire off to a distance!
-        public void OnObjectSpawn()
+        public void spawnBullet()
         {
             // add force in the direction of the fire point position
             rb.AddForce(bulletForce * transform.forward, ForceMode.Impulse);
-            // print("fired off into the distance");
+            // UnityEngine.Debug.Log($"fired off into the distance");
         }
 
         void OnDrawGizmos()
@@ -85,7 +84,9 @@ namespace Game.Pooling
         {
             if (other.CompareTag("Enemy"))
             {
-                UnityEngine.Debug.Log($"{other.transform.root.name} was shot");
+                IDamageable enemy = other.transform.GetComponentInParent<IDamageable>();
+                if (enemy is null) UnityEngine.Debug.LogWarning($"enemy is null");
+                UnityEngine.Debug.Log($"{enemy?.getTransform().name} was shot");
 
                 // collide with anything except the bullet itself and the player
                 if (Physics.Raycast(transform.localPosition, transform.forward*1.5f, out RaycastHit hit))
@@ -103,8 +104,9 @@ namespace Game.Pooling
                     // // delayForAFrame = StartCoroutine(delay());
                     // // fleshEffect.SetActive(false);
                     #endregion
+                    
                     // damage enemy
-                    other.transform.root.GetComponent<IDamageable>()?.takeDamage(HealthDamageManager.instance.enemyDamageAmount);
+                    enemy?.takeDamage(HealthDamageManager.instance.enemyDamageAmount);
                 }
                 else
                 {
@@ -119,44 +121,6 @@ namespace Game.Pooling
                 this.gameObject.SetActive(false);
             }
         }
-
-        //     #region old plan
-        //     //  instantiate bullet contact effect
-
-        //     // put bullet back in the queue
-
-        //     // destroy particle after a couple seconds
-        //     #endregion
-        // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
