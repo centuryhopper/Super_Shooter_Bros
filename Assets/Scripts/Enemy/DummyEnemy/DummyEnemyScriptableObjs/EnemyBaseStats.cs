@@ -13,9 +13,8 @@ namespace Game.EnemyAI
     {
         [Header("Enemy Stats")]
         public float Health = 100;
-        public float attackDelay = 1f;
-        public float damage = 5f;
-        public float attackRadius = 1.5f;
+        public AttackStats attackStats;
+        public Enemy enemyPrefab;
 
         [Space(10)]
 
@@ -32,5 +31,25 @@ namespace Game.EnemyAI
         public float Radius = 0.5f;
         public float Speed = 3f;
         public float StoppingDistance = 2f;
+
+        // this used to be from enemy class, but is
+        // now moved to this scriptable object for organizing
+        public void SetupAgentFromConfiguration(Enemy enemy)
+        {
+            enemy.agent.acceleration = Acceleration;
+            enemy.agent.angularSpeed = AngularSpeed;
+            enemy.agent.areaMask = AreaMask;
+            enemy.agent.avoidancePriority = AvoidancePriority;
+            enemy.agent.baseOffset = BaseOffset;
+            enemy.agent.height = Height;
+            enemy.agent.obstacleAvoidanceType = ObstacleAvoidanceType;
+            enemy.agent.radius = Radius;
+            enemy.agent.speed = Speed;
+            enemy.agent.stoppingDistance = StoppingDistance;
+            enemy.aiController.updateRate = AIUpdateInterval;
+            enemy.enemyHealth = Health;
+
+            attackStats.setUpEnemy(enemy);
+        }
     }
 }

@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: EnemyConfiguration
   m_EditorClassIdentifier: 
   Health: 25
-  attackDelay: 1
-  damage: 5
-  attackRadius: 1.5
+  attackStats: {fileID: 11400000, guid: 41009d52c7b8b834791e513251fdb0ed, type: 2}
+  enemyPrefab: {fileID: 2317701550905382832, guid: a09527ef17a114982b1597cefd14a118, type: 3}
   AIUpdateInterval: 0.1
   Acceleration: 8
   AngularSpeed: 120

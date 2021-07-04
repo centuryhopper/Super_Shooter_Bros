@@ -52,7 +52,6 @@ namespace Game.EnemyAI
         {
             rb = GetComponent<Rigidbody>();
             attackRadius.OnAttack += onAttack;
-            SetupAgentFromConfiguration();
         }
 
         public override void OnDisable()
@@ -61,25 +60,6 @@ namespace Game.EnemyAI
 
             attackRadius.OnAttack -= onAttack;
             agent.enabled = false;
-        }
-
-        public void SetupAgentFromConfiguration()
-        {
-            agent.acceleration = enemyBaseStats.Acceleration;
-            agent.angularSpeed = enemyBaseStats.AngularSpeed;
-            agent.areaMask = enemyBaseStats.AreaMask;
-            agent.avoidancePriority = enemyBaseStats.AvoidancePriority;
-            agent.baseOffset = enemyBaseStats.BaseOffset;
-            agent.height = enemyBaseStats.Height;
-            agent.obstacleAvoidanceType = enemyBaseStats.ObstacleAvoidanceType;
-            agent.radius = enemyBaseStats.Radius;
-            agent.speed = enemyBaseStats.Speed;
-            agent.stoppingDistance = enemyBaseStats.StoppingDistance;
-            aiController.updateRate = enemyBaseStats.AIUpdateInterval;
-            enemyHealth = enemyBaseStats.Health;
-            attackRadius.sphereCollider.radius = enemyBaseStats.attackRadius;
-            attackRadius.attackDelay = enemyBaseStats.attackDelay;
-            attackRadius.damage = enemyBaseStats.damage;
         }
 
         public void takeDamage(float damage)

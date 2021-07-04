@@ -19,7 +19,7 @@ namespace Game.Spawner
         public Transform player = null;
         public int numEnemiesToSpawn = 5;
         public float spawnDelay = 1f;
-        public List<Enemy> enemyPrefabs = new List<Enemy>();
+        public List<EnemyBaseStats> enemies = new List<EnemyBaseStats>();
         private Dictionary<int, ObjectPool> enemyObjectPools = new Dictionary<int, ObjectPool>();
         private WaitForSeconds waitForSeconds;
         private NavMeshTriangulation triangulation;
@@ -31,9 +31,9 @@ namespace Game.Spawner
 
             // populate dictionary with all the types of enemies passed in to the list
             // each enemy prefab will have its own object pool
-            for (var i = 0; i < enemyPrefabs.Count; i++)
+            for (var i = 0; i < enemies.Count; i++)
             {
-                enemyObjectPools[i] = ObjectPool.CreateInstance(enemyPrefabs[i], numEnemiesToSpawn);
+                enemyObjectPools[i] = ObjectPool.CreateInstance(enemies[i].enemyPrefab, numEnemiesToSpawn);
             }
         }
 
@@ -60,14 +60,14 @@ namespace Game.Spawner
 
         void spawnRoundRobinEnemy(int spawnedEnemies)
         {
-            int spawnIndex = spawnedEnemies % enemyPrefabs.Count;
+            int spawnIndex = spawnedEnemies % enemies.Count;
 
             spawnEnemy(spawnIndex);
         }
 
         void spawnRandomEnemy()
         {
-            spawnEnemy(UnityEngine.Random.Range(0, enemyPrefabs.Count));
+            spawnEnemy(UnityEngine.Random.Range(0, enemies.Count));
 
         }
 
@@ -82,6 +82,7 @@ namespace Game.Spawner
             else
             {
                 Enemy enemy = poolableObject as Enemy;
+                enemies[spawnIndex].SetupAgentFromConfiguration(enemy);
 
                 int vertexIndex = UnityEngine.Random.Range(0, triangulation.vertices.Length);
 

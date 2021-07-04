@@ -10,7 +10,7 @@ namespace Game.Pooling
     /// </summary>
 
     [RequireComponent(typeof(Rigidbody))]
-    public class Bullet : AutoDestroyPoolableObject
+    public class Bullet : PoolableObject
     {
         public float bulletForce;
         public float upForce = 1f;
@@ -20,6 +20,35 @@ namespace Game.Pooling
         public MeshRenderer meshRenderer = null;
         Rigidbody rb = null;
         GameObject fleshEffect = null;
+
+        [Header("Disabling configurations")]
+        private const string disableMethodName = "disable";
+        public float autoDestroyTime = 5f;
+
+        // for enemies
+        public float damage;
+        public Transform target;
+
+        protected virtual void OnEnable()
+        {
+            // really important that we cancel invoke befoirehand. Otherwise all objects will after 'autoDestroyTime' seconds get disabled
+            CancelInvoke(disableMethodName);
+            Invoke(disableMethodName, autoDestroyTime);
+
+            // may need to tweak when to spawn for enemy shooters
+            // as this line is meant for the player shooting
+            spawnBullet();
+        }
+
+        protected void disable()
+        {
+            // base.OnDisable();
+            // only call this method once per bullet while being active,
+            // so thats why we use cancel invoke here
+            CancelInvoke(disableMethodName);
+            rb.velocity = Vector3.zero;
+            this.gameObject.SetActive(false);
+        }
 
         // public float[] damageAmounst
         // Dictionary of enum values (enemy type) as keys and float values (damageAmount) as values
@@ -31,17 +60,11 @@ namespace Game.Pooling
             fleshEffect = Resources.Load<GameObject>("BulletImpactFleshSmallEffect");
         }
 
-        public override void OnDisable()
-        {
-            base.OnDisable();
-            rb.velocity = Vector3.zero;
-        }
-
-        public override void OnEnable()
-        {
-            base.OnEnable();
-            spawnBullet();
-        }
+        // public override void OnDisable()
+        // {
+        //     base.OnDisable();
+        //     rb.velocity = Vector3.zero;
+        // }
 
         #region old code
         // public void OnObjectSpawn()
@@ -58,11 +81,21 @@ namespace Game.Pooling
         // }
         #endregion
 
-        // fire off to a distance!
+        // for player
         public void spawnBullet()
         {
             // add force in the direction of the fire point position
             rb.AddForce(bulletForce * transform.forward, ForceMode.Impulse);
+            // UnityEngine.Debug.Log($"fired off into the distance");
+        }
+
+        // for enemies
+        public void spawnBullet(Vector3 forward, float damage, Transform target)
+        {
+            this.damage = damage;
+            this.target = target;
+            // add force in the direction of the fire point position
+            rb.AddForce(bulletForce * forward, ForceMode.Impulse);
             // UnityEngine.Debug.Log($"fired off into the distance");
         }
 
@@ -118,7 +151,7 @@ namespace Game.Pooling
                 // rb.velocity = Vector3.zero;
                 // transform.position = Vector3.zero;
 
-                this.gameObject.SetActive(false);
+                disable();
             }
         }
 
