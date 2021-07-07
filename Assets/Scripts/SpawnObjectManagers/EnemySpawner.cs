@@ -14,7 +14,6 @@ namespace Game.Spawner
             RoundRobin,
             Random,
         }
-
         public SpawnMethod enemySpawnMethod = SpawnMethod.RoundRobin;
         public Transform player = null;
         public int numEnemiesToSpawn = 5;
@@ -39,20 +38,20 @@ namespace Game.Spawner
 
         IEnumerator Start()
         {
-            int spawnedEemies = 0;
+            int spawnedEnemies = 0;
             for (int i = 0; i < numEnemiesToSpawn; i++)
             {
                 switch (enemySpawnMethod)
                 {
                     case SpawnMethod.RoundRobin:
-                        spawnRoundRobinEnemy(spawnedEemies);
+                        spawnRoundRobinEnemy(spawnedEnemies);
                         break;
                     case SpawnMethod.Random:
                         spawnRandomEnemy();
                         break;
                 }
 
-                spawnedEemies++;
+                spawnedEnemies++;
 
                 yield return waitForSeconds;
             }
@@ -78,28 +77,33 @@ namespace Game.Spawner
             if (poolableObject is null)
             {
                 UnityEngine.Debug.LogWarning($"unable to fetch enemy");
+                return;
+            }
+            
+            Enemy enemy = poolableObject as Enemy;
+            enemies[spawnIndex].SetupAgentFromConfiguration(enemy);
+
+            int vertexIndex = UnityEngine.Random.Range(0, triangulation.vertices.Length);
+
+            // -1 means all areas
+            if (NavMesh.SamplePosition(triangulation.vertices[vertexIndex], out NavMeshHit hit, 2f, enemy.agent.areaMask))
+            {
+                // TODO check why warp isn't working
+                if (!enemy.agent.Warp(hit.position))
+                {
+                    UnityEngine.Debug.LogWarning($"Agent didn't spawn successfully");
+                    // return;
+                }
+
+                // enable enemy NavMesh agent and start chasing player
+                enemy.aiController.player = player;
+                enemy.aiController.triangulation = triangulation;
+                enemy.agent.enabled = true;
+                enemy.aiController.spawn();
             }
             else
             {
-                Enemy enemy = poolableObject as Enemy;
-                enemies[spawnIndex].SetupAgentFromConfiguration(enemy);
-
-                int vertexIndex = UnityEngine.Random.Range(0, triangulation.vertices.Length);
-
-                // -1 means all areas
-                if (NavMesh.SamplePosition(triangulation.vertices[vertexIndex], out NavMeshHit hit, 2f, -1))
-                {
-                    enemy.agent.Warp(hit.position);
-
-                    // enable enemy NavMesh agent and start chasing player
-                    enemy.aiController.player = player;
-                    enemy.agent.enabled = true;
-                    enemy.aiController.StartChasing();
-                }
-                else
-                {
-                    UnityEngine.Debug.LogWarning($"Unable to place agent on navmesh. Tried to use {triangulation.vertices[vertexIndex]}");
-                }
+                UnityEngine.Debug.LogWarning($"Unable to place agent on navmesh. Tried to use {triangulation.vertices[vertexIndex]}");
             }
         }
     }
