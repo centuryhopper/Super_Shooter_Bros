@@ -28,7 +28,6 @@ namespace Game.EnemyAI
         [Space(10)]
         [Header("State config")]
         public EnemyLineOfSightChecker lineOfSightChecker;
-        public EnemyState defaultState;
         private EnemyState state;
         public EnemyState State
         {
@@ -41,6 +40,8 @@ namespace Game.EnemyAI
             }
         }
 
+        public EnemyState defaultState;
+
         [Space(10)]
         [Header("Idle state parameters")]
         public float idleLocationRadius = 4f;
@@ -48,9 +49,10 @@ namespace Game.EnemyAI
 
         [Space(10)]
         [Header("Patrol state parameters")]
-        [SerializeField] int waypointIndex = 0;
+        public int waypointIndex = 0;
 
         // TODO choose your own waypoints for each enemy
+        // Use transform[] instead
         Vector3[] waypoints = new Vector3[2];
 
         void Awake()
