@@ -144,7 +144,8 @@ namespace Game.PlayerCharacter
                 // show the rays
                 Debug.DrawRay(sphere.transform.position, p.transform.forward * directionBlock, Color.black);
 
-                bool didRayHitSomething = Physics.Raycast(sphere.transform.position, p.transform.forward * directionBlock, out RaycastHit hit, blockDistance);
+                // the raycast will ignore the enemy layer and the attack radius layer
+                bool didRayHitSomething = Physics.Raycast(sphere.transform.position, p.transform.forward * directionBlock, out RaycastHit hit, blockDistance, ~(1 << 8) & ~(1 << 9));
 
                 if (didRayHitSomething)
                 {
@@ -163,12 +164,14 @@ namespace Game.PlayerCharacter
                     UnityEngine.Debug.Log($"{hit.transform.root.name}");
                 }
 
-                UnityEngine.Debug.Log($"Still returning {didRayHitSomething} here");
+                if (didRayHitSomething)
+                {
+                    UnityEngine.Debug.Log($"the ray did hit something, but either the enemy isn't dead or the ray didn't hit an enemy");
+                }
+
                 // project a ray downwards
                 return didRayHitSomething;
             });
         }
-
-        // Implement a CheckBack() method
     }
 }

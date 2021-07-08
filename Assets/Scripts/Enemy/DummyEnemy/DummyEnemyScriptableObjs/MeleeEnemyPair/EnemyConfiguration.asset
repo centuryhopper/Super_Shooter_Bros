@@ -15,6 +15,15 @@ MonoBehaviour:
   Health: 25
   attackStats: {fileID: 11400000, guid: 41009d52c7b8b834791e513251fdb0ed, type: 2}
   enemyPrefab: {fileID: 2317701550905382832, guid: a09527ef17a114982b1597cefd14a118, type: 3}
+  defaultState: 2
+  idleLocationRadius: 4
+  idleMovespeedMultiplier: 0.5
+  waypointIndex: 0
+  LineOfSightRange: 6
+  FieldOfView: 90
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
   AIUpdateInterval: 0.1
   Acceleration: 8
   AngularSpeed: 120

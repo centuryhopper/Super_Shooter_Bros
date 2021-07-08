@@ -7,18 +7,18 @@ namespace Game.EnemyAI
     [RequireComponent(typeof(SphereCollider))]
     public class EnemyLineOfSightChecker : MonoBehaviour
     {
-        public SphereCollider Collider;
+        public SphereCollider sphereCollider;
         public float FieldOfView = 90f;
         public LayerMask LineOfSightLayers;
         public delegate void GainSightEvent(IHealable player);
-        public GainSightEvent OnGainSight = delegate {};
+        public GainSightEvent OnGainSight = delegate { };
         public delegate void LoseSightEvent(IHealable player);
-        public LoseSightEvent OnLoseSight = delegate {};
+        public LoseSightEvent OnLoseSight = delegate { };
         private Coroutine CheckForLineOfSightCoroutine;
 
         private void Awake()
         {
-            Collider = GetComponent<SphereCollider>();
+            sphereCollider = GetComponent<SphereCollider>();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -30,6 +30,10 @@ namespace Game.EnemyAI
                 {
                     CheckForLineOfSightCoroutine = StartCoroutine(CheckForLineOfSight(player));
                 }
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning($"healable component not found on {other.name}");
             }
         }
 
@@ -51,7 +55,7 @@ namespace Game.EnemyAI
             float DotProduct = Vector3.Dot(transform.forward, Direction);
             if (DotProduct >= Mathf.Cos(FieldOfView))
             {
-                if (Physics.Raycast(transform.position, Direction, out RaycastHit Hit, Collider.radius, LineOfSightLayers))
+                if (Physics.Raycast(transform.position, Direction, out RaycastHit Hit, sphereCollider.radius, LineOfSightLayers))
                 {
                     if (Hit.transform.GetComponent<IHealable>() != null)
                     {
@@ -68,7 +72,7 @@ namespace Game.EnemyAI
         {
             WaitForSeconds Wait = new WaitForSeconds(0.1f);
 
-            while(!CheckLineOfSight(player))
+            while (!CheckLineOfSight(player))
             {
                 // wait for a little bit so we're not checking for line of sight on every frame
                 yield return Wait;

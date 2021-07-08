@@ -54,18 +54,23 @@ namespace Game.EnemyAI
         // TODO choose your own waypoints for each enemy
         // Use transform[] instead
         Vector3[] waypoints = new Vector3[2];
+        [SerializeField] Animation anim = null;
 
         void Awake()
         {
-            agent = GetComponent<NavMeshAgent>();
-            linkMover = GetComponent<AgentLinkMover>();
-            animator = GetComponentInChildren<Animator>();
-            lineOfSightChecker = GetComponentInChildren<EnemyLineOfSightChecker>();
+            if (agent is null)
+                agent = GetComponent<NavMeshAgent>();
+            if (linkMover is null)
+                linkMover = GetComponent<AgentLinkMover>();
+            if (animator is null)
+                animator = GetComponentInChildren<Animator>();
+            if (lineOfSightChecker is null)
+                lineOfSightChecker = GetComponentInChildren<EnemyLineOfSightChecker>();
         }
 
         void Update()
         {
-            animator.SetBool(isMoving, agent.velocity.magnitude > 0.01f);
+            animator.SetBool(isMoving, agent.velocity.magnitude > Mathf.Epsilon);
         }
 
         void OnEnable()
@@ -83,6 +88,9 @@ namespace Game.EnemyAI
             linkMover.onLinkStart -= handleLinkStart;
             linkMover.onLinkEnd -= handleLinkEnd;
             onStateChange -= handleStateChange;
+
+            lineOfSightChecker.OnGainSight -= handleGainSight;
+            lineOfSightChecker.OnLoseSight -= handleLoseSight;
 
             state = defaultState;
         }
@@ -142,11 +150,12 @@ namespace Game.EnemyAI
                 if (agent.isOnNavMesh && agent.enabled && agent.remainingDistance <= agent.stoppingDistance)
                 {
                     waypointIndex++;
+                    waypointIndex%=waypoints.Length;
 
-                    if (waypointIndex >= waypoints.Length)
-                    {
-                        waypointIndex = 0;
-                    }
+                    // if (waypointIndex >= waypoints.Length)
+                    // {
+                    //     waypointIndex = 0;
+                    // }
 
                     agent.SetDestination(waypoints[waypointIndex]);
                 }
@@ -230,7 +239,9 @@ namespace Game.EnemyAI
 
             while (gameObject.activeSelf)
             {
-                agent.SetDestination(player.transform.position);
+                // base layer is 0, attack layer is 1
+                if (agent.enabled && !animator.GetCurrentAnimatorStateInfo(1).IsName("AttackLayer.Punch"))
+                    agent.SetDestination(player.transform.position);
                 yield return wait;
             }
         }

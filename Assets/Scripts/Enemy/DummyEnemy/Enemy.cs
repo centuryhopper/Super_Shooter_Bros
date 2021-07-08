@@ -8,9 +8,6 @@ using Game.Pooling;
 
 namespace Game.EnemyAI
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class Enemy : PoolableObject, IDamageable
     {
         [Header("Custom Script Components")]
@@ -20,7 +17,7 @@ namespace Game.EnemyAI
         [Space(10)]
         public NavMeshAgent agent;
         public float enemyHealth = 100;
-        private const string attack = "attack";
+        private const string attack = "attack", stopAttack = "stopAttack";
         public Animator animator;
         Coroutine lookRoutine;
         Rigidbody rb = null;
@@ -29,6 +26,7 @@ namespace Game.EnemyAI
 
         void onAttack(IDamageable target)
         {
+            animator.ResetTrigger(stopAttack);
             animator.SetTrigger(attack);
             if (lookRoutine != null)
             {

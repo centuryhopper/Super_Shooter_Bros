@@ -70,7 +70,7 @@ namespace Game.EnemyAI
             enemy.aiController.idleMovespeedMultiplier = idleMovespeedMultiplier;
             enemy.aiController.waypointIndex = waypointIndex;
             enemy.aiController.lineOfSightChecker.FieldOfView = FieldOfView;
-            enemy.aiController.lineOfSightChecker.Collider.radius = LineOfSightRange;
+            enemy.aiController.lineOfSightChecker.sphereCollider.radius = LineOfSightRange;
             enemy.aiController.lineOfSightChecker.LineOfSightLayers = attackStats.lineOfSightLayers;
             #endregion
 
