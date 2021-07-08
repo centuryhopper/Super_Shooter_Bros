@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using Game.Enums;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,7 +16,6 @@ namespace Game.EnemyAI
         private const string isMoving = "isMoving";
         private const string jump = "jump";
         private const string didLand = "didLand";
-        private AgentLinkMover linkMover = null;
         private Animator animator = null;
         public Transform target = null;
         public float updateRate = 0.1f;
@@ -27,6 +26,7 @@ namespace Game.EnemyAI
         public StateChangeEvent onStateChange = delegate {};
         [Space(10)]
         [Header("State config")]
+        private AgentLinkMover linkMover = null;
         public EnemyLineOfSightChecker lineOfSightChecker;
         private EnemyState state;
         public EnemyState State

@@ -413,10 +413,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiController: {fileID: 108295858790004833}
-  agent: {fileID: 2679091877313943658}
-  enemyBaseStats: {fileID: 11400000, guid: 016bca95b958e4b45b1e9e1377293496, type: 2}
-  enemyHealth: 25
   attackRadius: {fileID: 8320954467625298675}
+  agent: {fileID: 2679091877313943658}
+  enemyHealth: 25
   animator: {fileID: 8390403500354516790}
   enemyRobot: {fileID: 3016092334759524342}
   enemyRobotRagdoll: {fileID: 5857902826362953027}
@@ -635,6 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec9f69b5bb875e4899b62825a9ebcec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackRadius: {fileID: 8320954467625298675}
 --- !u!54 &7023852680575084640
 Rigidbody:
   m_ObjectHideFlags: 0

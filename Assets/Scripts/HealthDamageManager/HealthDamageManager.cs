@@ -80,10 +80,10 @@ namespace Game.HealthManager
         /// <summary>
         /// So far this is getting called by the Enemy's provide damage class
         /// </summary>
-        public void Jab()
+        public void Jab(float damage)
         {
             UnityEngine.Debug.Log($"here in Jab()");
-            damagePlayer();
+            damagePlayer(damage);
         }
 
         public void playerGainHealth()
@@ -91,22 +91,9 @@ namespace Game.HealthManager
             player.GetComponent<IHealable>().gainHealth(playerGainHealthAmount);
         }
 
-        public void damagePlayer()
+        public void damagePlayer(float damage)
         {
-            player.GetComponent<IDamageable>().takeDamage(playerDamageAmount);
+            player.GetComponent<IDamageable>().takeDamage(damage);
         }
-
-        // public void damageEnemy()
-        // {
-        //     foreach (var entity in entitiesWithHealth)
-        //     {
-        //         // TODO need to single in on the correct enemy once we have multiple enemies
-        //         if (entity.name == "EnemyFighter")
-        //         {
-        //             entity.GetComponent<IDamageable>().takeDamage(enemyDamageAmount);
-        //         }
-        //     }
-        // }
-
     }
 }

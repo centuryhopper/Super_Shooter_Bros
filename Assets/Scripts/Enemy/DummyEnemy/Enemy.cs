@@ -8,14 +8,19 @@ using Game.Pooling;
 
 namespace Game.EnemyAI
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Enemy : PoolableObject, IDamageable
     {
+        [Header("Custom Script Components")]
         public EnemyAIController aiController;
+        public AttackRadius attackRadius;
+
+        [Space(10)]
         public NavMeshAgent agent;
-        public EnemyBaseStats enemyBaseStats;
         public float enemyHealth = 100;
         private const string attack = "attack";
-        public AttackRadius attackRadius;
         public Animator animator;
         Coroutine lookRoutine;
         Rigidbody rb = null;

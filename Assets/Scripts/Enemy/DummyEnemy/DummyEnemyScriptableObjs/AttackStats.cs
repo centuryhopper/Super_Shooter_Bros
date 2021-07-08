@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.AI;
 using Game.Pooling;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Game.EnemyAI
 {
@@ -19,7 +19,6 @@ namespace Game.EnemyAI
         public float attackDelay = 1.5f;
 
         [Space(10)]
-
         [Header("Ranged configurations")]
         public Bullet bulletPrefab;
         public Vector3 bulletSpawnOffset = new Vector3(0,1,0);

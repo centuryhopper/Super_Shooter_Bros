@@ -27,6 +27,7 @@ namespace Game.EnemyAI
         public float LineOfSightRange = 6f;
         public float FieldOfView = 90f;
 
+        // TODO pick your own waypoints
         public Transform[] waypoints = new Transform[2];
 
 

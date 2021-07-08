@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using Game.Interfaces;
 using UnityEngine;
 
+
+/// <summary>
+/// Script that handles objects that are inside this gameobject's sphere collider
+/// </summary>
 [RequireComponent(typeof(SphereCollider))]
 public class AttackRadius : MonoBehaviour
 {
     public SphereCollider sphereCollider;
     private List<IDamageable> damageables = new List<IDamageable>();
+    
+    /// <summary>
+    /// how much damage to GIVE to victims of this enemy
+    /// </summary>
     public float damage = 10;
     public float attackDelay = 0.1f;
     public delegate void AttackEvent(IDamageable target);

@@ -14,6 +14,7 @@ namespace Game.EnemyAI
         Transform enemyTransform;
         Transform playerTransform;
         float enemyAttackRange = 4f;
+        [SerializeField] AttackRadius attackRadius = null;
 
         void Start()
         {
@@ -27,13 +28,15 @@ namespace Game.EnemyAI
         //     UnityEngine.Debug.Log($"{distanceToPlayer}");
         // }
 
-        // jab animation event (needs monobehaviour to work)
+        /// <summary>
+        /// This function is meant to be an animation event (needs monobehaviour to work)
+        /// </summary>
         public void damagePlayer()
         {
             float distanceToPlayer = (enemyTransform.position - playerTransform.position).sqrMagnitude;
 
             if (distanceToPlayer < enemyAttackRange)
-                HealthDamageManager.instance.Jab();
+                HealthDamageManager.instance.Jab(attackRadius.damage);
         }
     }
 }
