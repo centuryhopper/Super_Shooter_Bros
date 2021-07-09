@@ -68,8 +68,8 @@ namespace Game.EnemyAI
                     StopCoroutine(attackCoroutine);
                     attackCoroutine = null;
 
-                    animator.ResetTrigger(attack);
-                    animator.SetTrigger(stopAttack);
+                    // animator.ResetTrigger(attack);
+                    // animator.SetTrigger(stopAttack);
                 }
                 else
                 {

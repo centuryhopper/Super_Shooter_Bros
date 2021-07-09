@@ -7,6 +7,7 @@ namespace Game.Audio
     {
         [HideInInspector]
         public AudioSource source;
+        public string name;
         public AudioClip clip;
 
         [Range(0, 1)]
@@ -14,7 +15,6 @@ namespace Game.Audio
 
         [Range(.1f, 3)]
         public float pitch;
-        public string name;
         public bool shouldLoop;
     }
 }

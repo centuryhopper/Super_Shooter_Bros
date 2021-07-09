@@ -53,6 +53,7 @@ namespace Game.EnemyAI
 
         // TODO choose your own waypoints for each enemy
         // Use transform[] instead
+        public Transform[] wayPoints = null;
         Vector3[] waypoints = new Vector3[2];
         [SerializeField] Animation anim = null;
 
@@ -143,21 +144,21 @@ namespace Game.EnemyAI
             WaitForSeconds wait = new WaitForSeconds(updateRate);
 
             yield return new WaitUntil(() => agent.enabled && agent.isOnNavMesh);
-            agent.SetDestination(waypoints[waypointIndex]);
+            agent.SetDestination(wayPoints[waypointIndex].position);
 
             while (true)
             {
                 if (agent.isOnNavMesh && agent.enabled && agent.remainingDistance <= agent.stoppingDistance)
                 {
                     waypointIndex++;
-                    waypointIndex%=waypoints.Length;
+                    waypointIndex%=wayPoints.Length;
 
-                    // if (waypointIndex >= waypoints.Length)
+                    // if (waypointIndex >= wayPoints.Length)
                     // {
                     //     waypointIndex = 0;
                     // }
 
-                    agent.SetDestination(waypoints[waypointIndex]);
+                    agent.SetDestination(wayPoints[waypointIndex].position);
                 }
 
                 yield return wait;
@@ -218,17 +219,18 @@ namespace Game.EnemyAI
             #endregion
 
             // populate our waypoints
-            for (var i = 0; i < waypoints.Length; i++)
-            {
-                if (NavMesh.SamplePosition(triangulation.vertices[UnityEngine.Random.Range(0, triangulation.vertices.Length)], out NavMeshHit hit, 2f, agent.areaMask))
-                {
-                    waypoints[i] = hit.position;
-                }
-                else
-                {
-                    Debug.LogError("Unable to find position for navmesh near Triangulation vertex!");
-                }
-            }
+            // for (var i = 0; i < waypoints.Length; i++)
+            // {
+            //     UnityEngine.Debug.Log($"triangulation.vertices.Length: {triangulation.vertices.Length}");
+            //     if (NavMesh.SamplePosition(triangulation.vertices[UnityEngine.Random.Range(0, triangulation.vertices.Length)], out NavMeshHit hit, 2f, agent.areaMask))
+            //     {
+            //         waypoints[i] = hit.position;
+            //     }
+            //     else
+            //     {
+            //         Debug.LogError("Unable to find position for navmesh near Triangulation vertex!");
+            //     }
+            // }
 
             onStateChange.Invoke(EnemyState.Spawn, defaultState);
         }
@@ -240,8 +242,18 @@ namespace Game.EnemyAI
             while (gameObject.activeSelf)
             {
                 // base layer is 0, attack layer is 1
-                if (agent.enabled && !animator.GetCurrentAnimatorStateInfo(1).IsName("AttackLayer.Punch"))
-                    agent.SetDestination(player.transform.position);
+                // if (agent.enabled && !animator.GetCurrentAnimatorStateInfo(1).IsName("AttackLayer.Punch"))
+                //     agent.SetDestination(player.transform.position);
+                if (!animator.GetCurrentAnimatorStateInfo(1).IsName("AttackLayer.Punch"))
+                {
+                    // let the enemy finish its punching animation to so that
+                    // it's possible for the enemy to miss an attack,
+                    // then chase the player
+                    if (agent.enabled)
+                        agent.SetDestination(player.transform.position);
+                }
+                    
+
                 yield return wait;
             }
         }
@@ -264,12 +276,34 @@ namespace Game.EnemyAI
 
         void OnDrawGizmos()
         {
-            int n = waypoints.Length;
+            int n = wayPoints.Length;
+            Gizmos.color = Color.yellow;
             for (var i = 0; i < n; i++)
             {
-                Gizmos.DrawSphere(waypoints[i], .25f);
-                Gizmos.DrawLine(waypoints[i], waypoints[(i+1) % n]);
+                Gizmos.DrawSphere(wayPoints[i].position, .25f);
+                Gizmos.DrawLine(wayPoints[i].position, wayPoints[(i+1) % n].position);
             }
+
+
+            #region navmesh triangulation debug
+            
+            // Gizmos.color = Color.blue;
+            // n = triangulation.vertices.Length;
+            // for (var i = 0; i < n; i++)
+            // {
+            //     Gizmos.DrawSphere(triangulation.vertices[i], .25f);
+            //     Gizmos.DrawLine(triangulation.vertices[i], triangulation.vertices[(i+1) % n]);
+            // }
+
+            // Gizmos.color = Color.green;
+            // n = waypoints.Length;
+            // for (var i = 0; i < n; i++)
+            // {
+            //     Gizmos.DrawSphere(waypoints[i], .25f);
+            //     Gizmos.DrawLine(waypoints[i], waypoints[(i+1) % n]);
+            // }
+            #endregion
+
         }
     }
 }

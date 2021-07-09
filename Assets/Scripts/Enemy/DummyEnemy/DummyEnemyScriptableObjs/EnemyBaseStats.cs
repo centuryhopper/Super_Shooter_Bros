@@ -27,10 +27,6 @@ namespace Game.EnemyAI
         public float LineOfSightRange = 6f;
         public float FieldOfView = 90f;
 
-        // TODO pick your own waypoints
-        public Transform[] waypoints = new Transform[2];
-
-
         [Space(10)]
         [Header("NavMeshAgent configurations")]
         public float AIUpdateInterval = 0.1f;

@@ -22,11 +22,20 @@ namespace Game.Spawner
         private Dictionary<int, ObjectPool> enemyObjectPools = new Dictionary<int, ObjectPool>();
         private WaitForSeconds waitForSeconds;
         private NavMeshTriangulation triangulation;
+        
+        // for now, each enemy will have two way points
+        [SerializeField] Transform[] waypoints = null;
+
+        // start at one for the first enemy
+        int waypointIndex = 1;
 
         void Awake()
         {
             waitForSeconds = new WaitForSeconds(spawnDelay);
             triangulation = NavMesh.CalculateTriangulation();
+            if (waypoints is null || waypoints.Length != enemies.Count * 2)
+                UnityEngine.Debug.LogError($"either there are no waypoints configured or at least spawned enemy didn't get a pair of waypoints");
+                
 
             // populate dictionary with all the types of enemies passed in to the list
             // each enemy prefab will have its own object pool
@@ -67,7 +76,6 @@ namespace Game.Spawner
         void spawnRandomEnemy()
         {
             spawnEnemy(UnityEngine.Random.Range(0, enemies.Count));
-
         }
 
         private void spawnEnemy(int spawnIndex)
@@ -79,32 +87,46 @@ namespace Game.Spawner
                 UnityEngine.Debug.LogWarning($"unable to fetch enemy");
                 return;
             }
-            
+
             Enemy enemy = poolableObject as Enemy;
             enemies[spawnIndex].SetupAgentFromConfiguration(enemy);
 
-            int vertexIndex = UnityEngine.Random.Range(0, triangulation.vertices.Length);
+            enemy.agent.Warp(waypoints[waypointIndex].position);
+
+            // enable enemy NavMesh agent and start chasing player
+            enemy.aiController.player = player;
+            enemy.aiController.triangulation = triangulation;
+            enemy.agent.enabled = true;
+            // give the spawned enemy two waypoints
+            enemy.aiController.wayPoints = new Transform[] {waypoints[waypointIndex-1], waypoints[waypointIndex]};
+            // move on for the next pair
+            waypointIndex+=2;
+            enemy.aiController.spawn();
+
+
+
+            // int vertexIndex = UnityEngine.Random.Range(0, triangulation.vertices.Length);
 
             // -1 means all areas
-            if (NavMesh.SamplePosition(triangulation.vertices[vertexIndex], out NavMeshHit hit, 2f, enemy.agent.areaMask))
-            {
-                // TODO check why warp isn't working
-                if (!enemy.agent.Warp(hit.position))
-                {
-                    UnityEngine.Debug.LogWarning($"Agent didn't spawn successfully");
-                    // return;
-                }
+            // if (NavMesh.SamplePosition(triangulation.vertices[vertexIndex], out NavMeshHit hit, 2f, enemy.agent.areaMask))
+            // {
+            //     // TODO check why warp isn't working
+            //     if (!enemy.agent.Warp(hit.position))
+            //     {
+            //         UnityEngine.Debug.LogWarning($"Agent didn't spawn successfully");
+            //         // return;
+            //     }
 
-                // enable enemy NavMesh agent and start chasing player
-                enemy.aiController.player = player;
-                enemy.aiController.triangulation = triangulation;
-                enemy.agent.enabled = true;
-                enemy.aiController.spawn();
-            }
-            else
-            {
-                UnityEngine.Debug.LogWarning($"Unable to place agent on navmesh. Tried to use {triangulation.vertices[vertexIndex]}");
-            }
+            //     // enable enemy NavMesh agent and start chasing player
+            //     enemy.aiController.player = player;
+            //     enemy.aiController.triangulation = triangulation;
+            //     enemy.agent.enabled = true;
+            //     enemy.aiController.spawn();
+            // }
+            // else
+            // {
+            //     UnityEngine.Debug.LogWarning($"Unable to place agent on navmesh. Tried to use {triangulation.vertices[vertexIndex]}");
+            // }
         }
     }
 }

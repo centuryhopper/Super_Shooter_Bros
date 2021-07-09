@@ -46,7 +46,7 @@ namespace Game.PlayerCharacter
 
                 // show gun shooting spark and sound effect
                 muzzleFlash.Play();
-                AudioManager.instance.Play(gunSound, 1);
+                AudioManager.instance.Play(gunSound, 1, true);
                 yield return waitForSeconds;
             }
         }
