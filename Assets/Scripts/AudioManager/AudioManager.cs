@@ -6,7 +6,6 @@ namespace Game.Audio
     public class AudioManager : MonoBehaviour
     {
         public Sound[] sounds;
-
         public static AudioManager instance;
 
         void Awake()
@@ -38,7 +37,6 @@ namespace Game.Audio
             }
         }
 
-        // TODO add a main music theme sometime
         void Start()
         {
             // Play the game theme here
@@ -63,8 +61,6 @@ namespace Game.Audio
             {
                 s.source.Play();
             }
-
-
         }
     }
 }
