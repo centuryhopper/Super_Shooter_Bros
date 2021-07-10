@@ -7,6 +7,7 @@ namespace Game.GameUI
 {
     public class SceneLoader : MonoBehaviour
     {
+        
         [SerializeField] string sceneName = "MainMenu";
         public void loadMainMenu()
         {

@@ -43,7 +43,7 @@ namespace Game.EnemyAI
                 damageables.Add(damageable);
 
                 // disable navmesh agent to stop chasing the IDamageable
-                agent.enabled = false;
+                // agent.enabled = false;
 
                 if (attackCoroutine == null)
                 {
@@ -59,7 +59,7 @@ namespace Game.EnemyAI
                 UnityEngine.Debug.Log($"player leaving range");
 
                 // re-enable navmesh agent to start chasing the IDamageable again
-                agent.enabled = true;
+                // agent.enabled = true;
 
                 damageables.Remove(damageable);
                 if (damageables.Count == 0)
@@ -73,7 +73,7 @@ namespace Game.EnemyAI
                 }
                 else
                 {
-                    UnityEngine.Debug.Log($"enemy still has something to attack");
+                    UnityEngine.Debug.Log($"enemy had something to attack");
                 }
             }
         }

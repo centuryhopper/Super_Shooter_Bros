@@ -33,8 +33,11 @@ namespace Game.Spawner
         {
             waitForSeconds = new WaitForSeconds(spawnDelay);
             triangulation = NavMesh.CalculateTriangulation();
-            if (waypoints is null || waypoints.Length != enemies.Count * 2)
-                UnityEngine.Debug.LogError($"either there are no waypoints configured or at least spawned enemy didn't get a pair of waypoints");
+            if (waypoints is null || waypoints.Length != numEnemiesToSpawn * 2)
+            {
+                UnityEngine.Debug.LogError($"either there are no waypoints configured, at least one spawned enemy didn't get a pair of waypoints, or there are more waypoints configured than enemies spawned. Please make sure that each enemy has exactly one pair of waypoints");
+                return;
+            }
                 
 
             // populate dictionary with all the types of enemies passed in to the list
@@ -66,17 +69,9 @@ namespace Game.Spawner
             }
         }
 
-        void spawnRoundRobinEnemy(int spawnedEnemies)
-        {
-            int spawnIndex = spawnedEnemies % enemies.Count;
+        void spawnRoundRobinEnemy(int spawnedEnemies) => spawnEnemy(spawnedEnemies % enemies.Count);
 
-            spawnEnemy(spawnIndex);
-        }
-
-        void spawnRandomEnemy()
-        {
-            spawnEnemy(UnityEngine.Random.Range(0, enemies.Count));
-        }
+        void spawnRandomEnemy() => spawnEnemy(UnityEngine.Random.Range(0, enemies.Count));
 
         private void spawnEnemy(int spawnIndex)
         {
@@ -101,6 +96,7 @@ namespace Game.Spawner
             enemy.aiController.wayPoints = new Transform[] {waypoints[waypointIndex-1], waypoints[waypointIndex]};
             // move on for the next pair
             waypointIndex+=2;
+            // spawn the enemy with its default state
             enemy.aiController.spawn();
 
 

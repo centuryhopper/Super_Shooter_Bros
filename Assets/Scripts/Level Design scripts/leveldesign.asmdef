@@ -1,0 +1,16 @@
+{
+    "name": "leveldesign",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f7e36908f21550443a9fa91e2fb449ac"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

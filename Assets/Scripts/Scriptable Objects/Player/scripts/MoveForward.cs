@@ -144,8 +144,8 @@ namespace Game.PlayerCharacter
                 // show the rays
                 Debug.DrawRay(sphere.transform.position, p.transform.forward * directionBlock, Color.black);
 
-                // the raycast will ignore the enemy layer and the attack radius layer
-                bool didRayHitSomething = Physics.Raycast(sphere.transform.position, p.transform.forward * directionBlock, out RaycastHit hit, blockDistance, ~(1 << 8) & ~(1 << 9));
+                // the raycast will ignore the enemy layer, the attack radius layer, and the portal layer
+                bool didRayHitSomething = Physics.Raycast(sphere.transform.position, p.transform.forward * directionBlock, out RaycastHit hit, blockDistance, ~(1 << 8) & ~(1 << 9) & ~(1 << 12));
 
                 if (didRayHitSomething)
                 {
