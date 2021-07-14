@@ -20,6 +20,7 @@ namespace Game.EnemyAI
         private const string attack = "attack", stopAttack = "stopAttack";
         public Animator animator;
         Coroutine lookRoutine;
+        Coroutine handleDeathRoutine;
         Rigidbody rb = null;
         [SerializeField] GameObject enemyRobot = null;
         [SerializeField] GameObject enemyRobotRagdoll = null;
@@ -55,6 +56,13 @@ namespace Game.EnemyAI
         {
             rb = GetComponent<Rigidbody>();
             attackRadius.OnAttack += onAttack;
+
+            // re-parent the ragdoll to this game object since this enemy is being respawned
+            if (enemyRobotRagdoll.transform.parent != transform)
+            {
+                enemyRobotRagdoll.transform.SetParent(transform);
+                enemyRobotRagdoll.SetActive(false);
+            }
         }
 
         public override void OnDisable()
@@ -65,24 +73,36 @@ namespace Game.EnemyAI
             agent.enabled = false;
         }
 
+        void OnDestroy()
+        {
+            UnityEngine.Debug.Log($"{gameObject.name} destroyed");
+        }
+
         public void takeDamage(float damage)
         {
             enemyHealth = Mathf.Max(enemyHealth - damage, 0f);
 
             if (enemyHealth <= 0f)
             {
-                // TODO disable the animated model and enable the ragdoll
-                HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
-                rb.velocity = Vector3.zero;
+                if (handleDeathRoutine != null) StopCoroutine(handleDeathRoutine);
 
-                // turn on ragdoll and turn off player robot mesh
-                enemyRobot.SetActive(false);
-                enemyRobotRagdoll.SetActive(true);
-
-                // TODO destroy the enemy ragdoll after x seconds
-                enemyRobotRagdoll.transform.parent = null;
-                this.gameObject.SetActive(false);
+                handleDeathRoutine = StartCoroutine(handleDeath());
             }
+        }
+
+        IEnumerator handleDeath()
+        {
+            // HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
+            rb.velocity = Vector3.zero;
+
+            // turn on ragdoll and turn off player robot mesh
+            enemyRobot.SetActive(false);
+            enemyRobotRagdoll.SetActive(true);
+            enemyRobotRagdoll.transform.parent = null;
+
+            yield return new WaitForSeconds(2.5f);
+            
+            this.gameObject.SetActive(false);
         }
 
         public Transform getTransform()

@@ -51,8 +51,6 @@ namespace Game.EnemyAI
         [Header("Patrol state parameters")]
         public int waypointIndex = 0;
 
-        // TODO choose your own waypoints for each enemy
-        // Use transform[] instead
         public Transform[] wayPoints = null;
         // Vector3[] waypoints = new Vector3[2];
         [SerializeField] Animation anim = null;
