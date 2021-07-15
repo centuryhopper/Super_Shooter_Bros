@@ -2,6 +2,7 @@ using UnityEngine;
 using Game.Interfaces;
 using Game.HealthManager;
 using System.Collections;
+using System;
 
 namespace Game.Pooling
 {
@@ -12,14 +13,9 @@ namespace Game.Pooling
     [RequireComponent(typeof(Rigidbody))]
     public class Bullet : PoolableObject
     {
-        public float bulletForce;
-        public float upForce = 1f;
-        public float sideForce = .1f;
-        
-        [HideInInspector]
-        public MeshRenderer meshRenderer = null;
+        public float bulletForce;       
         Rigidbody rb = null;
-        GameObject fleshEffect = null;
+        GameObject fleshEffect = null, sandHitEffect = null;
 
         [Header("Disabling configurations")]
         private const string disableMethodName = "disable";
@@ -55,9 +51,9 @@ namespace Game.Pooling
 
         void Awake()
         {
-            meshRenderer = GetComponentInChildren<MeshRenderer>();
             rb = GetComponent<Rigidbody>();
             fleshEffect = Resources.Load<GameObject>("BulletImpactFleshSmallEffect");
+            sandHitEffect = Resources.Load<GameObject>("BulletImpactSandEffect");
         }
 
         // public override void OnDisable()
@@ -115,6 +111,11 @@ namespace Game.Pooling
         // give the enemy a trigger collider
         void OnTriggerEnter(Collider other)
         {
+            processTrigger(other);
+        }
+
+        private void processTrigger(Collider other)
+        {
             if (other.CompareTag("Enemy"))
             {
                 IDamageable enemy = other.transform.GetComponentInParent<IDamageable>();
@@ -150,9 +151,21 @@ namespace Game.Pooling
                 // stop the velocity and move somewhere outside of the game area
                 // rb.velocity = Vector3.zero;
                 // transform.position = Vector3.zero;
-
-                disable();
             }
+        
+            else if (other.CompareTag("climbable") || other.CompareTag("obstacle") || other.CompareTag("platform"))
+            {
+                if (Physics.Raycast(transform.localPosition, transform.forward*1.5f, out RaycastHit hit))
+                {
+                    UnityEngine.Debug.Log($"hit the object at {hit.point}");
+                    GameObject obj = Instantiate(sandHitEffect, hit.point, Quaternion.identity);
+                    ParticleSystem sandHitEffects = obj.GetComponent<ParticleSystem>();
+                    sandHitEffects.Play();
+                    Destroy(obj, .5f);
+                }
+            }
+        
+           disable();
         }
 
 

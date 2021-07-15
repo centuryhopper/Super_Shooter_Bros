@@ -11,6 +11,8 @@ TagManager:
   - EnemyFighter
   - playerBullet
   - Enemy
+  - obstacle
+  - platform
   layers:
   - Default
   - TransparentFX
@@ -25,7 +27,7 @@ TagManager:
   - noIncludeInNavMesh
   - includeInNavMesh
   - Portal
-  - 
+  - playerBullet
   - 
   - 
   - 

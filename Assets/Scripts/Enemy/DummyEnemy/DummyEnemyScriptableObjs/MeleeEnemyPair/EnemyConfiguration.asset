@@ -19,11 +19,8 @@ MonoBehaviour:
   idleLocationRadius: 4
   idleMovespeedMultiplier: 0.5
   waypointIndex: 0
-  LineOfSightRange: 6
+  LineOfSightRange: 10
   FieldOfView: 90
-  waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
   AIUpdateInterval: 0.1
   Acceleration: 8
   AngularSpeed: 120

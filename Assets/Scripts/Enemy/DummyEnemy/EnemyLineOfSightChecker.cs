@@ -14,7 +14,7 @@ namespace Game.EnemyAI
         public GainSightEvent OnGainSight = delegate { };
         public delegate void LoseSightEvent(IHealable player);
         public LoseSightEvent OnLoseSight = delegate { };
-        private Coroutine CheckForLineOfSightCoroutine;
+        private Coroutine CheckForLineOfSightCoroutine = null;
 
         private void Awake()
         {
@@ -49,14 +49,34 @@ namespace Game.EnemyAI
             }
         }
 
+        // void OnTriggerStay(Collider other)
+        // {
+        //     if (other.TryGetComponent<IHealable>(out IHealable player))
+        //     {
+        //         UnityEngine.Debug.Log($"on trigger stay");
+        //         Vector3 direction = (player.getTransform().position - transform.position);
+        //         // float magnitude = direction.magnitude;
+        //         direction.Normalize();
+        //         Debug.DrawRay(transform.position + Vector3.up, direction, Color.cyan);
+        //     }
+            
+        // }
+
+
         private bool CheckLineOfSight(IHealable player)
         {
-            Vector3 Direction = (player.getTransform().position - transform.position).normalized;
-            float DotProduct = Vector3.Dot(transform.forward, Direction);
+            Vector3 direction = (player.getTransform().position - transform.position);
+            float DotProduct = Vector3.Dot(transform.forward, direction);
+
             if (DotProduct >= Mathf.Cos(FieldOfView))
-            {
-                if (Physics.Raycast(transform.position, Direction, out RaycastHit Hit, sphereCollider.radius, LineOfSightLayers))
+            { 
+                UnityEngine.Debug.Log($"player triggered enemy's field of view");
+
+                // adding vector3.up to the start position really helped with raycasting since
+                // the ground isn't in the way anymore
+                if (Physics.Raycast(transform.position + Vector3.up, direction, out RaycastHit Hit, sphereCollider.radius, LineOfSightLayers))
                 {
+                    UnityEngine.Debug.Log($"TRIGGERED by raycast");
                     if (Hit.transform.GetComponent<IHealable>() != null)
                     {
                         OnGainSight.Invoke(player);

@@ -54,7 +54,7 @@ namespace Game.HealthManager
 
             if (!sourceTransform.gameObject.activeInHierarchy)
             {
-                // UnityEngine.Debug.LogWarning($"source transform is inactive");
+                UnityEngine.Debug.LogWarning($"source transform is inactive");
                 return;
             }
 

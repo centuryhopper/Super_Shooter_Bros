@@ -18,7 +18,7 @@ namespace Game.EnemyAI
         public Enemy enemyPrefab;
 
         [Space(10)]
-        [Header("state Stats")]
+        [Header("State Stats")]
         public EnemyState defaultState;
         public float idleLocationRadius = 4f;
         public float idleMovespeedMultiplier = 0.5f;

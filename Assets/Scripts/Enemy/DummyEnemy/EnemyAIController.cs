@@ -250,7 +250,6 @@ namespace Game.EnemyAI
                     if (agent.enabled)
                         agent.SetDestination(player.transform.position);
                 }
-                    
 
                 yield return wait;
             }

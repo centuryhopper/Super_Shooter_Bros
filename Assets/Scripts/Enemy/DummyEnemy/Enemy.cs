@@ -92,15 +92,15 @@ namespace Game.EnemyAI
 
         IEnumerator handleDeath()
         {
-            // HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
+            enemyRobotRagdoll.SetActive(true);
+            HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
+            // enemyRobotRagdoll.transform.parent = null;
             rb.velocity = Vector3.zero;
 
             // turn on ragdoll and turn off player robot mesh
             enemyRobot.SetActive(false);
-            enemyRobotRagdoll.SetActive(true);
-            enemyRobotRagdoll.transform.parent = null;
 
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(3f);
             
             this.gameObject.SetActive(false);
         }
