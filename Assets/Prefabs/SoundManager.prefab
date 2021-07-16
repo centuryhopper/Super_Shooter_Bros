@@ -45,8 +45,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - source: {fileID: 0}
-    clip: {fileID: 8300000, guid: 66f9a1e43cb0ce14fbba8662b8aae6a0, type: 3}
-    volume: 1
-    pitch: 1.32
     name: GunSound
+    clip: {fileID: 8300000, guid: 66f9a1e43cb0ce14fbba8662b8aae6a0, type: 3}
+    volume: 0.5
+    pitch: 1.32
     shouldLoop: 0
+  - source: {fileID: 0}
+    name: GameTheme
+    clip: {fileID: 8300000, guid: d5710a31ef58f4b918bf2d33cf56da78, type: 3}
+    volume: 0.6
+    pitch: 1.32
+    shouldLoop: 1

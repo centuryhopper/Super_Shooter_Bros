@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using Game.Interfaces;
 using Game.HealthManager;
 using Game.Pooling;
+using System.Linq;
 
 namespace Game.EnemyAI
 {
@@ -24,6 +25,7 @@ namespace Game.EnemyAI
         Rigidbody rb = null;
         [SerializeField] GameObject enemyRobot = null;
         [SerializeField] GameObject enemyRobotRagdoll = null;
+        [SerializeField] BoxCollider[] enemyColliders = null;
 
         void onAttack(IDamageable target)
         {
@@ -92,12 +94,22 @@ namespace Game.EnemyAI
 
         IEnumerator handleDeath()
         {
+            // turn on ragdoll and turn off player robot mesh
             enemyRobotRagdoll.SetActive(true);
             HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
             // enemyRobotRagdoll.transform.parent = null;
             rb.velocity = Vector3.zero;
+            yield return null;
 
-            // turn on ragdoll and turn off player robot mesh
+            // turn off enemy colliders and navmesh agent
+            agent.enabled = false;
+            foreach (var collider in enemyColliders)
+            {
+                collider.enabled = false;
+            }
+
+
+            
             enemyRobot.SetActive(false);
 
             yield return new WaitForSeconds(3f);

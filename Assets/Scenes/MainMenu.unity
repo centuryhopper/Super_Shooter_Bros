@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.35944584, g: 0.75104034, b: 0.8065395, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1053,6 +1053,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 168301943}
   m_CullTransparentMesh: 1
+--- !u!1 &193406730
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 193406731}
+  m_Layer: 0
+  m_Name: ---Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &193406731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193406730}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &195408307
 GameObject:
   m_ObjectHideFlags: 0
@@ -2112,6 +2142,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607029622}
   m_CullTransparentMesh: 1
+--- !u!114 &629478593 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+  m_PrefabInstance: {fileID: 1140329636}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8694f2af7918e064793bb93a661e0c3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &632897631
 GameObject:
   m_ObjectHideFlags: 0
@@ -2299,6 +2340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb6bf5477a9164a4ea9982a2c6d92801, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneName: MainMenu
 --- !u!1 &747741737
 GameObject:
   m_ObjectHideFlags: 0
@@ -2980,6 +3022,159 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1123988287}
   m_CullTransparentMesh: 1
+--- !u!1001 &1140329636
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3219793987552956884, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_RootOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956885, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[1].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 0b653cf2619ec2b489f5f0658e8faa25, type: 3}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[2].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 7e0690ca7e6c19b47be3998864abf95d, type: 3}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[2].name
+      value: MenuHipHop
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[3].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: fd110102d53a1e843bf8a5c63026d41a, type: 3}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[3].name
+      value: SickBeat
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[4].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: fd110102d53a1e843bf8a5c63026d41a, type: 3}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[4].name
+      value: SickBeat
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[2].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[3].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[4].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[0].volume
+      value: 0.817
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[1].volume
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[2].volume
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[3].volume
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[4].volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[2].shouldLoop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[3].shouldLoop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[4].shouldLoop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[0].spatialBlend
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[1].spatialBlend
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[2].spatialBlend
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[3].spatialBlend
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3219793987552956886, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
+      propertyPath: sounds.Array.data[4].spatialBlend
+      value: 0.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6308e3218b23ba140bb13cbd44758a6e, type: 3}
 --- !u!1 &1170762236
 GameObject:
   m_ObjectHideFlags: 0
@@ -3477,15 +3672,15 @@ MonoBehaviour:
   m_FillRect: {fileID: 1123988288}
   m_HandleRect: {fileID: 348112934}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 10
+  m_MinValue: -80
+  m_MaxValue: 0
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 510634079}
-        m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
+      - m_Target: {fileID: 629478593}
+        m_TargetAssemblyTypeName: Game.Audio.AudioManager, Audio
         m_MethodName: setVolume
         m_Mode: 0
         m_Arguments:

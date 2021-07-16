@@ -421,6 +421,9 @@ MonoBehaviour:
   animator: {fileID: 8390403500354516790}
   enemyRobot: {fileID: 3016092334759524342}
   enemyRobotRagdoll: {fileID: 5857902826362953027}
+  enemyColliders:
+  - {fileID: 2819390120133416379}
+  - {fileID: 6356603584918145224}
 --- !u!65 &9079269521659569276
 BoxCollider:
   m_ObjectHideFlags: 0
