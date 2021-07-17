@@ -13,34 +13,72 @@ namespace Game.PathFind
     [RequireComponent(typeof(NavMeshAgent))]
     public class PathFindingAgent : MonoBehaviour
     {
-        [SerializeField] Transform target;
+        [SerializeField] Transform playerTarget;
         NavMeshAgent agent;
-        Coroutine move;
         WaitForEndOfFrame waitForEndOfFrame;
+        WaitForSeconds waitForSeconds;
+        Coroutine moveRoutine;
+        public bool hasReachedADestination, enemyShouldMove;
+        public GameObject startSphere;
+        public GameObject endSphere;
+        public Transform enemyTarget;
+        public List<Vector3> meshLinks = new List<Vector3>(2);
 
-        [ReadOnly]
-        public Vector3 startOffMeshPosition, endOffMeshPosition;
+        public void setSpeed(float speed) => agent.speed = speed;
+
+        public void setAcceleration(float acceleration) => agent.acceleration = acceleration;
+
+        public void setAngularSpeed(float angularSpeed) => agent.angularSpeed = angularSpeed;
+
+        void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(startSphere.transform.position, .2f);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(endSphere.transform.position, .2f);
+        }
 
         void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
             waitForEndOfFrame = new WaitForEndOfFrame();
+            waitForSeconds = new WaitForSeconds(0.5f);
+            startSphere = new GameObject("PathFindingStartSphere");
+            endSphere = new GameObject("PathFindingEndSphere");
+            playerTarget = GameObject.FindWithTag("Player").transform;
+            enemyTarget = GameObject.Find("EnemyFighter").transform;
+        }
+
+        void OnEnable()
+        {
+            // UnityEngine.Debug.Log($"stopping the previous coroutine");
+            if (moveRoutine != null)
+            {
+                StopCoroutine(moveRoutine);
+            }
         }
 
         public void GoToTarget()
         {
-            agent.isStopped = false;
-
-            if (target == null) { UnityEngine.Debug.LogWarning($"no target found"); return; }
-            agent.SetDestination(target.position);
-
-            // if the coroutine is already running
-            if (move != null)
+            meshLinks?.Clear();
+            if (moveRoutine != null)
             {
-                StopCoroutine(move);
+                StopCoroutine(moveRoutine);
             }
 
-            move = StartCoroutine(Move());
+            #region move the agent towards destination
+            agent.enabled = true;
+            agent.isStopped = false;
+            hasReachedADestination = false;
+            enemyShouldMove = false;
+
+            startSphere.transform.parent = null;
+            endSphere.transform.parent = null;
+
+            agent.SetDestination(playerTarget.position);
+            #endregion
+
+            moveRoutine = StartCoroutine(Move());
         }
 
         // pause the agent every time it reaches the end of an off mesh link before reaching the
@@ -51,34 +89,54 @@ namespace Game.PathFind
             {
                 if (agent.isOnOffMeshLink)
                 {
-                    startOffMeshPosition = transform.position;
+                    UnityEngine.Debug.Log($"agent on off mesh link");
+                    if (meshLinks.Count == 0)
+                    {
+                        meshLinks.Add(agent.currentOffMeshLinkData.startPos);
+                        meshLinks.Add(agent.currentOffMeshLinkData.endPos);
+                    }
 
+                    startSphere.transform.position = agent.currentOffMeshLinkData.startPos;
+                    endSphere.transform.position = agent.currentOffMeshLinkData.endPos;
+
+                    // let the agent make the jump
                     agent.CompleteOffMeshLink();
 
-                    yield return waitForEndOfFrame;
-
-                    endOffMeshPosition = transform.position;
-
                     agent.isStopped = true;
-                    yield break;
-                }
-                else
-                {
-                    UnityEngine.Debug.Log($"agent is not on off mesh link");
+                    enemyShouldMove = true;
+
+                    // https://riptutorial.com/csharp/example/29811/the-difference-between-break-and-yield-break
+                    break;
                 }
 
                 // once the agent reaches destination
                 var dist = transform.position - agent.destination;
-                if (Vector3.SqrMagnitude(dist) < 0.5f)
+                // UnityEngine.Debug.Log($"agent to player distance: {Vector3.SqrMagnitude(dist)}");
+                if (Vector3.SqrMagnitude(dist) <= 1f)
                 {
-                    startOffMeshPosition = transform.position;
-                    endOffMeshPosition = transform.position;
+                    if (meshLinks.Count > 0)
+                    {
+                        startSphere.transform.position = meshLinks[0];
+                        endSphere.transform.position = meshLinks[1];
+                    }
+                    else
+                    {
+                        startSphere.transform.position = agent.destination;
+                        endSphere.transform.position = agent.destination;
+                    }
+
+
+                    //  no links at this point, just the destination, which is the player
+                    // UnityEngine.Debug.Log($"pathfinding agent has reached the player");
                     agent.isStopped = true;
-                    yield break;
+                    hasReachedADestination = true;
+                    enemyShouldMove = true;
+                    break;
                 }
 
-                yield return waitForEndOfFrame;
+                yield return null;
             }
+            yield return null;
         }
 
     }

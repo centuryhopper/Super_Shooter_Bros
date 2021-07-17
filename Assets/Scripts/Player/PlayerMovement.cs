@@ -1,23 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Animations.Rigging;
 using Game.Inputs;
 using Game.Hash;
 using Game.Enums;
+<<<<<<< HEAD
 using Game.InventoryAssembly;
+=======
+using Game.GenericCharacter;
+using Game.Interfaces;
+
+>>>>>>> leo_branch_windows10
 
 namespace Game.PlayerCharacter
 {
-
-    // [ExecuteInEditMode]
     public class PlayerMovement : MonoBehaviour
     {
         [HideInInspector]
         public Animator skinnedMeshAnimator = null;
         public AnimationProgress animationProgress;
-        BoxCollider boxCollider = null;
+        public BoxCollider boxCollider = null;
         public BoxCollider BoxCollider { get => boxCollider; }
         Rigidbody rb;
         public Rigidbody RB { get => rb; }
@@ -29,11 +32,7 @@ namespace Game.PlayerCharacter
         [SerializeField] LedgeChecker ledgeChecker = null;
         public LedgeChecker GetLedgeChecker { get => ledgeChecker; }
         public Transform playerSkin = null;
-        public List<GameObject> frontSphereGroundCheckers { get; private set; }
-        public List<GameObject> bottomSphereGroundCheckers { get; private set; }
-        [SerializeField] GameObject groundCheckingSphere = null;
-        [SerializeField] int horizontalSections = 5;
-        [SerializeField] int verticalSections = 10;
+        public CollisionSpheres collisionSpheres = null;
 
         /// <summary>
         /// With this, player now has double jump ability
@@ -56,30 +55,21 @@ namespace Game.PlayerCharacter
         public GameObject rifle = null;
         [SerializeField] float tolerableDistance = 2.5f;
 
-        [Space, Header("Player Inputs"), ReadOnly]
+
+        [Header("Player movements")]
+
         public bool jump;
-
-        [ReadOnly]
         public bool moveLeft;
-
-        [ReadOnly]
         public bool moveRight;
-
-        [ReadOnly]
         public bool moveUp;
-
-        [ReadOnly]
         public bool moveDown;
 
-        [ReadOnly]
         /// <summary>
         /// Is true when player holds down
         /// shift or when player is "run" mode
         /// </summary>
         /// <value></value>
         public bool turbo;
-
-        [ReadOnly]
         public bool secondJump;
 
         [Header("Gravity")]
@@ -109,28 +99,32 @@ namespace Game.PlayerCharacter
         #endregion
 
         Transform t;
+        private bool paused;
 
+        public bool allowMovement {get; set;} = true;
 
         void Awake()
         {
             // Debug.Log(Input.mousePresent ? "mouse detected" : "mouse not detected");
 
+            collisionSpheres = GetComponentInChildren<CollisionSpheres>();
             skinnedMeshAnimator = playerSkin.GetComponent<Animator>();
-            bottomSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
-            frontSphereGroundCheckers = new List<GameObject>(horizontalSections + 2);
             boxCollider = GetComponent<BoxCollider>();
             rb = GetComponent<Rigidbody>();
             t = transform;
             mainCam = Camera.main;
-            SetColliderSpheres();
-
+            collisionSpheres.owner = this;
             // Debug.Log($"player parent: {transform.parent is null}");
+        }
 
+        void Start()
+        {
+            collisionSpheres.SetColliderSpheres();
         }
 
         public void ToggleRigLayerWeights(int weightNumber)
         {
-            Debug.Log($"setting rig weights to {weightNumber}");
+            // Debug.Log($"setting rig weights to {weightNumber}");
             // rigs.ForEach(rig => rig.weight = weightNumber);
             rigs[1].weight = weightNumber;
             rigs[2].weight = weightNumber;
@@ -158,6 +152,7 @@ namespace Game.PlayerCharacter
             contactPoints = collisionInfo.contacts;
         }
 
+<<<<<<< HEAD
         public (float a, float b, float c, float d) GetTopBottomFrontBackDimensions()
         {
             // y-z plane in this case
@@ -243,6 +238,8 @@ namespace Game.PlayerCharacter
 
         public GameObject CreateGroundCheckingSphere(Vector3 position) => Instantiate<GameObject>(groundCheckingSphere, position, Quaternion.identity);
 
+=======
+>>>>>>> leo_branch_windows10
         // public void CreateMiddleSpheres(GameObject start, Vector3 direction, float section, int sections, List<GameObject> spheresList)
         // {
         //     for (int i = 0; i < sections; ++i)
@@ -308,6 +305,21 @@ namespace Game.PlayerCharacter
         // todo maybe migrate the code below over to a state machine script
         void Update()
         {
+            // custom pause
+            if (Input.GetKeyDown(KeyCode.P) && !paused)
+            {
+                Time.timeScale = 0f;
+                paused = true;
+                return;
+            }
+            else if (Input.GetKeyDown(KeyCode.P))
+            {
+                Time.timeScale = 1f;
+                paused = false;
+                return;
+            }
+
+
             // Debug.Log($"top, bottom, front, back: {GetTopBottomFrontBackDimensions()}");
 
             // Debug.Log(GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict));
@@ -324,7 +336,7 @@ namespace Game.PlayerCharacter
                     ToggleRigLayerWeights(1);
                     break;
                 default:
-                    Debug.Log($"invalid state name");
+                    // Debug.Log($"invalid state name");
                     break;
             }
 
@@ -335,10 +347,13 @@ namespace Game.PlayerCharacter
 
             if (animationProgress.isUpdatingSpheres)
             {
-                RepositionBottomSpheres();
-                RepositionFrontSpheres();
+                collisionSpheres.RepositionBottomSpheres();
+                collisionSpheres.RepositionFrontSpheres();
+                collisionSpheres.RepositionBackSpheres();
             }
 
+            #region temporarily commented out when I debug the game without ability to aim
+            
             // plauyer aim will follow the crosshair transform, which follows the hit.point,
             // if the hit.point is far enough
             Ray mouseRay = mainCam.ScreenPointToRay(Input.mousePosition);
@@ -382,6 +397,7 @@ namespace Game.PlayerCharacter
                     // weaponAimRig.weight = 0;
                 }
             }
+            #endregion
 
             // if (GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) != AnimationStateNames.HangingIdle &&
             //     GetCurrentAnimatorStateName(HashManager.Instance.stateNamesDict) != AnimationStateNames.LedgeClimb)
@@ -399,6 +415,8 @@ namespace Game.PlayerCharacter
             // hover your mouse cursor over this function call for comment details
             faceDirection = DotProductWithComments(transform.forward, Vector3.forward);
 
+            if (!allowMovement) return;
+
             #region Keyboardinput syncs
             jump = VirtualInputManager.Instance.jump;
             moveLeft = VirtualInputManager.Instance.moveLeft;
@@ -411,9 +429,6 @@ namespace Game.PlayerCharacter
         }
 
 
-
-
-
         /// <summary>
         /// Returns...<br/>
         /// 1 if both vectors are facing the same direction with each other.<br/>
@@ -421,68 +436,6 @@ namespace Game.PlayerCharacter
         /// 0 if both vectors are perpendicular with each other.
         /// </summary>
         private float DotProductWithComments(Vector3 l, Vector3 r) => Vector3.Dot(l, r);
-
-        #region old code
-        // This method can't be called if this script and the animator component aren't
-        // attached to the same game object
-        // void OnAnimatorIK()
-        // {
-        //     // Weapon aim at target ik
-
-        //     // position sets for ik goals
-        //     animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.5f);
-        //     animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0.5f);
-        //     animator.SetIKPosition(AvatarIKGoal.RightHand, targetTransform.position);
-        //     animator.SetIKPosition(AvatarIKGoal.LeftHand, targetTransform.position);
-        // }
-        #endregion
-
-        #region
-        // // debug code
-        // void OnCollisionEnter(Collision collisionInfo)
-        // {
-        //     print(collisionInfo.gameObject.name);
-        // }
-
-        // /// <summary>
-        // /// moves the player left and right
-        // /// </summary>
-        // void MovePlayer()
-        // {
-        //     // side scroller
-        //     print("here");
-        //     if (Input.GetKey(KeyCode.D))
-        //     {
-        //         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        //         // transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        //         transform.rotation = Quaternion.LookRotation(Vector3.forward, transform.up);
-        //         anim.SetBool(AnimationParameters.move.ToString(), true);
-        //     }
-        //     else if (Input.GetKey(KeyCode.A))
-        //     {
-        //         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        //         // transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-        //         transform.rotation = Quaternion.LookRotation(-Vector3.forward, transform.up);
-        //         anim.SetBool(AnimationParameters.move.ToString(), true);
-        //     }
-        //     else
-        //     {
-        //         anim.SetBool(AnimationParameters.move.ToString(), false);
-        //     }
-        // }
-
-        // void FlipSprite()
-        // {
-        //     // don't cache Input.GetAxis("Horizontal"), or it will not work
-        //     if (Input.GetAxis("Horizontal") != 0)
-        //     {
-        //         float zScale = Mathf.Abs(transform.localScale.z);
-        //         transform.localScale = (Input.GetAxis("Horizontal") > 0) ?
-        //         new Vector3(transform.localScale.x,transform.localScale.y,zScale) :
-        //         new Vector3(transform.localScale.x,transform.localScale.y,-zScale);
-        //     }
-        // }
-        #endregion
     }
 }
 

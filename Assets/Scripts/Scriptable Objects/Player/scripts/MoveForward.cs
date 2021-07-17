@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Game.Enums;
 using Game.Hash;
 using Game.States;
 using UnityEngine;
+using Game.HealthManager;
+using Game.Interfaces;
 
 namespace Game.PlayerCharacter
 {
@@ -14,8 +17,17 @@ namespace Game.PlayerCharacter
         public float faceDirection;
 
         [Range(.01f, 5)]
-        public float distanceofDetection = 0.3f;
+        public float directionBlock = 0.3f;
+
+        [Range(.01f,5f)]
+        public float blockDistance = 0.5f;
         private PlayerMovement playerMovement;
+        private float movementDirection = 1;
+        private List<GameObject> spheresList;
+        public float distanceOfDetection = 0;
+
+
+
 
         override public void OnEnter(CharacterState character, Animator a, AnimatorStateInfo asi)
         {
@@ -44,7 +56,6 @@ namespace Game.PlayerCharacter
             // and backwards based on player's
             // facing direction
             faceDirection = p.faceDirection;
-            // Debug.Log($"facing: {faceDirection}");
 
             // side scroller
             if (playerMovement.moveRight)
@@ -54,15 +65,21 @@ namespace Game.PlayerCharacter
                 // facing right
                 if (faceDirection == 1)
                 {
-                    if (!CheckFront(p))
+                    if (!IsBlocked(p))
                     {
+                        movementDirection = 1;
                         // multiple by the speed graph value so that we can still move while we jump
                         p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                    }
+                    else
+                    {
+                        UnityEngine.Debug.Log($"obstruction on the right");
                     }
                 }
                 // facing left
                 else if (faceDirection == -1)
                 {
+                    movementDirection = -1;
                     // multiple by the speed graph value so that we can still move while we jump
                     p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                 }
@@ -77,16 +94,22 @@ namespace Game.PlayerCharacter
                 // facing right
                 if (faceDirection == 1)
                 {
+                    movementDirection = -1;
                     // multiple by the speed graph value so that we can still move while we jump
                     p.transform.Translate(Vector3.forward * -speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
                 }
                 // facing left
                 else if (faceDirection == -1)
                 {
-                    if (!CheckFront(p))
+                    if (!IsBlocked(p))
                     {
+                        movementDirection = 1;
                         // multiple by the speed graph value so that we can still move while we jump
                         p.transform.Translate(Vector3.forward * speed * speedGraph.Evaluate(asi.normalizedTime) * Time.deltaTime);
+                    }
+                    else
+                    {
+                        UnityEngine.Debug.Log($"obstruction on the left");
                     }
                 }
             }
@@ -103,25 +126,52 @@ namespace Game.PlayerCharacter
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        private bool CheckFront(PlayerMovement p)
+        private bool IsBlocked(PlayerMovement p)
         {
-            // if (p.RB.velocity.z > -0.01f && p.RB.velocity.z <= 0)
-            // {
-            //     return true;
-            // }
+            if (movementDirection > 0)
+            {
+                spheresList = p.collisionSpheres.frontSphereGroundCheckers;
+                directionBlock = 0.3f;
+            }
+            else if (movementDirection < 0)
+            {
+                spheresList = p.collisionSpheres.backSphereGroundCheckers;
+                directionBlock = -0.3f;
+            }
 
-            UnityEngine.Debug.Log($"Checking FRONT");
-
-            return p.frontSphereGroundCheckers.Any((GameObject obj) =>
+            return spheresList.Any((GameObject sphere) =>
             {
                 // show the rays
-                Debug.DrawRay(obj.transform.position, p.transform.forward * distanceofDetection, Color.black);
+                Debug.DrawRay(sphere.transform.position, p.transform.forward * directionBlock, Color.black);
+
+                // the raycast will ignore the enemy layer, the attack radius layer, and the portal layer
+                bool didRayHitSomething = Physics.Raycast(sphere.transform.position, p.transform.forward * directionBlock, out RaycastHit hit, blockDistance, ~(1 << 8) & ~(1 << 9) & ~(1 << 12));
+
+                if (didRayHitSomething)
+                {
+                    UnityEngine.Debug.Log($"checking to see if it was an enemy");
+                    // check if it was an enemy
+                    // if it was, make sure it's dead before crossing it, otherwise,
+                    // will not be able to walk thru it
+                    bool isEnemyDead = hit.transform.root.name.Contains("Ragdoll");
+                    // found an enemy
+                    if (isEnemyDead)
+                    {
+                        UnityEngine.Debug.Log($"enemy is dead");
+                        return false;
+                    }
+                    UnityEngine.Debug.Log($"enemy is not dead");
+                    UnityEngine.Debug.Log($"{hit.transform.root.name}");
+                }
+
+                if (didRayHitSomething)
+                {
+                    UnityEngine.Debug.Log($"the ray did hit something, but either the enemy isn't dead or the ray didn't hit an enemy");
+                }
 
                 // project a ray downwards
-                return (Physics.Raycast(obj.transform.position, p.transform.forward, out RaycastHit hit, distanceofDetection));
+                return didRayHitSomething;
             });
         }
-
-        // Implement a CheckBack() method
     }
 }

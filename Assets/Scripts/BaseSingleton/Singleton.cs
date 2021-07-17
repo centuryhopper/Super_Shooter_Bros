@@ -25,6 +25,7 @@ namespace Game.singleton
 
                 return instance;
             }
+
         }
 
     }

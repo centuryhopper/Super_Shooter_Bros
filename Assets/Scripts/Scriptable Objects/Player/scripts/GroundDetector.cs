@@ -79,7 +79,7 @@ namespace Game.PlayerCharacter
             // }
             #endregion
 
-            return p.bottomSphereGroundCheckers.Any((GameObject obj) =>
+            return p.collisionSpheres.bottomSphereGroundCheckers.Any((GameObject obj) =>
             {
                 // show the rays
                 Debug.DrawRay(obj.transform.position, Vector3.down * distanceOfDetection, Color.black);

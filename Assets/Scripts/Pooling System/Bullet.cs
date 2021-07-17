@@ -1,5 +1,8 @@
 using UnityEngine;
-
+using Game.Interfaces;
+using Game.HealthManager;
+using System.Collections;
+using System;
 
 namespace Game.Pooling
 {
@@ -8,77 +11,162 @@ namespace Game.Pooling
     /// </summary>
 
     [RequireComponent(typeof(Rigidbody))]
-    public class Bullet : MonoBehaviour, IPooledObject
+    public class Bullet : PoolableObject
     {
-        public float bulletForce;
-        public float upForce = 1f;
-        public float sideForce = .1f;
-        public bool shouldCallOnObjectSpawn = false;
-        public bool shouldCallOnObjectSpawnWithParam = true;
+        public float bulletForce;       
+        Rigidbody rb = null;
+        GameObject fleshEffect = null, sandHitEffect = null;
 
-        public void OnObjectSpawn()
+        [Header("Disabling configurations")]
+        private const string disableMethodName = "disable";
+        public float autoDestroyTime = 5f;
+
+        // for enemies
+        public float damage;
+        public Transform target;
+
+        protected virtual void OnEnable()
         {
-            if (!shouldCallOnObjectSpawn) return;
+            // really important that we cancel invoke befoirehand. Otherwise all objects will after 'autoDestroyTime' seconds get disabled
+            CancelInvoke(disableMethodName);
+            Invoke(disableMethodName, autoDestroyTime);
 
-            float xForce = Random.Range(-sideForce, sideForce);
-            float yForce = Random.Range(upForce / 2f, upForce);
-            float zForce = Random.Range(-sideForce, sideForce);
-
-            Vector3 force = new Vector3(xForce, yForce, zForce);
-
-            GetComponent<Rigidbody>().velocity = force;
+            // may need to tweak when to spawn for enemy shooters
+            // as this line is meant for the player shooting
+            spawnBullet();
         }
 
-
-        // fire off to a distance!
-        public void OnObjectSpawn(Transform spawnPointTransform)
+        protected void disable()
         {
-            if (!shouldCallOnObjectSpawnWithParam) return;
+            // base.OnDisable();
+            // only call this method once per bullet while being active,
+            // so thats why we use cancel invoke here
+            CancelInvoke(disableMethodName);
+            rb.velocity = Vector3.zero;
+            this.gameObject.SetActive(false);
+        }
 
-            Rigidbody rb = GetComponent<Rigidbody>();
+        // public float[] damageAmounst
+        // Dictionary of enum values (enemy type) as keys and float values (damageAmount) as values
 
+        void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+            fleshEffect = Resources.Load<GameObject>("BulletImpactFleshSmallEffect");
+            sandHitEffect = Resources.Load<GameObject>("BulletImpactSandEffect");
+        }
+
+        // public override void OnDisable()
+        // {
+        //     base.OnDisable();
+        //     rb.velocity = Vector3.zero;
+        // }
+
+        #region old code
+        // public void OnObjectSpawn()
+        // {
+        //     if (!shouldCallOnObjectSpawn) return;
+
+        //     float xForce = Random.Range(-sideForce, sideForce);
+        //     float yForce = Random.Range(upForce / 2f, upForce);
+        //     float zForce = Random.Range(-sideForce, sideForce);
+
+        //     Vector3 force = new Vector3(xForce, yForce, zForce);
+
+        //     rb.velocity = force;
+        // }
+        #endregion
+
+        // for player
+        public void spawnBullet()
+        {
             // add force in the direction of the fire point position
-            rb.AddForce(bulletForce * spawnPointTransform.forward, ForceMode.Impulse);
-            // print("fired off into the distance");
+            rb.AddForce(bulletForce * transform.forward, ForceMode.Impulse);
+            // UnityEngine.Debug.Log($"fired off into the distance");
         }
 
-        void OnCollisionEnter(Collision collisionInfo)
+        // for enemies
+        public void spawnBullet(Vector3 forward, float damage, Transform target)
         {
-            //  instantiate bullet contact effect
-
-            // put bullet back in the queue
-
-            // destroy particle after a couple seconds
+            this.damage = damage;
+            this.target = target;
+            // add force in the direction of the fire point position
+            rb.AddForce(bulletForce * forward, ForceMode.Impulse);
+            // UnityEngine.Debug.Log($"fired off into the distance");
         }
 
+        void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawCube(transform.localPosition, Vector3.one / 6f);
+            // Gizmos.color = Color.magenta;
+            // Gizmos.DrawLine(transform.localPosition, transform.forward);
+        }
 
+        void Update()
+        {
+            Debug.DrawRay(transform.localPosition, transform.forward*1.5f, Color.red);
+        }
 
+        // give the enemy a trigger collider
+        void OnTriggerEnter(Collider other)
+        {
+            processTrigger(other);
+        }
 
+        private void processTrigger(Collider other)
+        {
+            if (other.CompareTag("Enemy"))
+            {
+                IDamageable enemy = other.transform.GetComponentInParent<IDamageable>();
+                if (enemy is null) UnityEngine.Debug.LogWarning($"enemy is null");
+                UnityEngine.Debug.Log($"{enemy?.getTransform().name} was shot");
 
+                // collide with anything except the bullet itself and the player
+                if (Physics.Raycast(transform.localPosition, transform.forward*1.5f, out RaycastHit hit))
+                {
+                    // UnityEngine.Debug.Log($"hit the enemy at {hit.point}");
+                    GameObject obj = Instantiate(fleshEffect, hit.point, Quaternion.identity);
+                    ParticleSystem fleshHitEffects = obj.GetComponent<ParticleSystem>();
+                    fleshHitEffects.Play();
+                    Destroy(obj, .5f);
 
+                    #region I tried to optimize the particle system for reusing instead of destroying but I failed
+                    // var fleshEffect = particlePooler.InstantiateFromPool(particleTag, hit.point);
+                    // // fleshEffect.GetComponent<ParticleSystem>().Play();
+                    // // stopPreviousCoroutine();
+                    // // delayForAFrame = StartCoroutine(delay());
+                    // // fleshEffect.SetActive(false);
+                    #endregion
+                    
+                    // damage enemy
+                    enemy?.takeDamage(HealthDamageManager.instance.enemyDamageAmount);
+                }
+                else
+                {
+                    // UnityEngine.Debug.Log($"layername: {LayerMask.LayerToName(7)}");
+                    UnityEngine.Debug.Log($"didnt hit anything");
+                }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                // stop the velocity and move somewhere outside of the game area
+                // rb.velocity = Vector3.zero;
+                // transform.position = Vector3.zero;
+            }
+        
+            else if (other.CompareTag("climbable") || other.CompareTag("obstacle") || other.CompareTag("platform"))
+            {
+                if (Physics.Raycast(transform.localPosition, transform.forward*1.5f, out RaycastHit hit))
+                {
+                    UnityEngine.Debug.Log($"hit the object at {hit.point}");
+                    GameObject obj = Instantiate(sandHitEffect, hit.point, Quaternion.identity);
+                    ParticleSystem sandHitEffects = obj.GetComponent<ParticleSystem>();
+                    sandHitEffects.Play();
+                    Destroy(obj, .5f);
+                }
+            }
+        
+           disable();
+        }
 
 
 

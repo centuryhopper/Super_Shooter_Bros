@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using Game.Pooling;
 using Game.Audio;
@@ -12,16 +12,19 @@ namespace Game.PlayerCharacter
         public string bulletTag = "bullet";
         public ParticleSystem muzzleFlash;
         public float fireBulletDelay = .1f;
+        public int numBullets = 100;
         private ObjectPooler bulletPooler;
+        ObjectPool bulletPool = null;
         private WaitForSeconds waitForSeconds;
         private Coroutine fireBulletCoro;
-        private static readonly string Fire1 = "Fire1", gunSound = "GunSound";
+        private const string Fire1 = "Fire1", gunSound = "GunSound";
 
         void Awake()
         {
             // initialize bullet gameobject pooler
-            bulletPooler = ObjectPooler.Instance;
+            // bulletPooler = ObjectPooler.Instance;
             waitForSeconds = new WaitForSeconds(fireBulletDelay);
+            bulletPool = ObjectPool.CreateInstance(Resources.Load<Bullet>("Bullet"), numBullets);
         }
 
         IEnumerator FireBullet()
@@ -29,9 +32,21 @@ namespace Game.PlayerCharacter
             while (true)
             {
                 // spawn from pool
-                GameObject bullet = bulletPooler.InstantiateFromPool(bulletTag, firePoint);
+                PoolableObject bullet = bulletPool.GetAndSetObject(firePoint);
+                if (bullet == null)
+                {
+                    UnityEngine.Debug.LogWarning($"Out of bullets");
+                    // stop the entire coroutine
+                    yield break;
+                }
+
+                // make sure the bullet comes out of the gun fire point
+                // bullet.transform.SetParent(firePoint);
+                // bullet.transform.localPosition = firePoint.position;
+
+                // show gun shooting spark and sound effect
                 muzzleFlash.Play();
-                AudioManager.instance.Play(gunSound, 1);
+                AudioManager.instance.Play(gunSound, 1, true);
                 yield return waitForSeconds;
             }
         }
@@ -42,6 +57,7 @@ namespace Game.PlayerCharacter
         {
             if (Input.GetButtonDown(Fire1))
             {
+                if (fireBulletCoro != null) StopCoroutine(fireBulletCoro);
                 fireBulletCoro = StartCoroutine(FireBullet());
             }
 

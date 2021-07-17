@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 // source: https://www.bitshiftprogrammer.com/2018/05/unity-c-extension-methods.html
@@ -95,6 +96,26 @@ namespace Extensions
             T[] result = new T[length];
             Array.Copy(data, startingIndex, result, 0, length);
             return result;
+        }
+
+        public static IEnumerable<(int, T)> Enumerate<T>(this IEnumerable<T> input, int start = 0)
+        {
+            int i = start;
+            foreach (var t in input)
+                yield return (i++, t);
+
+            #region code to test this extension method
+            // var s = new string[]
+            // {
+            //         "Alpha",
+            //         "Bravo",
+            //         "Charlie",
+            //         "Delta"
+            // };
+
+            // foreach (var (i, o) in s.Enumerate())
+            //     Console.WriteLine($"{i}: {o}");
+            #endregion
         }
 
     }

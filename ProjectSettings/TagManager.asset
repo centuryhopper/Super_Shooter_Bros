@@ -6,6 +6,13 @@ TagManager:
   tags:
   - PlayerEyes
   - climbable
+  - FxTemporaire
+  - Fire
+  - EnemyFighter
+  - playerBullet
+  - Enemy
+  - obstacle
+  - platform
   layers:
   - Default
   - TransparentFX
@@ -15,12 +22,12 @@ TagManager:
   - UI
   - CrossHair
   - Player
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - EnemyAttackRadius
+  - noIncludeInNavMesh
+  - includeInNavMesh
+  - Portal
+  - playerBullet
   - 
   - 
   - 
