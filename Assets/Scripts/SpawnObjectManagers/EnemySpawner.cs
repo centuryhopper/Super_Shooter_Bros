@@ -17,6 +17,7 @@ namespace Game.Spawner
         public SpawnMethod enemySpawnMethod = SpawnMethod.RoundRobin;
         public Transform player = null;
         public int numEnemiesToSpawn = 5;
+        public static int totalNumEnemies;
         public float spawnDelay = 1f;
         public List<EnemyBaseStats> enemies = new List<EnemyBaseStats>();
         private Dictionary<int, ObjectPool> enemyObjectPools = new Dictionary<int, ObjectPool>();
@@ -31,6 +32,7 @@ namespace Game.Spawner
 
         void Awake()
         {
+            totalNumEnemies = numEnemiesToSpawn;
             waitForSeconds = new WaitForSeconds(spawnDelay);
             triangulation = NavMesh.CalculateTriangulation();
             if (waypoints is null || waypoints.Length != numEnemiesToSpawn * 2)

@@ -2,6 +2,7 @@
 using UnityEngine;
 using Game.Interfaces;
 using Game.HealthManager;
+using Game.GameUI;
 
 namespace Game.PlayerCharacter
 {
@@ -11,6 +12,7 @@ namespace Game.PlayerCharacter
         public bool isDead { get; set;} = false;
         [SerializeField] GameObject playerRobot = null;
         [SerializeField] GameObject playerRobotRagdoll = null;
+        UIHealthBar playerHealthBar = null;
         PlayerMovement playerMovement = null;
         Rigidbody rb = null;
         private float playerMaxHealth;
@@ -18,6 +20,7 @@ namespace Game.PlayerCharacter
         void Start()
         {
             playerMaxHealth = playerHealth;
+            playerHealthBar = GetComponentInChildren<UIHealthBar>();
             rb = GetComponent<Rigidbody>();
             playerMovement = GetComponent<PlayerMovement>();
             // initially disable ragdoll
@@ -46,6 +49,7 @@ namespace Game.PlayerCharacter
                 // we will just ask the player for now and do the other
                 // two things as we progress
                 // Invoke("restartGameDelegate", 0f);
+                playerHealthBar.gameObject.SetActive(false);
                 die();
                 handleDeath();
             }
@@ -74,8 +78,15 @@ namespace Game.PlayerCharacter
             isDead = true;
         }
 
-        public void takeDamage(float damage) => playerHealth = Mathf.Max(playerHealth - damage, 0f);
-        public void gainHealth(float health) => playerHealth = Mathf.Min(playerHealth + health, playerMaxHealth);
+        public void takeDamage(float damage)
+        {
+            playerHealth = Mathf.Max(playerHealth - damage, 0f);
+            playerHealthBar.setHealthBarPercentage(playerHealth / playerMaxHealth);
+        }
+        public void gainHealth(float health)
+        {
+            playerHealth = Mathf.Min(playerHealth + health, playerMaxHealth);
+        }
         public void resetDeathStatus() => this.isDead = false;
 
         public Transform getTransform()

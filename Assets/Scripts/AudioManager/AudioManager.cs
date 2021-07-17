@@ -119,6 +119,7 @@ namespace Game.Audio
             if (s.Equals(default(Sound)))
             {
                 Debug.LogWarning($"Sound: \"{s.name}\" not found for Play()");
+                return;
             }
 
             if (playOneShot)

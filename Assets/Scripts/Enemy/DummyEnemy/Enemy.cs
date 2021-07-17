@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using Game.Interfaces;
 using Game.HealthManager;
 using Game.Pooling;
-using System.Linq;
+using Game.GameUI;
 
 namespace Game.EnemyAI
 {
@@ -18,6 +18,7 @@ namespace Game.EnemyAI
         [Space(10)]
         public NavMeshAgent agent;
         public float enemyHealth = 100;
+        public float maxHealth;
         private const string attack = "attack", stopAttack = "stopAttack";
         public Animator animator;
         Coroutine lookRoutine;
@@ -26,6 +27,9 @@ namespace Game.EnemyAI
         [SerializeField] GameObject enemyRobot = null;
         [SerializeField] GameObject enemyRobotRagdoll = null;
         [SerializeField] BoxCollider[] enemyColliders = null;
+        UIHealthBar healthBar = null;
+
+        public static int enemyDeaths = 0;
 
         void onAttack(IDamageable target)
         {
@@ -54,9 +58,15 @@ namespace Game.EnemyAI
             transform.rotation = lookRotation;
         }
 
+        void Start()
+        {
+            maxHealth = enemyHealth;
+            rb = GetComponent<Rigidbody>();
+            healthBar = GetComponentInChildren<UIHealthBar>();
+        }
+
         void OnEnable()
         {
-            rb = GetComponent<Rigidbody>();
             attackRadius.OnAttack += onAttack;
 
             // re-parent the ragdoll to this game object since this enemy is being respawned
@@ -83,9 +93,11 @@ namespace Game.EnemyAI
         public void takeDamage(float damage)
         {
             enemyHealth = Mathf.Max(enemyHealth - damage, 0f);
+            healthBar.setHealthBarPercentage(enemyHealth / maxHealth);
 
             if (enemyHealth <= 0f)
             {
+                healthBar.gameObject.SetActive(false);
                 if (handleDeathRoutine != null) StopCoroutine(handleDeathRoutine);
 
                 handleDeathRoutine = StartCoroutine(handleDeath());
@@ -109,12 +121,12 @@ namespace Game.EnemyAI
                 collider.enabled = false;
             }
 
-
-            
             enemyRobot.SetActive(false);
 
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2.5f);
             
+            ++enemyDeaths;
+            UnityEngine.Debug.Log($"enemyDeaths: {enemyDeaths}");
             this.gameObject.SetActive(false);
         }
 
