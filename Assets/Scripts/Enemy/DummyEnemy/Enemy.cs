@@ -98,6 +98,7 @@ namespace Game.EnemyAI
             enemyRobotRagdoll.SetActive(true);
             HealthDamageManager.instance.copyTransformData(enemyRobot.transform, enemyRobotRagdoll.transform, rb.velocity);
             // enemyRobotRagdoll.transform.parent = null;
+            yield return null;
             rb.velocity = Vector3.zero;
             yield return null;
 

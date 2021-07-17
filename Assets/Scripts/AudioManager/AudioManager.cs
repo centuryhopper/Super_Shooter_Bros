@@ -49,6 +49,11 @@ namespace Game.Audio
             }
 
             // build dict
+            string[] soundNames = {"SickBeat","GameTheme","SickBeat"};
+            for (int i = 0; i < SceneManager.sceneCountInBuildSettings; ++i)
+            {
+                sceneIndexToMusic.Add(i, soundNames[i]);
+            }
         }
 
         void Start()
@@ -84,13 +89,27 @@ namespace Game.Audio
             }
         }
 
-        public void setVolume(float volume)
+        public Sound getSoundFromScene()
         {
-            // get associated sound name from current scene index
+            string soundName = sceneIndexToMusic[SceneManager.GetActiveScene().buildIndex];
+            // UnityEngine.Debug.Log($"soundName: {soundName}");
 
             // find the correct sound struct according to the sound name
+            // should always find it in this case
+            Sound s = Array.Find<Sound>(sounds, sound => sound.name == soundName);
+            if (s.Equals(default(Sound)))
+            {
+                Debug.LogWarning($"Sound: \"{s.name}\" not found for getSoundFromScene().");
+                return default(Sound);
+            }
 
+            return s;
+        }
+
+        public void setVolume(float volume)
+        {
             // toggle sound
+            getSoundFromScene().audioSource.volume = volume;
         }
 
         public void Play(string name, float volume = .5f, bool playOneShot = false)
@@ -99,7 +118,7 @@ namespace Game.Audio
 
             if (s.Equals(default(Sound)))
             {
-                Debug.LogWarning($"Sound: \"{s.name}\" not found");
+                Debug.LogWarning($"Sound: \"{s.name}\" not found for Play()");
             }
 
             if (playOneShot)

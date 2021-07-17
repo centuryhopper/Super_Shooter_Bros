@@ -2,7 +2,8 @@
     "name": "leveldesign",
     "rootNamespace": "",
     "references": [
-        "GUID:f7e36908f21550443a9fa91e2fb449ac"
+        "GUID:f7e36908f21550443a9fa91e2fb449ac",
+        "GUID:5cac5a89ef2cc664480d8bad1097f555"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
