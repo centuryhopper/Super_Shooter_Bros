@@ -145,7 +145,7 @@ namespace Game.Pooling
                 else
                 {
                     // UnityEngine.Debug.Log($"layername: {LayerMask.LayerToName(7)}");
-                    UnityEngine.Debug.Log($"didnt hit anything");
+                    // UnityEngine.Debug.Log($"didnt hit anything");
                 }
 
                 // stop the velocity and move somewhere outside of the game area
@@ -157,7 +157,7 @@ namespace Game.Pooling
             {
                 if (Physics.Raycast(transform.localPosition, transform.forward*1.5f, out RaycastHit hit))
                 {
-                    UnityEngine.Debug.Log($"hit the object at {hit.point}");
+                    // UnityEngine.Debug.Log($"hit the object at {hit.point}");
                     GameObject obj = Instantiate(sandHitEffect, hit.point, Quaternion.identity);
                     ParticleSystem sandHitEffects = obj.GetComponent<ParticleSystem>();
                     sandHitEffects.Play();
